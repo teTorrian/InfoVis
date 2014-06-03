@@ -1,7 +1,7 @@
 class Chart extends DrawableGroup {
   
-  int x;
-  int y;
+  int left;
+  int top;
   int width;
   int height;
   
@@ -9,6 +9,10 @@ class Chart extends DrawableGroup {
   int offsetY = 0;    // Abstand der Achsen zur oberen Seite des Diagramms 
   int offsetX2 = 40;   // Abstand der Achsen zur rechten Seite des Diagramms 
   int offsetY2 = 0;    // Abstand der Achsen zur unteren Seite des Diagramms 
+  
+  int topicOffset = 100;
+  String topic = "Wo bin ich?";
+  String subTopic = "Stunden pro Zeit und Ort";
 
   AxisGroup axisGroup;
   Controller controller;
@@ -16,13 +20,13 @@ class Chart extends DrawableGroup {
   IntDict pathColor; // ein verrückter Processing-Datentyp, wie Map<String, int>
   View view;
   
-  Chart(View view, int x, int y, int width, int height) {
+  Chart(View view, int left, int top, int width, int height) {
     super();
     this.view = view;
     this.controller = view.controller;
     
-    this.x = x;
-    this.y = y;
+    this.left = left;
+    this.top = top;
     this.width = width;
     this.height = height;
     
@@ -54,10 +58,19 @@ class Chart extends DrawableGroup {
   void draw() {
     background(255);
     pushMatrix();
-      translate(x,y);
-      noStroke();
-      fill(255);
-      rect(0,0,width,height);
+      translate(left,top);
+      fill(0);
+      
+      pushMatrix();
+        textAlign(LEFT);
+        translate(0,-topicOffset);
+        textFont(view.font.bold22);
+        text(topic, 0, 0);
+        translate(0,textAscent()*1.8);
+        textFont(view.font.light20);
+        text(subTopic, 0, 0);
+      popMatrix();
+      
       translate(offsetX, offsetY);
       super.draw();
     popMatrix();

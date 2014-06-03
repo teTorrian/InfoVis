@@ -12,8 +12,6 @@ void draw() {
   view.update();
   if (view.updated()) {
     view.draw();
-    fill(0);
-    text("Parallele Koordinaten", 100, 100);
   } else {
     noLoop();
   }

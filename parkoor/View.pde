@@ -3,14 +3,12 @@ class View extends DrawableGroup {
   Controller controller;
   Font font;
   
-  View(Controller controller, int x, int y, int width, int height) {
+  View(Controller controller, int left, int top, int width, int height) {
     this.controller = controller;
     this.font = new Font();
-
-    textFont(font.bold22);
-    
-    
-    chart = new Chart(this, x, y, width, height);
+   
+    chart = new Chart(this, left, top, width, height);
     add(chart); 
   }
+
 }

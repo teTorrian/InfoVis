@@ -7,10 +7,15 @@ class AxisGroup extends DrawableGroup<Axis> {
     super();
     this.chart = chart;
     controller = chart.controller;
-    add(new Axis(this, 0, "Achse 1"));
-    add(new Axis(this, 100, "Achse 2"));
-    add(new Axis(this, 200, "Achse 3"));
-    add(new Axis(this, 300, "Achse 4"));
+    add(new Axis(this, 0, "Zu Hause"));
+    add(new Axis(this, 100, "Unterwegs"));
+    add(new Axis(this, 200, "Mensa"));
+    add(new Axis(this, 300, "Fakultät"));
+    add(new Axis(this, 400, "Slub"));
+    add(new Axis(this, 500, "Uni (Sonstige)"));
+    add(new Axis(this, 600, "Draußen"));
+    add(new Axis(this, 700, "Besorgungen"));
+    add(new Axis(this, 800, "Hobby/Sport"));
   }
   
 }

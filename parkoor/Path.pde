@@ -17,7 +17,7 @@ class Path implements Drawable {
   }
   
   void update() {
-    updated = true;
+    updated = false;
   }
   
   void draw() {
