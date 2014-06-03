@@ -1,24 +1,24 @@
 class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable {
-  
   boolean updated = false;
   
   DrawableGroup() {
   }
-
   
   boolean updated() {
     return updated;
   }
   
   void update() {
-
-    for (Drawable drawable: this) {
-      drawable.update();
-      boolean itemUpdated = drawable.updated();
-      if (!updated && itemUpdated) {
-        updated = true;
+    updated = false;
+    pushMatrix();
+      for (Drawable drawable: this) {
+        drawable.update();
+        boolean itemUpdated = drawable.updated();
+        if (!updated && itemUpdated) {
+          updated = true;
+        }
       }
-    }
+    popMatrix();
   }
   
   void draw() {
@@ -27,5 +27,24 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
         drawable.draw();
       }
     popMatrix();
+  }
+  
+  void mousePressed() {
+    for (Drawable drawable: this) {
+      drawable.mousePressed();
+    }
+  }
+  
+  
+  void mouseReleased() {
+    for (Drawable drawable: this) {
+      drawable.mouseReleased();
+    }
+  }
+  
+  void mouseDragged() {
+    for (Drawable drawable: this) {
+      drawable.mouseDragged();
+    }
   }
 }

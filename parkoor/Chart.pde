@@ -4,15 +4,18 @@ class Chart extends DrawableGroup {
   int y;
   int width;
   int height;
-  PFont fontBold22;
-  PFont fontLight12;  
-  PFont fontLight14;
-  PFont fontLight22;
+  
+  int offsetX = 40;    // Abstand der Achsen zur linken Seite des Diagramms 
+  int offsetY = 0;    // Abstand der Achsen zur oberen Seite des Diagramms 
+  int offsetX2 = 40;   // Abstand der Achsen zur rechten Seite des Diagramms 
+  int offsetY2 = 0;    // Abstand der Achsen zur unteren Seite des Diagramms 
+
   AxisGroup axisGroup;
   Controller controller;
   View view;
   
   Chart(View view, int x, int y, int width, int height) {
+    super();
     this.view = view;
     this.controller = view.controller;
     
@@ -20,18 +23,26 @@ class Chart extends DrawableGroup {
     this.y = y;
     this.width = width;
     this.height = height;
-   
-    fontBold22  = loadFont("UniversLTStd-BoldCn-22.vlw");
-    fontLight12 = loadFont("UniversLTStd-LightCn-12.vlw");
-    fontLight14 = loadFont("UniversLTStd-LightCn-14.vlw");
-    fontLight22 = loadFont("UniversLTStd-LightCn-22.vlw");
     
     axisGroup = new AxisGroup(this);
     add(axisGroup);
     
   }
+  
+  int getInnerWidth() {
+    return width - offsetX - offsetX2;
+  }
+  
+  int getInnerHeight() {
+    return height - offsetY - offsetY2;
+  }
+  
   void update() {
-    super.update(); 
+    pushMatrix();
+      translate(x,y);
+      translate(offsetX, offsetY);
+      super.update();
+    popMatrix();
   }
   
   void draw() {
@@ -41,6 +52,7 @@ class Chart extends DrawableGroup {
       noStroke();
       fill(230, 230, 230);
       rect(0,0,width,height);
+      translate(offsetX, offsetY);
       super.draw();
     popMatrix();
   }
