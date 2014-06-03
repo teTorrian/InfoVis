@@ -1,16 +1,10 @@
-class DrawableGroup implements Drawable {
+class DrawableGroup extends ArrayList<Drawable> implements Drawable {
   
-  ArrayList<Drawable> drawables;
   boolean updated = false;
   
   DrawableGroup() {
-    drawables = new ArrayList<Drawable>();
-    
   }
-  
-  void add(Drawable drawable) {
-    drawables.add(drawable);
-  }
+
   
   boolean updated() {
     return updated;
@@ -18,7 +12,7 @@ class DrawableGroup implements Drawable {
   
   void update() {
 
-    for (Drawable drawable: drawables) {
+    for (Drawable drawable: this) {
       drawable.update();
       boolean itemUpdated = drawable.updated();
       if (!updated && itemUpdated) {
@@ -29,7 +23,7 @@ class DrawableGroup implements Drawable {
   
   void draw() {
     pushMatrix();
-      for (Drawable drawable: drawables) {
+      for (Drawable drawable: this) {
         drawable.draw();
       }
     popMatrix();
