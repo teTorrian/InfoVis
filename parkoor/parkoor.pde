@@ -1,22 +1,26 @@
-import controlP5.*;
-
-ControlP5 cp5;
-
-Slider2D s;
-
+View view;
 
 void setup(){ 
   	size(1024,600);
-  	background(255); 
+
   	PFont font;
   	font = loadFont("UniversLTStd-LightCn-22.vlw");
   	textFont(font);
-  	fill(0,0,0);
-  	text("Parallele Koordinaten", 50, 80);
-  	noStroke();
      
+   view = new View(100,165,824,330);
 
+   view.draw();
+   fill(0);
+   text("Parallele Koordinaten", 100, 100);
+   
 } 
  
 void draw() {
+  view.update();
+  if (view.updated()) {
+    view.draw();
+    fill(0);
+    text("Parallele Koordinaten", 100, 100);
+    println("a");
+  }
 }
