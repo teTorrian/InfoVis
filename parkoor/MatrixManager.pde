@@ -1,9 +1,9 @@
-class MatrixManager {
+class DragAndDropManager {
   PMatrix2D invertedMatrix;
   PMatrix2D matrix;
   boolean dragging = false;
   
-  MatrixManager() {
+  DragAndDropManager() {
   }
   
   /**

@@ -1,11 +1,11 @@
 class Axis implements Drawable {
   
-  int triangleSize = 5;
+  int triangleSize = 6;
 
   Chart chart;
   AxisGroup axisGroup;
   Controller controller;
-  MatrixManager matrixManager;
+  DragAndDropManager dragAndDropManager;
   
   int x;
   String label;
@@ -19,14 +19,14 @@ class Axis implements Drawable {
     this.axisGroup = axisGroup;
     this.chart = axisGroup.chart;
     this.controller = chart.controller;
-    this.matrixManager = new MatrixManager();
+    this.dragAndDropManager = new DragAndDropManager();
     
     this.x = x;
     this.label = label;
   }
   
   boolean updated() {
-    return !initialized || updated || matrixManager.dragging;
+    return !initialized || updated || dragAndDropManager.dragging;
   }
   
   private void drawSliderMin() {
@@ -34,7 +34,7 @@ class Axis implements Drawable {
       translate(0,floor(min*chart.getInnerHeight()));
       fill(0,0,0);
       noStroke();
-      triangle(-triangleSize, 0, triangleSize, 0, 0, triangleSize);
+      triangle(-triangleSize, -triangleSize, triangleSize, -triangleSize, 0, 0);
     popMatrix();
   }
   
@@ -43,30 +43,17 @@ class Axis implements Drawable {
       translate(0,max*chart.getInnerHeight());
       fill(0,0,0);
       noStroke();
-      triangle(-triangleSize, 0, triangleSize, 0, 0, -triangleSize);
+      triangle(-triangleSize, triangleSize, triangleSize, triangleSize, 0, 0);
     popMatrix();
   }
   
   void update() {
-    pushMatrix();
-      translate(x,0);
-      matrixManager.saveMatrix();
-    popMatrix();
-      
-    if (matrixManager.dragging) {
-      if (draggingMax) {
-        println(min);
-        max = matrixManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight();
-      } else {
-        println(min);
-        min = matrixManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight();
-      }
-    }
   }
   
   void draw() {
     pushMatrix();
       translate(x,0);
+      dragAndDropManager.saveMatrix();
       stroke(0);
       line(0,0,0,chart.getInnerHeight());
       drawSliderMin();
@@ -80,41 +67,54 @@ class Axis implements Drawable {
   }
   
   boolean isMouseOverMinMark(PVector mouse) {
-    PVector p0 = new PVector(0.0, chart.getInnerHeight()*min);
-    PVector p1 = matrixManager.transformVector(mouse);
+    PVector p0 = new PVector(0.0, chart.getInnerHeight()*min - triangleSize);
+    PVector p1 = dragAndDropManager.transformVector(mouse);
     return (p0.dist(p1) < 8);
   }
   
   boolean isMouseOverMaxMark(PVector mouse) {
-    PVector p0 = new PVector(0.0, chart.getInnerHeight()*max);
-    PVector p1 = matrixManager.transformVector(mouse);
+    PVector p0 = new PVector(0.0, chart.getInnerHeight()*max + triangleSize);
+    PVector p1 = dragAndDropManager.transformVector(mouse);
     return (p0.dist(p1) < 8);
   }
   
   void mousePressed() {
-    if (!matrixManager.dragging && isMouseOverMinMark(new PVector(float(mouseX),float(mouseY)))) {
+    if (!dragAndDropManager.dragging && isMouseOverMinMark(new PVector(float(mouseX),float(mouseY)))) {
       draggingMax = false;
-      matrixManager.start();
+      dragAndDropManager.start();
       loop();
-    } else if (!matrixManager.dragging && isMouseOverMaxMark(new PVector(float(mouseX),float(mouseY)))) {
+    } else if (!dragAndDropManager.dragging && isMouseOverMaxMark(new PVector(float(mouseX),float(mouseY)))) {
       draggingMax = true;
-      matrixManager.start();
+      dragAndDropManager.start();
       loop();
     }
-    
-    
+
   }
   
   
   void mouseReleased() {
-    if (matrixManager.dragging) {
-      matrixManager.stop();
+    if (dragAndDropManager.dragging) {
+      dragAndDropManager.stop();
     }
   }
   
   void mouseDragged() {
-    if (matrixManager.dragging) {
-      
+    if (dragAndDropManager.dragging) {
+      if (draggingMax) {
+        max = dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight();
+        if (max < min) {
+          max = min;
+        } else if (max > 1) {
+          max = 1;
+        }
+      } else {
+        min = dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight();
+        if (min < 0) {
+          min = 0;
+        } else if (min > max) {
+          min = max;
+        }
+      }
     }
   }
 }

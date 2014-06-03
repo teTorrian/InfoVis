@@ -10,15 +10,13 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
   
   void update() {
     updated = false;
-    pushMatrix();
-      for (Drawable drawable: this) {
-        drawable.update();
-        boolean itemUpdated = drawable.updated();
-        if (!updated && itemUpdated) {
-          updated = true;
-        }
+    for (Drawable drawable: this) {
+      drawable.update();
+      boolean itemUpdated = drawable.updated();
+      if (!updated && itemUpdated) {
+        updated = true;
       }
-    popMatrix();
+    }
   }
   
   void draw() {

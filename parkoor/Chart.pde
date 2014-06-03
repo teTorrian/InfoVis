@@ -48,11 +48,7 @@ class Chart extends DrawableGroup {
   }
   
   void update() {
-    pushMatrix();
-      translate(x,y);
-      translate(offsetX, offsetY);
-      super.update();
-    popMatrix();
+    super.update();
   }
   
   void draw() {
