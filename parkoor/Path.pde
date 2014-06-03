@@ -21,12 +21,12 @@ class Path implements Drawable {
   }
   
   void draw() {
-    TreeMap<String, Integer> Locs = chart.controller.getLocationTimes(json.getJSONObject(0));
+    //TreeMap<String, Integer> Locs = chart.controller.getLocationTimes(json.getJSONObject(0));
     pushMatrix();
     fill(0);
     beginShape();
     for(int i = 3; i < date.size(); i++) {
-      vertex(date.get(
+      //vertex(date.get(
     }
     endShape(CLOSE);
     popMatrix();
