@@ -25,8 +25,8 @@ class Path implements Drawable {
     float c = (float)chart.height / 1440;
     
     pushMatrix();
-    
-    stroke(#33b5e5);
+    stroke(chart.pathColor.get(date.getString("name")));
+    //strokeWeight(2);
     noFill();
     
     beginShape();
@@ -39,5 +39,6 @@ class Path implements Drawable {
     
     popMatrix();
   }
+
   
 }
