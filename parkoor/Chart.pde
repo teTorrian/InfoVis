@@ -1,10 +1,10 @@
-class Chart implements Drawable {
+class Chart extends DrawableGroup {
   
   int x;
   int y;
   int width;
   int height;
-  DrawableGroup drawables;
+  AxisManager axisManager;
   PFont fontBold22;
   PFont fontLight12;  
   PFont fontLight14;
@@ -21,19 +21,8 @@ class Chart implements Drawable {
     fontLight14 = loadFont("UniversLTStd-LightCn-14.vlw");
     fontLight22 = loadFont("UniversLTStd-LightCn-22.vlw");
     
-    drawables = new DrawableGroup();
-  }
-  
-  void add(Drawable drawable) {
-    drawables.add(drawable);
-  }
-  
-  boolean updated() {
-    return drawables.updated(); 
-  }
-  
-  void update() {
-    drawables.update(); 
+    axisManager = new AxisManager(this);
+    add(axisManager);
   }
   
   void draw() {
@@ -43,7 +32,7 @@ class Chart implements Drawable {
       noStroke();
       fill(230, 230, 230);
       rect(0,0,width,height);
-      drawables.draw();
+      super.draw();
     popMatrix();
   }
   
