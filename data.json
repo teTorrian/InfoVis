@@ -1,85 +1,21 @@
 [
 	{
-        "date": "2014-05-15",
-        "home": {
-            "time": 1170,
-            "sleeping": 480,
-            "work": 240,
-            "hobby": 450
-        },
-        "uni_inf": {
-            "time": 100,
-            "course": 100
-        },
-        "uni_mensa": {
-            "time": 0
-        },
-        "uni_slub": {
-            "time": 0
-        },
-        "uni_other": {
-            "time": 100,
-            "course": 100
-        },
-        "work": {
-            "time": 0
-        },
-        "shopping": {
-            "time": 20
-        },
-        "outdoor": {
-            "time": 0
-        },
-        "sport_hobby": {
-            "time": 0
-        },
-        "other": {
-            "time": 800,
-            "sleeping": 480,
-            "family": 320
-        },
-        "transit": 50
-    },
+		"id": 0,
+		"date": "2014-05-15",
+		"name": "Jonas",
+		"home": 1230,
+		"transit": 210,
+		"home_sleeping": 480,
+		"home_work": 240,
+        "home_hobby": 450,
+        "home_other": 60
+        
+	},
 	{
+		"id": 1,
 		"date": "2014-05-16",
-		"home":{
-			"time":840,
-			"sleeping":480,
-			"work":60,
-			"hobby":300
-		},
-		"uni_inf":{
-			"time":0
-		},
-		"uni_mensa":{
-			"time":0
-		},
-		"uni_slub":{
-			"time":0
-		},
-		"uni_other":{
-			"time":100,
-			"course":100
-		},
-		"work":{
-			"time":0
-		},
-		"shopping":{
-			"time":0
-		},
-		"outdoor":{
-			"time":300,
-			"hobby":300
-		},
-		"sport_hobby":{
-			"time":0
-		},
-		"other":{
-			"time":40,
-			"family":40
-		},
-		"transit":{
-			"time":160
-		}
+		"name": "Lukas",
+		"home": 1440,
+		"home_sleeping": 1440      
 	}
 ]
