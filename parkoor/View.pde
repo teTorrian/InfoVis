@@ -1,19 +1,11 @@
-class View implements Drawable {
+class View extends DrawableGroup {
   Chart chart;
+  Controller controller;
   
-  View(int x, int y, int width, int height) {
-    chart = new Chart(x, y, width, height);
+  View(Controller controller, int x, int y, int width, int height) {
+    this.controller = controller;
+    chart = new Chart(this, x, y, width, height);
+    add(chart);
   }
-  
-  boolean updated() {
-    return chart.updated();
-  }
-  
-  void update() {
-    chart.update();
-  }
-  
-  void draw() {
-    chart.draw();
-  }
+
 }

@@ -6,6 +6,8 @@ class Axis implements Drawable {
   int x;
   String label;
   boolean updated;
+  int min;
+  int max;
   
   Axis(Chart chart, int x, String label) {
     this.chart = chart;

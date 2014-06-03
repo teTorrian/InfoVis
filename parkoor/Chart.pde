@@ -4,13 +4,18 @@ class Chart extends DrawableGroup {
   int y;
   int width;
   int height;
-  AxisManager axisManager;
   PFont fontBold22;
   PFont fontLight12;  
   PFont fontLight14;
   PFont fontLight22;
+  AxisGroup axisGroup;
+  Controller controller;
+  View view;
   
-  Chart(int x, int y, int width, int height) {
+  Chart(View view, int x, int y, int width, int height) {
+    this.view = view;
+    this.controller = view.controller;
+    
     this.x = x;
     this.y = y;
     this.width = width;
@@ -21,8 +26,12 @@ class Chart extends DrawableGroup {
     fontLight14 = loadFont("UniversLTStd-LightCn-14.vlw");
     fontLight22 = loadFont("UniversLTStd-LightCn-22.vlw");
     
-    axisManager = new AxisManager(this);
-    add(axisManager);
+    axisGroup = new AxisGroup(this);
+    add(axisGroup);
+    
+  }
+  void update() {
+    super.update(); 
   }
   
   void draw() {

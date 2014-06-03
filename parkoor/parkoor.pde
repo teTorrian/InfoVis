@@ -1,3 +1,4 @@
+Controller controller;
 View view;
 
 void setup(){ 
@@ -7,11 +8,8 @@ void setup(){
   	font = loadFont("UniversLTStd-LightCn-22.vlw");
   	textFont(font);
      
-   view = new View(100,165,824,330);
-
-   view.draw();
-   fill(0);
-   text("Parallele Koordinaten", 100, 100);
+   controller = new Controller(100,165,824,330);
+   view = controller.view;
    
 } 
  
@@ -21,6 +19,7 @@ void draw() {
     view.draw();
     fill(0);
     text("Parallele Koordinaten", 100, 100);
-    println("a");
+  } else {
+    noLoop();
   }
 }
