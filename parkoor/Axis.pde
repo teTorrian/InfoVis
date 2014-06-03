@@ -25,9 +25,9 @@ class Axis implements Drawable {
   
   void draw() {
     pushMatrix();
-      translate(x,0);
-      stroke(0);
-      line(0,0,0,chart.height);
+    translate(x,0);
+    stroke(0);
+    line(0,0,0,chart.height);
     popMatrix();
   }
 }

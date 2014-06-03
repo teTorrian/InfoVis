@@ -10,6 +10,7 @@ class Chart extends DrawableGroup {
   PFont fontLight22;
   AxisGroup axisGroup;
   Controller controller;
+  PathGroup pathGroup;
   View view;
   
   Chart(View view, int x, int y, int width, int height) {
@@ -29,6 +30,8 @@ class Chart extends DrawableGroup {
     axisGroup = new AxisGroup(this);
     add(axisGroup);
     
+    pathGroup = new PathGroup(this);
+    add(pathGroup);
   }
   void update() {
     super.update(); 

@@ -1,4 +1,4 @@
-import java.util.Map;
+import java.util.TreeMap;
 
 class Model {
    Model(){
@@ -28,8 +28,8 @@ class Model {
      return DataObjects;
    }  
    
-  HashMap getLocationTimes(JSONObject DataObject){
-    HashMap<String,Integer> LocationTimes = new HashMap<String,Integer>();
+  TreeMap getLocationTimes(JSONObject DataObject){
+    TreeMap<String,Integer> LocationTimes = new TreeMap<String,Integer>();
     LocationTimes.put("home",       DataObject.getInt("home"));
     LocationTimes.put("transit",    DataObject.getInt("transit"));
     LocationTimes.put("uni_mensa",  DataObject.getInt("uni_mensa"));
