@@ -21,14 +21,22 @@ class Path implements Drawable {
   }
   
   void draw() {
-    //TreeMap<String, Integer> Locs = chart.controller.getLocationTimes(json.getJSONObject(0));
+    HashMap<String, Integer> data = chart.controller.model.getLocationTimes(date);
+    float c = (float)chart.height / 1440;
+    
     pushMatrix();
-    fill(0);
+    
+    stroke(#33b5e5);
+    noFill();
+    
     beginShape();
-    for(int i = 3; i < date.size(); i++) {
-      //vertex(date.get(
+    int i = 0;
+    for (String key: data.keySet()) {
+      // x muss ersetzt werden durch axes.get(i++).x
+      vertex(i++ * 100, chart.height - data.get(key) * c);
     }
-    endShape(CLOSE);
+    endShape();
+    
     popMatrix();
   }
   
