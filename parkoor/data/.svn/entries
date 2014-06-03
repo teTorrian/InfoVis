@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   repos="https://vc.imld.de/svn/students"
+   name=""
+   revision="9439"
+   last-author="christian.porzig"
+   url="https://vc.imld.de/svn/students/InfoVis/2014/G-Parallel/parkoor/data"
+   uuid="df4912d1-9653-eb4c-be27-c8e597f17c8d"
+   committed-rev="9419"
+   kind="dir"
+   committed-date="2014-06-02T15:00:01.328602Z"/>
+<entry
+   name="UniversLTStd-BoldCn-22.vlw"
+   checksum="82ea8f396a6e75a6a152e555af6e35fd"
+   last-author="christian.porzig"
+   text-time="2014-06-02T15:00:01.000000Z"
+   committed-rev="9419"
+   kind="file"
+   committed-date="2014-06-02T15:00:01.328602Z"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+<entry
+   name="UniversLTStd-LightCn-12.vlw"
+   checksum="8eed90aaa05de79ff678f800d1d75f96"
+   last-author="christian.porzig"
+   text-time="2014-06-02T15:00:01.000000Z"
+   committed-rev="9419"
+   kind="file"
+   committed-date="2014-06-02T15:00:01.328602Z"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+<entry
+   name="UniversLTStd-LightCn-14.vlw"
+   checksum="f5d66120454f881c72fd34bf17567e42"
+   last-author="christian.porzig"
+   text-time="2014-06-02T15:00:01.000000Z"
+   committed-rev="9419"
+   kind="file"
+   committed-date="2014-06-02T15:00:01.328602Z"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+<entry
+   name="UniversLTStd-LightCn-22.vlw"
+   checksum="fb22e608a6a4a20e6651503509a6ca5d"
+   last-author="christian.porzig"
+   text-time="2014-06-02T15:00:01.000000Z"
+   committed-rev="9419"
+   kind="file"
+   committed-date="2014-06-02T15:00:01.328602Z"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+</wc-entries>

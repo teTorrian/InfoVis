@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   repos="https://vc.imld.de/svn/students"
+   name=""
+   revision="9439"
+   last-author="christian.porzig"
+   uuid="df4912d1-9653-eb4c-be27-c8e597f17c8d"
+   url="https://vc.imld.de/svn/students/InfoVis/2014/G-Parallel/parkoor"
+   committed-rev="9438"
+   kind="dir"
+   committed-date="2014-06-03T09:06:33.442423Z"/>
+<entry
+   name=".classpath"
+   checksum="c8b0a7fa5e3f0b9158afb79e33a47651"
+   last-author="lukas.bueschel"
+   text-time="2014-06-02T14:50:57.000000Z"
+   committed-rev="9417"
+   kind="file"
+   committed-date="2014-06-02T14:50:57.707892Z"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+<entry
+   name=".project"
+   checksum="16d326f9bef8c5d8e7f84134ecef0d37"
+   last-author="lukas.bueschel"
+   text-time="2014-06-02T14:50:57.000000Z"
+   committed-rev="9417"
+   kind="file"
+   committed-date="2014-06-02T14:50:57.707892Z"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+<entry
+   name="code"
+   kind="dir"/>
+<entry
+   name="controlP5.jar"
+   schedule="delete"
+   last-author="christian.porzig"
+   committed-rev="9438"
+   text-time="2014-06-03T09:06:33.000000Z"
+   kind="file"
+   committed-date="2014-06-03T09:06:33.442423Z"
+   checksum="95abc5acf204ec5ff48e37712555298b"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+<entry
+   name="data"
+   kind="dir"/>
+<entry
+   name="generated"
+   kind="dir"/>
+<entry
+   name="parkoor.pde"
+   checksum="fcbd0bae9f32f5ef143370f53ad2a57a"
+   last-author="christian.porzig"
+   text-time="2014-06-03T09:06:33.000000Z"
+   committed-rev="9438"
+   kind="file"
+   committed-date="2014-06-03T09:06:33.442423Z"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+</wc-entries>

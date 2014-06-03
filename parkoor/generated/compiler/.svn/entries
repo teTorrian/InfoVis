@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   repos="https://vc.imld.de/svn/students"
+   name=""
+   revision="9439"
+   last-author="lukas.bueschel"
+   url="https://vc.imld.de/svn/students/InfoVis/2014/G-Parallel/parkoor/generated/compiler"
+   uuid="df4912d1-9653-eb4c-be27-c8e597f17c8d"
+   committed-rev="9417"
+   kind="dir"
+   committed-date="2014-06-02T14:50:57.707892Z"/>
+<entry
+   name="parkoor.class"
+   checksum="f944040fe423429d9d6bc1c84385d650"
+   last-author="lukas.bueschel"
+   text-time="2014-06-02T14:50:57.000000Z"
+   committed-rev="9417"
+   kind="file"
+   committed-date="2014-06-02T14:50:57.707892Z"
+   prop-time="2014-06-03T09:07:27.000000Z"/>
+</wc-entries>

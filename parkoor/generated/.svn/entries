@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   repos="https://vc.imld.de/svn/students"
+   name=""
+   revision="9439"
+   last-author="lukas.bueschel"
+   url="https://vc.imld.de/svn/students/InfoVis/2014/G-Parallel/parkoor/generated"
+   uuid="df4912d1-9653-eb4c-be27-c8e597f17c8d"
+   committed-rev="9417"
+   kind="dir"
+   committed-date="2014-06-02T14:50:57.707892Z"/>
+<entry
+   name="compiler"
+   kind="dir"/>
+<entry
+   name="preproc"
+   kind="dir"/>
+</wc-entries>
