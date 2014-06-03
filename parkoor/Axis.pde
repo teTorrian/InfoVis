@@ -13,6 +13,7 @@ class Axis implements Drawable {
   boolean initialized = false;
   float min = 0;
   float max = 1;
+  boolean draggingMax = false;
   
   Axis(AxisGroup axisGroup, int x, String label) {
     this.axisGroup = axisGroup;
@@ -31,7 +32,6 @@ class Axis implements Drawable {
   private void drawSliderMin() {
     pushMatrix();
       translate(0,floor(min*chart.getInnerHeight()));
-      matrixManager.save();
       fill(0,0,0);
       noStroke();
       triangle(-triangleSize, 0, triangleSize, 0, 0, triangleSize);
@@ -48,12 +48,19 @@ class Axis implements Drawable {
   }
   
   void update() {
+    pushMatrix();
+      translate(x,0);
+      matrixManager.saveMatrix();
+    popMatrix();
+      
     if (matrixManager.dragging) {
-      pushMatrix();
-        translate(x,0);
-        
+      if (draggingMax) {
+        println(min);
+        max = matrixManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight();
+      } else {
+        println(min);
         min = matrixManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight();
-      popMatrix();
+      }
     }
   }
   
@@ -72,17 +79,30 @@ class Axis implements Drawable {
     }
   }
   
-  boolean isMouseOver(PVector mouse) {
-    PVector p0 = new PVector(0.0, 0.0);
+  boolean isMouseOverMinMark(PVector mouse) {
+    PVector p0 = new PVector(0.0, chart.getInnerHeight()*min);
+    PVector p1 = matrixManager.transformVector(mouse);
+    return (p0.dist(p1) < 8);
+  }
+  
+  boolean isMouseOverMaxMark(PVector mouse) {
+    PVector p0 = new PVector(0.0, chart.getInnerHeight()*max);
     PVector p1 = matrixManager.transformVector(mouse);
     return (p0.dist(p1) < 8);
   }
   
   void mousePressed() {
-    if (!matrixManager.dragging && isMouseOver(new PVector(float(mouseX),float(mouseY)))) {
+    if (!matrixManager.dragging && isMouseOverMinMark(new PVector(float(mouseX),float(mouseY)))) {
+      draggingMax = false;
+      matrixManager.start();
+      loop();
+    } else if (!matrixManager.dragging && isMouseOverMaxMark(new PVector(float(mouseX),float(mouseY)))) {
+      draggingMax = true;
       matrixManager.start();
       loop();
     }
+    
+    
   }
   
   

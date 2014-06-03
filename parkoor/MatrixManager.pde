@@ -4,13 +4,12 @@ class MatrixManager {
   boolean dragging = false;
   
   MatrixManager() {
-    save();
   }
   
   /**
   * Speichert die akktuelle Matrix, um Touch-Eingaben ins Zeichen-Koordinaten-System umrechnen zu können
   */
-  void save() {
+  void saveMatrix() {
     this.matrix = new PMatrix2D(getMatrix());
     this.invertedMatrix = new PMatrix2D(getMatrix());
     invertedMatrix.invert();
@@ -20,7 +19,10 @@ class MatrixManager {
   * Rechnet eine Bildschirm-Koordinate ins ggf. transformierte Zeichen-Koordnaten-System um
   */
   PVector transformVector(PVector vector) {
-    return invertedMatrix.mult(vector, null);
+    if (invertedMatrix != null) {
+      return invertedMatrix.mult(vector, null);
+    } else
+      return vector;
   }
   
   void start() {
