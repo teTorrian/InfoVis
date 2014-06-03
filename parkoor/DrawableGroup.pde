@@ -1,4 +1,4 @@
-class DrawableGroup extends ArrayList<Drawable> implements Drawable {
+class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable {
   
   boolean updated = false;
   

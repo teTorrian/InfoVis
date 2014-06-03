@@ -1,4 +1,4 @@
-class AxisGroup extends DrawableGroup {
+class AxisGroup extends DrawableGroup<Axis> {
   Chart chart;
   Controller controller;
   
