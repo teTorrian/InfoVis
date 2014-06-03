@@ -14,7 +14,6 @@ class MatrixManager {
     this.matrix = new PMatrix2D(getMatrix());
     this.invertedMatrix = new PMatrix2D(getMatrix());
     invertedMatrix.invert();
-    invertedMatrix.print();
   }
 
   /**

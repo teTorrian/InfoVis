@@ -1,17 +1,14 @@
-
-
 Controller controller;
 View view;
 
 void setup(){ 
   size(1024,600);
 
-  JSONArray json = loadJSONArray("data.json");
-  Model model = new Model();
-  JSONArray allData = new JSONArray();
+  /*Model model = new Model();
+  JSONArray allData;
   allData = model.getDataObjects(); 
   println(allData.size());
-  
+  /*
   HashMap<String, Integer> Locs = new HashMap<String, Integer>();
   Locs = model.getLocationTimes(json.getJSONObject(0));
   for(Map.Entry entry : Locs.entrySet()){
@@ -25,6 +22,7 @@ void setup(){
   lf.add(Loc1);
   //lf.add(Loc2);
   println(model.getDataObjects(lf).size());
+*/
      
    controller = new Controller(100,165,824,330);
    view = controller.view;

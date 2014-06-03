@@ -48,11 +48,13 @@ class Axis implements Drawable {
   }
   
   void update() {
-    pushMatrix();
-      translate(x,0);
-      
-      min = matrixManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight();
-    popMatrix();
+    if (matrixManager.dragging) {
+      pushMatrix();
+        translate(x,0);
+        
+        min = matrixManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight();
+      popMatrix();
+    }
   }
   
   void draw() {
