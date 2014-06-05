@@ -69,5 +69,4 @@ class Chart extends DrawableGroup {
     popMatrix();
   }
   
-  
 }

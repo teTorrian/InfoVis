@@ -4,10 +4,11 @@ class PathGroup extends DrawableGroup<Path> {
   JSONArray objects;
   IntDict pathColor; // ein verrückter Processing-Datentyp, wie Map<String, int>
   IntDict pathColorHighlighted; // ein verrückter Processing-Datentyp, wie Map<String, int>
+  JSONArray cachedData;
   
   PathGroup(Chart chart) {
     this.chart = chart;
-    JSONArray data = chart.controller.data;
+    cachedData = chart.controller.model.getDataObjects();
     
     pathColor = new IntDict();
     pathColor.set("Jonas", color(176, 40, 93, 100));
@@ -21,9 +22,20 @@ class PathGroup extends DrawableGroup<Path> {
     pathColorHighlighted.set("Vlad", color(7, 217, 98, 200));
     pathColorHighlighted.set("Lukas", color(14, 123, 221, 200));
 
-    // Es gibt scheinbar keinen Iterator?
-    for(int i = 0; i < data.size(); i++) {
-      add(new Path(this, data.getJSONObject(i)));
+    updateLocationFilters();
+  }
+  
+  void updateLocationFilters() {
+    if (chart.axisGroup.locationFilters != null) {
+      cachedData = chart.controller.model.getDataObjects(chart.axisGroup.locationFilters);
+      clear();
+      for(int i = 0; i < cachedData.size(); i++) {
+        add(new Path(this, cachedData.getJSONObject(i)));
+      }
+    } else {
+      println("why?");
     }
   }
 }
+
+

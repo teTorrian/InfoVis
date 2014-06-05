@@ -17,6 +17,7 @@ class Axis implements Drawable {
   
   int x;
   String label;
+  String name;
   boolean updated = false;
   boolean initialized = false;
   float min = 0;
@@ -24,8 +25,9 @@ class Axis implements Drawable {
   boolean draggingMax = false;
   boolean minHighlighted = false;
   boolean maxHighlighted = false;
+  LocationFilter locationFilter;
   
-  Axis(AxisGroup axisGroup, int x, String label) {
+  Axis(AxisGroup axisGroup, int x, String label, String name) {
     this.axisGroup = axisGroup;
     this.chart = axisGroup.chart;
     this.view = chart.view;
@@ -34,6 +36,13 @@ class Axis implements Drawable {
     
     this.x = x;
     this.label = label;
+    this.name = name;
+    locationFilter = new LocationFilter(min, max, name);
+  }
+  
+  void updateLocationFilter() {
+    locationFilter.min = min;
+    locationFilter.max = max;
   }
   
   boolean updated() {
@@ -161,6 +170,8 @@ class Axis implements Drawable {
         } else if (max > maxMax) {
           max = maxMax;
         }
+        updateLocationFilter();
+        chart.pathGroup.updateLocationFilters();
       } else {
         min = minMin + (1-dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight())*(maxMax-minMin);
         if (min < minMin) {
@@ -168,6 +179,8 @@ class Axis implements Drawable {
         } else if (min > max) {
           min = max;
         }
+        updateLocationFilter();
+        chart.pathGroup.updateLocationFilters();
       }
       return true;
     }

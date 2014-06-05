@@ -5,8 +5,6 @@ class Controller {
   
   Controller(int left, int top, int width, int height) {
     model = new Model();
-    data = model.getDataObjects();  
-    
     view = new View(this, left, top, width, height);
   }
   

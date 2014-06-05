@@ -1,9 +1,9 @@
 class LocationFilter {
-  int min;
-  int max;
+  float min;
+  float max;
   String name;
   
-  LocationFilter(int min, int max, String name) {
+  LocationFilter(float min, float max, String name) {
     this.min = min;
     this.max = max;
     this.name = name;

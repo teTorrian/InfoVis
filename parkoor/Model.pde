@@ -13,19 +13,25 @@ class Model {
    JSONArray getDataObjects(ArrayList<LocationFilter> filters){
      JSONArray DataObjects = loadJSONArray("data.json");
      JSONArray json = loadJSONArray("data.json");
+     print("filterting {");
      for(int i = 0; i < filters.size(); i++){
-       LocationFilter filter = filters.get(i);       
+       LocationFilter filter = filters.get(i);
+       print(filter.name+" "+filter.min+"..."+filter.max);
+       if (i < filters.size()-1)
+         print(", "); 
        String name = filter.name;
-       int min = filter.min;
-       int max = filter.max;       
+       float min = filter.min;
+       float max = filter.max;       
        
        for(int j = 0; j < DataObjects.size(); j++){
          JSONObject data = json.getJSONObject(j);
          if(data.getInt(name) > max || data.getInt(name) < min){
+           
            DataObjects.remove(j);
          }         
        }       
-     }  
+     }
+   println("}");  
      return DataObjects;
    }  
    
