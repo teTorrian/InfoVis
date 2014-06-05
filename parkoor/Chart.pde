@@ -63,6 +63,8 @@ class Chart extends DrawableGroup {
         textFont(view.font.light20);
         text(subTopic, 0, 0);
       popMatrix();
+      stroke(0,0,0);
+      
       
       translate(offsetX, offsetY);
       super.draw();

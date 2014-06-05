@@ -14,43 +14,26 @@ class Model {
   }
 
   JSONArray getDataObjects(ArrayList<LocationFilter> filters) {
-    //copy original...
+    // copy original...
     JSONArray dataObjects = JSONArray.parse(cachedDataObjects.toString());
 
-    print("filterting {");
     for (int i = 0; i < filters.size(); i++) {
       LocationFilter filter = filters.get(i);
-      print(filter.name+" "+int(filter.min*60)+"..."+int(filter.max*60));
       String name = filter.name;
       float min = filter.min;
       float max = filter.max;  
-      if (name == "transit") {     
-        print("(");
-      }; 
+      
       for (int j = 0; j < dataObjects.size();) {
         JSONObject data = dataObjects.getJSONObject(j);
-        if (name == "transit") {
-          print(data.getString("name")+" ");
-        }
+       
         if (data.getInt(name) > max*60 || data.getInt(name) < min*60) {
-          dataObjects.remove(j);
-          if (name == "transit") {
-            print(data.getInt(name)+"!, ");
-          } 
-        } else {
-          if (name == "transit") {
-            print(data.getInt(name)+"√, "); 
-          }
+          dataObjects.remove(j); 
+        } else {      
           j++;
         }
-      }
-      if (name == "transit") {     
-        print(")");
-      }; 
-      if (i < filters.size()-1)
-        print(", "); 
+      }   
     }
-    println("} -> found "+dataObjects.size());  
+   
     return dataObjects;
   }  
 
