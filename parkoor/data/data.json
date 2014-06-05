@@ -34,22 +34,22 @@
 		"uni_fak": 0,
 		"uni_slub": 0,
 		"uni_other": 0,
-		"outdoor": 180,
+		"outdoor": 330,
 		"shopping": 0,
-		"hobby": 450       
+		"hobby": 300       
 	},
    {
 		"date": "2014-05-18",
 		"name": "Jonas",
-		"home": 1060,
+		"home": 480,
 		"transit": 60,
 		"uni_mensa": 0,
 		"uni_fak": 0,
 		"uni_slub": 0,
 		"uni_other": 0,
-		"outdoor": 320,
+		"outdoor": 300,
 		"shopping": 0,
-		"hobby": 0       
+		"hobby": 600       
 	},
    {
 		"date": "2014-05-19",
@@ -67,15 +67,15 @@
    {
 		"date": "2014-05-20",
 		"name": "Jonas",
-		"home": 1440,
-		"transit": 0,
+		"home": 720,
+		"transit": 120,
 		"uni_mensa": 0,
 		"uni_fak": 0,
 		"uni_slub": 0,
 		"uni_other": 0,
-		"outdoor": 0,
-		"shopping": 0,
-		"hobby": 0       
+		"outdoor": 200,
+		"shopping": 30,
+		"hobby": 370       
 	},
    {
 		"date": "2014-05-21",
