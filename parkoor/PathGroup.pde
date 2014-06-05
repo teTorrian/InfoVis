@@ -26,14 +26,10 @@ class PathGroup extends DrawableGroup<Path> {
   }
   
   void updateLocationFilters() {
-    if (chart.axisGroup.locationFilters != null) {
-      cachedData = chart.controller.model.getDataObjects(chart.axisGroup.locationFilters);
-      clear();
-      for(int i = 0; i < cachedData.size(); i++) {
-        add(new Path(this, cachedData.getJSONObject(i)));
-      }
-    } else {
-      println("why?");
+    cachedData = chart.controller.model.getDataObjects(chart.axisGroup.locationFilters);
+    this.clear();
+    for(int i = 0; i < cachedData.size(); i++) {
+      add(new Path(this, cachedData.getJSONObject(i)));
     }
   }
 }

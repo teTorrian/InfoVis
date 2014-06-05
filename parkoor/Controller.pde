@@ -4,7 +4,7 @@ class Controller {
   JSONArray data;
   
   Controller(int left, int top, int width, int height) {
-    model = new Model();
+    model = new Model("data.json");
     view = new View(this, left, top, width, height);
   }
   

@@ -11,6 +11,7 @@ class Path implements Drawable {
   DragAndDropManager dragAndDropManager;
   boolean highlighted = false;
   HashMap<String, Integer> data;
+  ArrayList<String> dataKeys;
   
 
   Path(PathGroup pathGroup, JSONObject date) {
@@ -20,6 +21,7 @@ class Path implements Drawable {
     axes = chart.axisGroup;
     this.dragAndDropManager = new DragAndDropManager();
     data = chart.controller.model.getLocationTimes(date);
+    dataKeys = chart.controller.model.getLocations(date);
   }
 
   boolean updated() {
@@ -46,9 +48,9 @@ class Path implements Drawable {
   
       beginShape();
         int i = 0;
-        for (String key : data.keySet()) {
+        for (String key : dataKeys) {
           // x muss ersetzt werden durch axes.get(i++).x
-          vertex(i++ * 100, chart.getInnerHeight() - data.get(key) * c);
+          vertex(i++ * 100, chart.getInnerHeight() - ((float)data.get(key)/1440) * chart.getInnerHeight());
         }
       endShape();
 
@@ -107,7 +109,7 @@ class Path implements Drawable {
     PVector pointM = dragAndDropManager.transformVector(mouse);
     float c = (float)chart.getInnerHeight() / 1440;
     int i = 0;
-    for (String key : data.keySet ()) {
+    for (String key : dataKeys) {
       if (point0 == null) {
         point0 = new PVector(float(i++ * 100), chart.getInnerHeight() - data.get(key) * c);
       } else {
