@@ -15,12 +15,11 @@ class AxisGroup extends DrawableGroup<Axis> {
     add(new Axis(this, 400, "Slub", "uni_slub"));
     add(new Axis(this, 500, "Uni (Sonstige)", "uni_other"));
     add(new Axis(this, 600, "Draußen", "outdoor"));
-    add(new Axis(this, 700, "Besorgungen", "outdoor"));
+    add(new Axis(this, 700, "Besorgungen", "shopping"));
     add(new Axis(this, 800, "Hobby/Sport", "hobby"));
     
     locationFilters = new ArrayList<LocationFilter>();
     for (Axis axis:this) {
-      println("adding "+axis.label+" "+(axis.locationFilter == null));
       locationFilters.add(axis.locationFilter);
     }
   }
