@@ -11,6 +11,7 @@ void setup(){
 void draw() {
   view.update();
   if (view.updated()) {
+    println("painting");
     view.draw();
   } else {
     noLoop();
@@ -28,4 +29,8 @@ void mouseReleased() {
 
 void mouseDragged() {
   view.mouseDragged();
+}
+
+void mouseMoved() {
+  view.mouseMoved();
 }

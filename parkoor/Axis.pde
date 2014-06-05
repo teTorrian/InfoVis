@@ -7,6 +7,7 @@ class Axis implements Drawable {
   color lineColor = color(80,80,80); 
   color lineColorGrayed = color(200,200,200); 
   color markColor = color(0,0,0); 
+  color markColorHighlighted = color(110,110,110); 
 
   Chart chart;
   AxisGroup axisGroup;
@@ -21,6 +22,8 @@ class Axis implements Drawable {
   float min = 0;
   float max = 24;
   boolean draggingMax = false;
+  boolean minHighlighted = false;
+  boolean maxHighlighted = false;
   
   Axis(AxisGroup axisGroup, int x, String label) {
     this.axisGroup = axisGroup;
@@ -51,7 +54,10 @@ class Axis implements Drawable {
     
     pushMatrix();
       translate(0,(1-((min-minMin)/(maxMax-minMin)))*chart.getInnerHeight());
-      fill(0,0,0);
+      if (minHighlighted)
+        fill(markColorHighlighted);
+      else
+        fill(markColor);
       noStroke();
       triangle(-triangleSize, triangleSize, triangleSize, triangleSize, 0, 0);
     popMatrix();
@@ -69,14 +75,16 @@ class Axis implements Drawable {
     
     pushMatrix();
       translate(0,(1-((max-minMin)/(maxMax-minMin)))*chart.getInnerHeight());
-      fill(markColor);
+      if (maxHighlighted)
+        fill(markColorHighlighted);
+      else
+        fill(markColor);
       noStroke();
       triangle(-triangleSize, -triangleSize, triangleSize, -triangleSize, 0, 0);
     popMatrix();
   }
   
   void update() {
-    updated = false;
   }
   
   void draw() {
@@ -100,45 +108,51 @@ class Axis implements Drawable {
       drawSliderMax();
     popMatrix();
     
+    updated = false;
+    
     
     if (!initialized) {
       initialized = true;
     }
   }
   
-  boolean isMouseOverMinMark(PVector mouse) {
+  boolean mouseOverMinMark(PVector mouse) {
     PVector p0 = new PVector(0.0, chart.getInnerHeight()*(1-((min-minMin)/(maxMax-minMin))) + triangleSize);
     PVector p1 = dragAndDropManager.transformVector(mouse);
     return (p0.dist(p1) < 8);
   }
   
-  boolean isMouseOverMaxMark(PVector mouse) {
+  boolean mouseOverMaxMark(PVector mouse) {
     PVector p0 = new PVector(0.0, chart.getInnerHeight()*(1-((max-minMin)/(maxMax-minMin))) - triangleSize);
     PVector p1 = dragAndDropManager.transformVector(mouse);
     return (p0.dist(p1) < 8);
   }
   
-  void mousePressed() {
-    if (!dragAndDropManager.dragging && isMouseOverMinMark(new PVector(float(mouseX),float(mouseY)))) {
+  boolean mousePressed() {
+    if (!dragAndDropManager.dragging && mouseOverMinMark(new PVector(float(mouseX),float(mouseY)))) {
       draggingMax = false;
       dragAndDropManager.start();
       loop();
-    } else if (!dragAndDropManager.dragging && isMouseOverMaxMark(new PVector(float(mouseX),float(mouseY)))) {
+      return true;
+    } else if (!dragAndDropManager.dragging && mouseOverMaxMark(new PVector(float(mouseX),float(mouseY)))) {
       draggingMax = true;
       dragAndDropManager.start();
       loop();
+      return true;
     }
-
+    return false;
   }
   
   
-  void mouseReleased() {
+  boolean mouseReleased() {
     if (dragAndDropManager.dragging) {
       dragAndDropManager.stop();
+      return true;
     }
+    return false;
   }
   
-  void mouseDragged() {
+  boolean mouseDragged() {
     if (dragAndDropManager.dragging) {
       if (draggingMax) {
         max = minMin + (1-dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight())*(maxMax-minMin);
@@ -155,6 +169,31 @@ class Axis implements Drawable {
           min = max;
         }
       }
+      return true;
     }
+    return false;
+  }
+  
+  boolean mouseMoved() {
+    if (!dragAndDropManager.dragging && mouseOverMinMark(new PVector(float(mouseX),float(mouseY)))) {
+      minHighlighted = true;
+      updated = true;
+      loop();
+      return true;
+    } else if (!dragAndDropManager.dragging && mouseOverMaxMark(new PVector(float(mouseX),float(mouseY)))) {
+      maxHighlighted = true;
+      updated = true;
+      loop();
+      return true;
+    } else if (minHighlighted && !mouseOverMinMark(new PVector(float(mouseX),float(mouseY)))) {
+      minHighlighted = false;
+      updated = true;
+      loop();
+    } else if (maxHighlighted && !mouseOverMaxMark(new PVector(float(mouseX),float(mouseY)))) {
+      maxHighlighted = false;
+      updated = true;
+      loop();
+    }
+    return false;
   }
 }

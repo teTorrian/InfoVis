@@ -17,7 +17,6 @@ class Chart extends DrawableGroup {
   AxisGroup axisGroup;
   Controller controller;
   PathGroup pathGroup;
-  IntDict pathColor; // ein verrückter Processing-Datentyp, wie Map<String, int>
   View view;
   
   Chart(View view, int left, int top, int width, int height) {
@@ -32,12 +31,6 @@ class Chart extends DrawableGroup {
     
     axisGroup = new AxisGroup(this);
     add(axisGroup);
-    
-    pathColor = new IntDict();
-    pathColor.set("Jonas", color(#B0285D));
-    pathColor.set("Christian", color(#E84A38));
-    pathColor.set("Vlad", color(#07D962));
-    pathColor.set("Lukas", color(#0E7BDD));
     
     pathGroup = new PathGroup(this);
     add(pathGroup);

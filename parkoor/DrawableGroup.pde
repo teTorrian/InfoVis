@@ -27,22 +27,40 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
     popMatrix();
   }
   
-  void mousePressed() {
+  boolean mousePressed() {
     for (Drawable drawable: this) {
-      drawable.mousePressed();
+      if (drawable.mousePressed()) {
+        return true;
+      }
     }
+    return false;
   }
   
   
-  void mouseReleased() {
+  boolean mouseReleased() {
     for (Drawable drawable: this) {
-      drawable.mouseReleased();
+      if (drawable.mouseReleased()) {
+        return true;
+      }
     }
+    return false;
   }
   
-  void mouseDragged() {
+  boolean mouseDragged() {
     for (Drawable drawable: this) {
-      drawable.mouseDragged();
+      if (drawable.mouseDragged()) {
+        return true;
+      }
     }
+    return false;
+  }
+  
+  boolean mouseMoved() {
+    for (Drawable drawable: this) {
+      if (drawable.mouseMoved()) {
+        return true;
+      }
+    }
+    return false;
   }
 }
