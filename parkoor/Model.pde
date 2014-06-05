@@ -64,5 +64,9 @@ class Model {
     locations.add("hobby");
     return locations;
   }
+  
+  int getLocationCount() {
+    return getLocations(cachedDataObjects.getJSONObject(0)).size();
+  }
 }
 

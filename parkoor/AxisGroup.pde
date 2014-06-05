@@ -8,15 +8,15 @@ class AxisGroup extends DrawableGroup<Axis> {
     super();
     this.chart = chart;
     controller = chart.controller;
-    add(new Axis(this, 0, "Zu Hause", "home"));
-    add(new Axis(this, 100, "Unterwegs", "transit"));
-    add(new Axis(this, 200, "Mensa", "uni_mensa"));
-    add(new Axis(this, 300, "Fakultät", "uni_fak"));
-    add(new Axis(this, 400, "Slub", "uni_slub"));
-    add(new Axis(this, 500, "Uni (Sonstige)", "uni_other"));
-    add(new Axis(this, 600, "Draußen", "outdoor"));
-    add(new Axis(this, 700, "Besorgungen", "shopping"));
-    add(new Axis(this, 800, "Hobby/Sport", "hobby"));
+    add(new Axis(this, int(chart.getSpacing()*0), "Zu Hause", "home"));
+    add(new Axis(this, int(chart.getSpacing()*1), "Unterwegs", "transit"));
+    add(new Axis(this, int(chart.getSpacing()*2), "Mensa", "uni_mensa"));
+    add(new Axis(this, int(chart.getSpacing()*3), "Fakultät", "uni_fak"));
+    add(new Axis(this, int(chart.getSpacing()*4), "Slub", "uni_slub"));
+    add(new Axis(this, int(chart.getSpacing()*5), "Uni (Sonstige)", "uni_other"));
+    add(new Axis(this, int(chart.getSpacing()*6), "Draußen", "outdoor"));
+    add(new Axis(this, int(chart.getSpacing()*7), "Besorgungen", "shopping"));
+    add(new Axis(this, int(chart.getSpacing()*8), "Hobby/Sport", "hobby"));
     
     locationFilters = new ArrayList<LocationFilter>();
     for (Axis axis:this) {

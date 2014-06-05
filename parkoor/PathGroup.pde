@@ -5,10 +5,12 @@ class PathGroup extends DrawableGroup<Path> {
   IntDict pathColor; // ein verrückter Processing-Datentyp, wie Map<String, int>
   IntDict pathColorHighlighted; // ein verrückter Processing-Datentyp, wie Map<String, int>
   JSONArray cachedData;
+  Model model;
   
   PathGroup(Chart chart) {
     this.chart = chart;
-    cachedData = chart.controller.model.getDataObjects();
+    model = chart.controller.model;
+    cachedData = model.getDataObjects();
     
     pathColor = new IntDict();
     pathColor.set("Jonas", color(176, 40, 93, 100));

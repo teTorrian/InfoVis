@@ -1,6 +1,6 @@
 class Path implements Drawable {
   
-  float strokeWidth = 3.0;
+  float strokeWidth = 1.5;
 
   boolean updated;
 
@@ -48,10 +48,12 @@ class Path implements Drawable {
   
       beginShape();
         int i = 0;
+        vertex(-chart.offsetX, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight());
         for (String key : dataKeys) {
           // x muss ersetzt werden durch axes.get(i++).x
-          vertex(i++ * 100, chart.getInnerHeight() - ((float)data.get(key)/1440) * chart.getInnerHeight());
+          vertex(i++ * chart.getSpacing(), chart.getInnerHeight() - ((float)data.get(key)/1440) * chart.getInnerHeight());
         }
+        vertex(chart.getInnerWidth()+chart.offsetX2, chart.getInnerHeight() - ((float)data.get(dataKeys.get(dataKeys.size()-1))/1440) * chart.getInnerHeight());
       endShape();
 
     popMatrix();
@@ -111,15 +113,16 @@ class Path implements Drawable {
     int i = 0;
     for (String key : dataKeys) {
       if (point0 == null) {
-        point0 = new PVector(float(i++ * 100), chart.getInnerHeight() - data.get(key) * c);
+        point0 = new PVector(float(i) * chart.getSpacing(), chart.getInnerHeight() - data.get(key) * c);
       } else {
-        point1 = new PVector(i++ * 100, (float)chart.getInnerHeight() - data.get(key) * c);
+        point1 = new PVector(i * chart.getSpacing(), (float)chart.getInnerHeight() - data.get(key) * c);
         if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
           return true;
         }
         
         point0 = point1;
       }
+      i++;
     }
     
     return false;
