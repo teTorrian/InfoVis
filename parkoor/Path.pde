@@ -1,6 +1,6 @@
 class Path implements Drawable {
   
-  float strokeWidth = 1.5;
+  float strokeWidth = 3.5;
 
   boolean updated;
 
@@ -10,6 +10,7 @@ class Path implements Drawable {
   AxisGroup axes;
   DragAndDropManager dragAndDropManager;
   boolean highlighted = false;
+  boolean grayed = false;
   HashMap<String, Integer> data;
   ArrayList<String> dataKeys;
   
@@ -38,7 +39,9 @@ class Path implements Drawable {
     
       dragAndDropManager.saveMatrix();
     
-      if (highlighted) {
+      if (grayed) {
+        stroke(color(200,200,200,100));
+      } else if (highlighted) {
         stroke(pathGroup.pathColorHighlighted.get(date.getString("name")));
       } else {
         stroke(pathGroup.pathColor.get(date.getString("name")));
@@ -111,19 +114,20 @@ class Path implements Drawable {
     PVector pointM = dragAndDropManager.transformVector(mouse);
     float c = (float)chart.getInnerHeight() / 1440;
     int i = 0;
+    point0 = new PVector(-chart.offsetX, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight());
     for (String key : dataKeys) {
-      if (point0 == null) {
-        point0 = new PVector(float(i) * chart.getSpacing(), chart.getInnerHeight() - data.get(key) * c);
-      } else {
-        point1 = new PVector(i * chart.getSpacing(), (float)chart.getInnerHeight() - data.get(key) * c);
-        if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
-          return true;
-        }
-        
-        point0 = point1;
+      point1 = new PVector(i * chart.getSpacing(), (float)chart.getInnerHeight() - data.get(key) * c);
+      if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
+        return true;
       }
+      
+      point0 = point1;
       i++;
     }
+    point1 = new PVector(chart.getInnerWidth()+chart.offsetX2, chart.getInnerHeight() - ((float)data.get(dataKeys.get(dataKeys.size()-1))/1440) * chart.getInnerHeight());
+    if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
+        return true;
+      }
     
     return false;
   }
@@ -131,11 +135,30 @@ class Path implements Drawable {
   boolean mouseMoved() {
     boolean cachedMouseOverCached = mouseOver(new PVector(float(mouseX),float(mouseY)));
     if (!highlighted && cachedMouseOverCached) {
+      for(Path path:pathGroup) {
+        path.highlighted = false;
+        path.grayed = true;
+      }
+      int myIndex = pathGroup.indexOf(this);
+      pathGroup.add(this);
+      pathGroup.remove(myIndex);
       highlighted = true;
+      grayed = false;
+      for(Axis axis:chart.axisGroup) {
+        axis.selectionMode = true;
+        axis.selectionColor = pathGroup.pathColorHighlighted.get(date.getString("name"));
+        axis.selection = (data.get(axis.name)/60);
+      }
       updated = true;
       loop();
       return true;
     } else if (highlighted && !cachedMouseOverCached) {
+      for(Path path:pathGroup) {
+        path.grayed = false;
+      }
+      for(Axis axis:chart.axisGroup) {
+        axis.selectionMode = false;
+      }
       highlighted = false;
       updated = true;
       loop();

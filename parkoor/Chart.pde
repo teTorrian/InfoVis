@@ -32,10 +32,11 @@ class Chart extends DrawableGroup {
     this.height = height;
 
     axisGroup = new AxisGroup(this);
-    add(axisGroup);
+    
 
     pathGroup = new PathGroup(this);
     add(pathGroup);
+    add(axisGroup);
   }
 
   int getInnerWidth() {

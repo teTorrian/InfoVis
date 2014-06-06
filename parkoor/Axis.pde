@@ -25,6 +25,9 @@ class Axis implements Drawable {
   boolean draggingMax = false;
   boolean minHighlighted = false;
   boolean maxHighlighted = false;
+  boolean selectionMode = false;
+  color selectionColor = color(0,0,0);
+  float selection = 0;
   LocationFilter locationFilter;
   
   Axis(AxisGroup axisGroup, int x, String label, String name) {
@@ -54,9 +57,17 @@ class Axis implements Drawable {
       textFont(font.light14);
       textAlign(CENTER);
       translate(0,textOffset+chart.getInnerHeight()+textAscent());
-      fill(0,0,0);
       noStroke();
-      text(int(min), 0, 0);
+      if (!selectionMode) {
+        fill(0,0,0);
+        text(int(min), 0, 0);
+      } else {
+        textFont(font.bold14);
+        fill(selectionColor);
+        text(int(selection), 0, 0);
+      }
+      textFont(font.light14);
+      fill(0,0,0);
       translate(0,textAscent()*2);
       text(label, 0, 0);
     popMatrix();
@@ -80,6 +91,11 @@ class Axis implements Drawable {
       fill(markColor);
       noStroke();
       text(int(max), 0, 0);
+//      if (!selectionMode) {
+//        text(int(max), 0, 0);
+//      } else {
+//        
+//      }
     popMatrix();
     
     pushMatrix();
