@@ -6,6 +6,7 @@ class Path implements Drawable {
 
   Chart chart;
   PathGroup pathGroup;
+  Font font;
   JSONObject date;
   AxisGroup axes;
   DragAndDropManager dragAndDropManager;
@@ -18,6 +19,7 @@ class Path implements Drawable {
   Path(PathGroup pathGroup, JSONObject date) {
     this.pathGroup = pathGroup;
     this.chart = pathGroup.chart;
+    this.font = chart.view.font;
     this.date = date;
     axes = chart.axisGroup;
     this.dragAndDropManager = new DragAndDropManager();
@@ -38,13 +40,23 @@ class Path implements Drawable {
     pushMatrix();
     
       dragAndDropManager.saveMatrix();
+      String entry_name = date.getString("name");
     
       if (grayed) {
         stroke(color(200,200,200,100));
       } else if (highlighted) {
-        stroke(pathGroup.pathColorHighlighted.get(date.getString("name")));
+        pushMatrix();
+          fill(pathGroup.pathColorHighlighted.get(entry_name));
+          noStroke();
+          translate(-chart.offsetX-4-textWidth(entry_name), chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() - textAscent()/2-4);
+          rect(0, 0, textWidth(entry_name)+8, textAscent()+8);
+          textFont(font.light14);
+          fill(255,255,255);
+          text(entry_name, 4,textAscent()+6);
+          stroke(pathGroup.pathColorHighlighted.get(entry_name));
+        popMatrix();
       } else {
-        stroke(pathGroup.pathColor.get(date.getString("name")));
+        stroke(pathGroup.pathColor.get(entry_name));
       }
       strokeWeight(strokeWidth);
       noFill();
