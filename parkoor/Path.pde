@@ -1,6 +1,6 @@
 class Path implements Drawable {
   
-  float strokeWidth = 3.5;
+  float strokeWidth = 1.9;
 
   boolean updated;
 

@@ -13,16 +13,16 @@ class PathGroup extends DrawableGroup<Path> {
     cachedData = model.getDataObjects();
     
     pathColor = new IntDict();
-    pathColor.set("Jonas", color(176, 40, 93, 100));
-    pathColor.set("Christian", color(232, 74, 56, 100));
-    pathColor.set("Vlad", color(7, 217, 98, 100));
-    pathColor.set("Lukas", color(14, 123, 221, 100));
+    pathColor.set("Jonas", color(176, 40, 93, 70));
+    pathColor.set("Christian", color(232, 74, 56, 70));
+    pathColor.set("Vlad", color(7, 217, 98, 70));
+    pathColor.set("Lukas", color(14, 123, 221, 70));
     
     pathColorHighlighted = new IntDict();
-    pathColorHighlighted.set("Jonas", color(176, 40, 93, 200));
-    pathColorHighlighted.set("Christian", color(232, 74, 56, 200));
-    pathColorHighlighted.set("Vlad", color(7, 217, 98, 200));
-    pathColorHighlighted.set("Lukas", color(14, 123, 221, 200));
+    pathColorHighlighted.set("Jonas", color(176, 40, 93, 180));
+    pathColorHighlighted.set("Christian", color(232, 74, 56, 180));
+    pathColorHighlighted.set("Vlad", color(7, 217, 98, 180));
+    pathColorHighlighted.set("Lukas", color(14, 123, 221, 180));
 
     updateLocationFilters();
   }
