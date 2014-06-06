@@ -19,12 +19,14 @@ class Chart extends DrawableGroup {
   Controller controller;
   PathGroup pathGroup;
   View view;
+  Font font;
 
   Chart(View view, int left, int top, int width, int height) {
     super();
     this.view = view;
     this.controller = view.controller;
     this.model = controller.model;
+    this.font = view.font;
 
     this.left = left;
     this.top = top;
@@ -75,6 +77,11 @@ class Chart extends DrawableGroup {
     stroke(200, 200, 200);
     dashline(0, offsetY, 0, getInnerHeight(), spacing);
     dashline(width, offsetY, width, getInnerHeight(), spacing);
+    textFont(font.light14);
+    textAlign(LEFT);
+    fill(200,200,200);
+    noStroke();
+    text("Stunden", width, -14);
 
     translate(offsetX, offsetY);
     super.draw();
