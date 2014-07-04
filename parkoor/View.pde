@@ -22,10 +22,9 @@ class View extends DrawableGroup {
     this.width = width;
     this.height = height;
     chart = new Chart(this, 0, 0, round(width-width*(1-chartFrac)), height);
-    calendar = new Calendar(this, round(width-width*(1-chartFrac-calendarOffset)), 0, round(width*(1-chartFrac-calendarOffset)), height);
-
-
-    faces = new Faces(600, round(-topicOffset-16), width-600, topicOffset-50);
+   
+    faces = new Faces(round(width-width*(1-chartFrac-calendarOffset)), 0, round(width*(1-chartFrac-calendarOffset)), 80);
+    calendar = new Calendar(this, round(width-width*(1-chartFrac-calendarOffset)), 100, round(width*(1-chartFrac-calendarOffset)), height-100);
     add(chart); 
     add(calendar);
     add(faces);
