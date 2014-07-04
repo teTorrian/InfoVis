@@ -11,6 +11,8 @@ class Faces extends DrawableGroup<Drawable> {
     this.height = height;
     this.left = left;
     this.top = top;
+    
+    add(new Face(this));
   }
   
   void draw() {
@@ -18,6 +20,7 @@ class Faces extends DrawableGroup<Drawable> {
       translate(left,top);
       fill(200,200,200);
       rect(0,0,width,height);
+      super.draw();
     popMatrix();
   }
   
