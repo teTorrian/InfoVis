@@ -43,6 +43,10 @@ class Axis implements Drawable {
     locationFilter = new LocationFilter(min, max, name);
   }
   
+  float minutesOnAxis(float value) {
+    return chart.getInnerHeight() - (value/1440) * chart.getInnerHeight();
+  }
+  
   void updateLocationFilter() {
     locationFilter.min = min;
     locationFilter.max = max;

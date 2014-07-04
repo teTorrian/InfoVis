@@ -11,6 +11,7 @@ void setup(){
 void draw() {
   view.update();
   if (view.updated()) {
+    print("a");
     view.draw();
   } else {
     noLoop();
