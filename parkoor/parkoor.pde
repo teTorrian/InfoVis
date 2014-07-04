@@ -2,9 +2,9 @@ Controller controller;
 View view;
 
 void setup(){ 
-  size(1400,700);
+  size(1024,600);
   
-  controller = new Controller(100,200,width-200,height-350);
+  controller = new Controller(100,165,824,330);
   view = controller.view;
 } 
  

@@ -10,6 +10,9 @@ class Chart extends DrawableGroup {
   int offsetX2 = 50;   // Abstand der Achsen zur rechten Seite des Diagramms 
   int offsetY2 = 0;    // Abstand der Achsen zur unteren Seite des Diagramms 
 
+  int topicOffset = 100;
+  String topic = "Wo bin ich?";
+  String subTopic = "Stunden pro Zeit und Ort";
   Model model;
 
   AxisGroup axisGroup;
@@ -51,27 +54,37 @@ class Chart extends DrawableGroup {
   }
 
   void draw() {
+    background(255);
     pushMatrix();
-      translate(left, top);
+    translate(left, top);
+    fill(0);
 
-      fill(0);
+    pushMatrix();
+    textAlign(LEFT);
+    translate(0, -topicOffset);
+    textFont(view.font.bold22);
+    text(topic, 0, 0);
+    translate(0, textAscent()*1.8);
+    textFont(view.font.light20);
+    text(subTopic, 0, 0);
+    popMatrix();
+    
 
-      float[] spacing = {
-        5, 5
-      };
-      strokeWeight(1.2);
-      stroke(200, 200, 200);
-      dashline(0, offsetY, 0, getInnerHeight(), spacing);
-      dashline(width, offsetY, width, getInnerHeight(), spacing);
-      textFont(font.light14);
-      textAlign(LEFT);
-      fill(200,200,200);
-      noStroke();
-      text("Stunden", width, -14);
-  
-      translate(offsetX, offsetY);
-      super.draw();
-      
+    float[] spacing = {
+      5, 5
+    };
+    strokeWeight(1.2);
+    stroke(200, 200, 200);
+    dashline(0, offsetY, 0, getInnerHeight(), spacing);
+    dashline(width, offsetY, width, getInnerHeight(), spacing);
+    textFont(font.light14);
+    textAlign(LEFT);
+    fill(200,200,200);
+    noStroke();
+    text("Stunden", width, -14);
+
+    translate(offsetX, offsetY);
+    super.draw();
     popMatrix();
   }
   
