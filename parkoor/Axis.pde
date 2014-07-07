@@ -191,7 +191,7 @@ class Axis implements Drawable {
           max = maxMax;
         }
         updateLocationFilter();
-        chart.pathGroup.updateLocationFilters();
+        chart.pathGroup.updateFilters();
       } else {
         min = minMin + (1-dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight())*(maxMax-minMin);
         if (min < minMin) {
@@ -200,7 +200,7 @@ class Axis implements Drawable {
           min = max;
         }
         updateLocationFilter();
-        chart.pathGroup.updateLocationFilters();
+        chart.pathGroup.updateFilters();
       }
       return true;
     }

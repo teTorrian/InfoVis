@@ -24,11 +24,11 @@ class PathGroup extends DrawableGroup<Path> {
     pathColorHighlighted.set("Vlad", color(7, 217, 98, 180));
     pathColorHighlighted.set("Lukas", color(14, 123, 221, 180));
 
-    updateLocationFilters();
+    updateFilters();
   }
   
-  void updateLocationFilters() {
-    cachedData = chart.controller.model.getDataObjects(chart.axisGroup.locationFilters);
+  void updateFilters() {
+    cachedData = chart.controller.model.getDataObjects(chart.axisGroup.filters);
     this.clear();
     for(int i = 0; i < cachedData.size(); i++) {
       add(new Path(this, cachedData.getJSONObject(i)));

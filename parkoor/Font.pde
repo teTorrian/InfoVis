@@ -3,7 +3,7 @@ class Font {
   PFont bold14;
   PFont light22;
   PFont light20;
-  PFont light12;  
+  PFont light12;
   PFont light14;
   
   Font() {

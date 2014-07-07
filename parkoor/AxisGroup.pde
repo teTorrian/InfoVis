@@ -2,7 +2,7 @@ class AxisGroup extends DrawableGroup<Axis> {
   
   Chart chart;
   Controller controller;
-  ArrayList<LocationFilter> locationFilters;
+  ArrayList<Filter> filters;
   
   AxisGroup(Chart chart) {
     super();
@@ -18,10 +18,14 @@ class AxisGroup extends DrawableGroup<Axis> {
     add(new Axis(this, int(chart.getSpacing()*7), "Besorgungen", "shopping"));
     add(new Axis(this, int(chart.getSpacing()*8), "Hobby/Sport", "hobby"));
     
-    locationFilters = new ArrayList<LocationFilter>();
+    filters = new ArrayList<Filter>();
     for (Axis axis:this) {
-      locationFilters.add(axis.locationFilter);
+      filters.add(axis.locationFilter);
     }
+    
+    DateFilter d = new DateFilter(new String[] {"2014-05-16", "2014-05-17"});
+    
+    filters.add(d);
   }
   
 }

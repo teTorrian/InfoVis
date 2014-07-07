@@ -1,4 +1,4 @@
-class LocationFilter {
+class LocationFilter implements Filter {
   float min;
   float max;
   String name;
@@ -9,4 +9,15 @@ class LocationFilter {
     this.name = name;
   }
   
+  JSONArray filterObjects(JSONArray dataObjects) {
+    for (int j = 0; j < dataObjects.size(); ) {
+      JSONObject data = dataObjects.getJSONObject(j);
+      
+      if (data.getInt(name) > max*60 || data.getInt(name) < min*60)
+        dataObjects.remove(j);
+      else
+        j++;
+    }
+    return dataObjects;
+  }
 }

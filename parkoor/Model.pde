@@ -1,5 +1,5 @@
 import java.util.Map;
-import java.util.Set;
+import java.util.HashSet;
 
 class Model {
 
@@ -13,25 +13,12 @@ class Model {
     return cachedDataObjects;
   }
 
-  JSONArray getDataObjects(ArrayList<LocationFilter> filters) {
+  JSONArray getDataObjects(ArrayList<Filter> filters) {
     // copy original...
     JSONArray dataObjects = JSONArray.parse(cachedDataObjects.toString());
-
-    for (int i = 0; i < filters.size(); i++) {
-      LocationFilter filter = filters.get(i);
-      String name = filter.name;
-      float min = filter.min;
-      float max = filter.max;  
-      
-      for (int j = 0; j < dataObjects.size();) {
-        JSONObject data = dataObjects.getJSONObject(j);
-       
-        if (data.getInt(name) > max*60 || data.getInt(name) < min*60) {
-          dataObjects.remove(j); 
-        } else {      
-          j++;
-        }
-      }   
+    
+    for (Filter f: filters) {
+      dataObjects = f.filterObjects(dataObjects);
     }
    
     return dataObjects;
