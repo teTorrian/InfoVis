@@ -5,6 +5,11 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
   }
   
   boolean updated() {
+    for (Drawable drawable: this) {
+      if (drawable.updated()) {
+        return true;
+      }
+    }
     return updated;
   }
   

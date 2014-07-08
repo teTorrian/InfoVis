@@ -1,4 +1,4 @@
-class PolyfocalAxis extends DrawableGroup<Drawable> {
+class PolyfocalAxis extends DrawableGroup<PolyfocalPoint> {
 
   int textOffset = 14;
   int hoverArea = 5;
@@ -16,7 +16,6 @@ class PolyfocalAxis extends DrawableGroup<Drawable> {
   boolean updated = false;
   boolean initialized = false;
   PVector hoverPoint;
-  ArrayList<PVector> polyfocalPoints;
 
   PolyfocalAxis(Chart chart, int x, String label) {
     this.chart = chart;
@@ -25,7 +24,6 @@ class PolyfocalAxis extends DrawableGroup<Drawable> {
 
     this.x = x;
     this.label = label;
-    polyfocalPoints = new ArrayList<PVector>();
   }
 
   float minutesAxisProjection(float value) {
@@ -34,7 +32,7 @@ class PolyfocalAxis extends DrawableGroup<Drawable> {
 
 
   boolean updated() {
-    return !initialized || updated || dragAndDropManager.dragging;
+    return super.updated() || !initialized || updated || dragAndDropManager.dragging;
   }
 
   void update() {
@@ -42,36 +40,28 @@ class PolyfocalAxis extends DrawableGroup<Drawable> {
 
   void draw() {
     pushMatrix();
-    translate(x, 0);
-    dragAndDropManager.saveMatrix();
+      translate(x, 0);
+      dragAndDropManager.saveMatrix();
 
-    strokeWeight(1.2);
-    stroke(200, 200, 200);
-    dashline(0, chart.getInnerHeight(), 0, 0, spacing);
-    textFont(font.light14);
-    textAlign(LEFT);
-    fill(200, 200, 200);
-    noStroke();
-    text(label, 0, -14);
+      strokeWeight(1.2);
+      stroke(200, 200, 200);
+      dashline(0, chart.getInnerHeight(), 0, 0, spacing);
+      textFont(font.light14);
+      textAlign(LEFT);
+      fill(200, 200, 200);
+      noStroke();
+      text(label, 0, -14);
 
-    if (hoverPoint != null) {
-      ellipse(hoverPoint.x, hoverPoint.y, 2*hoverArea, 2*hoverArea);
-    }
-
-    fill(120, 120, 120);
-    boolean first = false;
-    for (PVector point : polyfocalPoints) {
-      if (first) {
-        first = false;
-        fill(220, 220, 220);
-      }  
-      ellipse(point.x, point.y, 2*hoverArea, 2*hoverArea);
-    }
-
+      if (hoverPoint != null) {
+        ellipse(hoverPoint.x, hoverPoint.y, 2*hoverArea, 2*hoverArea);
+      }
+      
+      super.draw();
+  
     popMatrix();
-
+  
     updated = false;
-
+  
     if (!initialized) {
       initialized = true;
     }
@@ -82,54 +72,37 @@ class PolyfocalAxis extends DrawableGroup<Drawable> {
   }
 
   boolean mousePressed() {
-    PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
-    if (!dragAndDropManager.dragging && mouseOver(m)) {
-      dragAndDropManager.start();
-      hoverPoint = null;
-      polyfocalPoints.add(0, new PVector(0, m.y));
-      updated = true;
-      loop();
-      return true;
-    } 
-    return false;
-  }
-
-
-  boolean mouseReleased() {
-    if (dragAndDropManager.dragging) {
-      dragAndDropManager.stop();
-
-      updated = true;
-      loop();
-      return true;
-    }
-    return false;
-  }
-
-  boolean mouseDragged() {
-
-    if (dragAndDropManager.dragging) {
-      PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
-      polyfocalPoints.get(0).y = m.y;
-      updated = true;
-      loop();
-      return true;
-    }
-    return false;
-  }
-
-  boolean mouseMoved() {
-    if (!dragAndDropManager.dragging) {
+    if (!super.mousePressed()) {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       if (mouseOver(m)) {
-        hoverPoint = new PVector(0, m.y);
-        updated = true;
-        loop();
-      } else if (hoverPoint != null) {
         hoverPoint = null;
-        updated = true;
-        loop();
-      }
+        add(0, new PolyfocalPoint(this, 0, m.y));
+        get(0).dragAndDropManager.start();
+//        updated = true;
+//        loop();
+        return true;
+      } 
+    }
+    return false;
+  }
+
+
+  boolean mouseMoved() {
+    if (!super.mouseMoved()) {
+        PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
+        if (mouseOver(m)) {
+          hoverPoint = new PVector(0, m.y);
+          updated = true;
+          loop();
+        } else if (hoverPoint != null) {
+          hoverPoint = null;
+          updated = true;
+          loop();
+        }
+    } else if (hoverPoint != null) {
+      hoverPoint = null;
+      updated = true;
+      loop();
     }
     return false;
   }
