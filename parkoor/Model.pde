@@ -24,6 +24,14 @@ class Model {
     return dataObjects;
   }  
 
+  JSONArray getDataObjects(JSONArray dataObjects, ArrayList<Filter> filters) {
+    for (Filter f: filters) {
+      dataObjects = f.filterObjects(dataObjects);
+    }
+   
+    return dataObjects;
+  }
+  
   HashMap getLocationTimes(JSONObject dataObject) {
     HashMap<String, Integer> LocationTimes = new HashMap<String, Integer>();
     LocationTimes.put("home", dataObject.getInt("home"));

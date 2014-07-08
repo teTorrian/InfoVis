@@ -7,10 +7,14 @@ class PathGroup extends DrawableGroup<Path> {
   JSONArray cachedData;
   Model model;
   
+  ArrayList<Filter> filters;
+  
   PathGroup(Chart chart) {
     this.chart = chart;
     model = chart.controller.model;
     cachedData = model.getDataObjects();
+    
+    filters = new ArrayList<Filter>();
     
     pathColor = new IntDict();
     pathColor.set("Jonas", color(176, 40, 93, 70));
@@ -29,6 +33,7 @@ class PathGroup extends DrawableGroup<Path> {
   
   void updateFilters() {
     cachedData = chart.controller.model.getDataObjects(chart.axisGroup.filters);
+    cachedData = chart.controller.model.getDataObjects(cachedData, filters);
     this.clear();
     for(int i = 0; i < cachedData.size(); i++) {
       add(new Path(this, cachedData.getJSONObject(i)));
