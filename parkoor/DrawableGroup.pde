@@ -25,15 +25,14 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
   }
   
   void draw() {
-    pushMatrix();
-      for (Drawable drawable: this) {
-        drawable.draw();
-      }
-    popMatrix();
+    for (Drawable drawable: this) {
+      drawable.draw();
+    }
   }
   
   boolean mousePressed() {
-    for (Drawable drawable: this) {
+    for(int i = this.size()-1; i >= 0; i--) {
+      Drawable drawable = get(i);
       if (drawable.mousePressed()) {
         return true;
       }
@@ -43,7 +42,8 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
   
   
   boolean mouseReleased() {
-    for (Drawable drawable: this) {
+    for(int i = this.size()-1; i >= 0; i--) {
+      Drawable drawable = get(i);
       if (drawable.mouseReleased()) {
         return true;
       }
@@ -52,7 +52,8 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
   }
   
   boolean mouseDragged() {
-    for (Drawable drawable: this) {
+    for(int i = this.size()-1; i >= 0; i--) {
+      Drawable drawable = get(i);
       if (drawable.mouseDragged()) {
         return true;
       }
@@ -61,7 +62,8 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
   }
   
   boolean mouseMoved() {
-    for (Drawable drawable: this) {
+    for(int i = this.size()-1; i >= 0; i--) {
+      Drawable drawable = get(i);
       if (drawable.mouseMoved()) {
         return true;
       }

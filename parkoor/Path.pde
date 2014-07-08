@@ -108,25 +108,6 @@ class Path implements Drawable {
   }
 
   boolean mousePressed() {
-    // mouseEvent variable contains the current event information
-    if (mouseEvent.getClickCount()==2) {
-      println("<double click>");
-      if(mouseOver(new PVector(mouseX, mouseY))) {
-        println("mouse over!");
-        println(date.getString("name"));
-        PersonFilter p = new PersonFilter();
-        p.resetFilter();
-        p.remove(date.getString("name"));
-        pathGroup.filters.add(p);
-      }
-      else {
-        // Filter löschen
-      }
-    }
-    else {
-      // Multi-Select
-    }
-  
     return false;
   }
 
@@ -164,8 +145,8 @@ class Path implements Drawable {
   }
 
   boolean mouseMoved() {
-    boolean cachedMouseOverCached = mouseOver(new PVector(float(mouseX),float(mouseY)));
-    if (!highlighted && cachedMouseOverCached) {
+    boolean mouseIsOver = mouseOver(new PVector(float(mouseX),float(mouseY)));
+    if (!highlighted && mouseIsOver) {
       for(Path path:pathGroup) {
         path.highlighted = false;
         path.grayed = true;
@@ -183,7 +164,7 @@ class Path implements Drawable {
       updated = true;
       loop();
       return true;
-    } else if (highlighted && !cachedMouseOverCached) {
+    } else if (highlighted && !mouseIsOver) {
       for(Path path:pathGroup) {
         path.grayed = false;
       }
@@ -194,6 +175,8 @@ class Path implements Drawable {
       updated = true;
       loop();
       return false;
+    } else if (highlighted && mouseIsOver) {
+      return true;
     }
     return false;
   }
