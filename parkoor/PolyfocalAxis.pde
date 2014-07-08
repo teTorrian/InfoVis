@@ -77,6 +77,8 @@ class PolyfocalAxis extends DrawableGroup<PolyfocalPoint> {
       if (mouseOver(m)) {
         hoverPoint = null;
         add(0, new PolyfocalPoint(this, 0, m.y));
+        get(0).dragAndDropManager.matrix = dragAndDropManager.matrix;
+        get(0).dragAndDropManager.invertedMatrix = dragAndDropManager.invertedMatrix;
         get(0).dragAndDropManager.start();
 //        updated = true;
 //        loop();
