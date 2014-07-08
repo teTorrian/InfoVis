@@ -46,7 +46,7 @@ class Model {
     return LocationTimes;
   }
   
-  ArrayList<String> getLocations(JSONObject dataObject) {
+  ArrayList<String> getLocations(/*JSONObject dataObject*/) {
     ArrayList<String> locations = new ArrayList<String>();
     locations.add("home");
     locations.add("transit");
@@ -61,7 +61,7 @@ class Model {
   }
   
   int getLocationCount() {
-    return getLocations(cachedDataObjects.getJSONObject(0)).size();
+    return getLocations(/*cachedDataObjects.getJSONObject(0)*/).size();
   }
   
   HashSet<String> getDates() {

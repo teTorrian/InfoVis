@@ -25,7 +25,7 @@ class Path implements Drawable {
     axes = chart.axisGroup;
     this.dragAndDropManager = new DragAndDropManager();
     data = chart.controller.model.getLocationTimes(date);
-    dataKeys = chart.controller.model.getLocations(date);
+    dataKeys = chart.controller.model.getLocations(/*date*/);
     
     personFilter = new PersonFilter();
   }
@@ -113,20 +113,47 @@ class Path implements Drawable {
   boolean mousePressed() {
     // mouseEvent variable contains the current event information
     if (mouseEvent.getClickCount()==2) {
-      println("double click");
       if(mouseMoved()) {
-        // Mouse auf einer Linie beim Doppelklick
-        // -> Person auswählen
+        // double click auf eine Linie
+        // -> alle Datensätze einer Person auswählen (Filter)
+        println("double click on this Path :\t" + date.getString("name") + "\t" + date.getString("date"));
+        
+        pathGroup.personFilter.fillFilter();
+        pathGroup.personFilter.remove(date.getString("name"));
+        println("People not to show : " + pathGroup.personFilter.toString());
 
         return true;
       }
       else {
-        // Filter löschen
+        // double click in leere Fläche
+        // -> Filter löschen
+        pathGroup.personFilter.clear();
 
+        // Warum funktioniert das?
+        println("double click and no Path cares");
+        return true;
       }
     }
-    else {
+    else if (mouseEvent.getClickCount()==1) {
       // Multi-Select
+      if (mouseMoved()) {
+        // single click auf eine Linie
+        // -> Linie auswählen (Auswahl erstellen, Durchschnitt anzeigen)
+        // Alle weiteren Linie werden dauerhaft, also solange die Auswahl
+        // besteht, grayed dargestellt, beim mouse over highlighted.
+        // Allerdings ist das auch schlecht, da man so nicht mehr erkennt
+        // welcher Datensatz von wem ist.
+        println("single click");
+        //pathGroup.extendSelection(date);
+        return true;
+      }
+      else {
+        // single click in leere Fläche
+        // -> Auswahl löschen
+        //pathGroup.clearSelection();
+        
+        //return true;
+      }
     }
     return false;
   }
