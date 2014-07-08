@@ -1,4 +1,4 @@
-//class ZoomPoint implements Drawable {
+//class PolyfocalPoint extends PVector implements Drawable {
 //  Font font;
 //  DragAndDropManager dragAndDropManager; 
 // 

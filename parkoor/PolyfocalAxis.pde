@@ -1,7 +1,7 @@
-class ZoomableAxis extends DrawableGroup<Drawable> {
-  
+class PolyfocalAxis extends DrawableGroup<Drawable> {
+
   int textOffset = 14;
-  int hoverArea = 7;
+  int hoverArea = 5;
   float[] spacing = {
     5, 5
   };
@@ -9,97 +9,118 @@ class ZoomableAxis extends DrawableGroup<Drawable> {
   Chart chart;
   Font font;
   DragAndDropManager dragAndDropManager;
-  
+
   int x;
   String label;
- 
+
   boolean updated = false;
   boolean initialized = false;
   PVector hoverPoint;
-  ArrayList<PVector> zoomablePoints;
+  ArrayList<PVector> polyfocalPoints;
 
-  ZoomableAxis(Chart chart, int x, String label) {
+  PolyfocalAxis(Chart chart, int x, String label) {
     this.chart = chart;
     this.font = chart.view.font;
     this.dragAndDropManager = new DragAndDropManager();
-    
+
     this.x = x;
     this.label = label;
-    
+    polyfocalPoints = new ArrayList<PVector>();
   }
-  
+
   float minutesAxisProjection(float value) {
     return chart.getInnerHeight() - (value/1440) * chart.getInnerHeight();
   }
-  
-  
+
+
   boolean updated() {
     return !initialized || updated || dragAndDropManager.dragging;
   }
-  
+
   void update() {
   }
-  
+
   void draw() {
     pushMatrix();
-      translate(x, 0);
-      dragAndDropManager.saveMatrix();
-      
-      strokeWeight(1.2);
-      stroke(200, 200, 200);
-      dashline(0,chart.getInnerHeight(),0,0, spacing);
-      textFont(font.light14);
-      textAlign(LEFT);
-      fill(200,200,200);
-      noStroke();
-      text(label, 0, -14);
-      
-      if (hoverPoint != null) {
-        ellipse(hoverPoint.x, hoverPoint.y, 2*hoverArea, 2*hoverArea);
-      }
-  
+    translate(x, 0);
+    dragAndDropManager.saveMatrix();
+
+    strokeWeight(1.2);
+    stroke(200, 200, 200);
+    dashline(0, chart.getInnerHeight(), 0, 0, spacing);
+    textFont(font.light14);
+    textAlign(LEFT);
+    fill(200, 200, 200);
+    noStroke();
+    text(label, 0, -14);
+
+    if (hoverPoint != null) {
+      ellipse(hoverPoint.x, hoverPoint.y, 2*hoverArea, 2*hoverArea);
+    }
+
+    fill(120, 120, 120);
+    boolean first = false;
+    for (PVector point : polyfocalPoints) {
+      if (first) {
+        first = false;
+        fill(220, 220, 220);
+      }  
+      ellipse(point.x, point.y, 2*hoverArea, 2*hoverArea);
+    }
+
     popMatrix();
-    
+
     updated = false;
-    
+
     if (!initialized) {
       initialized = true;
     }
   }
-  
+
   boolean mouseOver(PVector m) {
     return (m.x > -hoverArea && m.x < hoverArea && m.y > 0 && m.y < chart.getInnerHeight());
   }
-  
+
   boolean mousePressed() {
-    if (!dragAndDropManager.dragging && mouseOver(new PVector(float(mouseX),float(mouseY)))) {
+    PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
+    if (!dragAndDropManager.dragging && mouseOver(m)) {
       dragAndDropManager.start();
+      hoverPoint = null;
+      polyfocalPoints.add(0, new PVector(0, m.y));
+      updated = true;
       loop();
       return true;
     } 
     return false;
   }
-  
-  
+
+
   boolean mouseReleased() {
     if (dragAndDropManager.dragging) {
       dragAndDropManager.stop();
+
+      updated = true;
+      loop();
       return true;
     }
     return false;
   }
-  
+
   boolean mouseDragged() {
+
     if (dragAndDropManager.dragging) {
-      
+      PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
+      polyfocalPoints.get(0).y = m.y;
+      updated = true;
+      loop();
       return true;
     }
     return false;
   }
-  
+
   boolean mouseMoved() {
-    PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY)));
     if (!dragAndDropManager.dragging) {
+      PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       if (mouseOver(m)) {
         hoverPoint = new PVector(0, m.y);
         updated = true;
@@ -112,7 +133,7 @@ class ZoomableAxis extends DrawableGroup<Drawable> {
     }
     return false;
   }
-  
+
   /* 
    * Draw a dashed line with given set of dashes and gap lengths. 
    * x0 starting x-coordinate of line. 
@@ -168,3 +189,4 @@ class ZoomableAxis extends DrawableGroup<Drawable> {
     }
   }
 }
+

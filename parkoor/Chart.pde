@@ -39,8 +39,8 @@ class Chart extends DrawableGroup {
     pathGroup = new PathGroup(this);
     add(pathGroup);
     add(axisGroup);
-    add(new ZoomableAxis(this, width-offsetX, "Zoom"));
-    add(new ZoomableAxis(this, 0-offsetX, ""));
+    add(new PolyfocalAxis(this, width-offsetX, "Zoom"));
+    add(new PolyfocalAxis(this, 0-offsetX, ""));
   }
 
   int getInnerWidth() {
