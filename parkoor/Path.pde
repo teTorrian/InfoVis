@@ -134,7 +134,6 @@ class Path implements Drawable {
     else {
       // Multi-Select
     }
-  
     return false;
   }
 
@@ -172,8 +171,8 @@ class Path implements Drawable {
   }
 
   boolean mouseMoved() {
-    boolean cachedMouseOverCached = mouseOver(new PVector(float(mouseX),float(mouseY)));
-    if (!highlighted && cachedMouseOverCached) {
+    boolean mouseIsOver = mouseOver(new PVector(float(mouseX),float(mouseY)));
+    if (!highlighted && mouseIsOver) {
       for(Path path:pathGroup) {
         path.highlighted = false;
         path.grayed = true;
@@ -191,7 +190,7 @@ class Path implements Drawable {
       updated = true;
       loop();
       return true;
-    } else if (highlighted && !cachedMouseOverCached) {
+    } else if (highlighted && !mouseIsOver) {
       for(Path path:pathGroup) {
         path.grayed = false;
       }
@@ -202,6 +201,8 @@ class Path implements Drawable {
       updated = true;
       loop();
       return false;
+    } else if (highlighted && mouseIsOver) {
+      return true;
     }
     return false;
   }

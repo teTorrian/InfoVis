@@ -60,8 +60,12 @@ class PolyfocalPoint extends PVector implements Drawable {
   
   boolean mouseReleased() {
     if (dragAndDropManager.dragging) {
+      PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       dragAndDropManager.stop();
-      updated = true;
+      if (abs(m.x) > 10) {
+        polyfocalAxis.remove(this);
+      }
+      polyfocalAxis.updated = true;
       loop();
       return true;
     }
@@ -72,6 +76,11 @@ class PolyfocalPoint extends PVector implements Drawable {
     if (dragAndDropManager.dragging) {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       this.y = m.y;
+      if (abs(m.x) > 10) {
+        this.x = m.x;
+      } else {
+        this.x = 0;
+      }
       updated = true;
       loop();
       return true;
