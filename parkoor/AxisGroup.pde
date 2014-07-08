@@ -23,9 +23,15 @@ class AxisGroup extends DrawableGroup<Axis> {
       filters.add(axis.locationFilter);
     }
     
-    DateFilter d = new DateFilter(new String[] {"2014-05-16", "2014-05-17"});
+//    DateFilter d = new DateFilter(new String[] {"2014-05-16", "2014-05-17"});
+//    filters.add(d);
     
-    filters.add(d);
+//    PersonFilter p = new PersonFilter(new String[] {"Jonas", "Lukas", "Jonas"});
+//    println("PersonFilter: " + p.toString());
+//    println("remove Jonas " + p.remove("Jonas"));
+//    println("remove Jonas " + p.remove("Jonas"));
+//    println("add Jonas " + p.add("Jonas"));
+//    filters.add(p);
   }
   
 }
