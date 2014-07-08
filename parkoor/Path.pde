@@ -15,6 +15,7 @@ class Path implements Drawable {
   HashMap<String, Integer> data;
   ArrayList<String> dataKeys;
   
+  PersonFilter personFilter;
 
   Path(PathGroup pathGroup, JSONObject date) {
     this.pathGroup = pathGroup;
@@ -25,6 +26,8 @@ class Path implements Drawable {
     this.dragAndDropManager = new DragAndDropManager();
     data = chart.controller.model.getLocationTimes(date);
     dataKeys = chart.controller.model.getLocations(date);
+    
+    personFilter = new PersonFilter();
   }
 
   boolean updated() {
@@ -112,12 +115,17 @@ class Path implements Drawable {
     if (mouseEvent.getClickCount()==2) {
       println("<double click>");
       if(mouseOver(new PVector(mouseX, mouseY))) {
-        println("mouse over!");
+        println("mouse over");
         println(date.getString("name"));
-        PersonFilter p = new PersonFilter();
-        p.resetFilter();
-        p.remove(date.getString("name"));
-        pathGroup.filters.add(p);
+        
+        personFilter.resetFilter();
+        personFilter.remove(date.getString("name"));
+        
+        //pathGroup.filters.add(personFilter);
+        //println(pathGroup.filters.toString());
+        //pathGroup.updateFilters();
+        
+        return true;
       }
       else {
         // Filter löschen
