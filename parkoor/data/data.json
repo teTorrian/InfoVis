@@ -286,6 +286,19 @@
 		"hobby": 0       
 	},
 	{
+		"date": "2014-05-18",
+		"name": "Vlad",
+		"home": 996,
+		"transit": 87,
+		"uni_mensa": 0,
+		"uni_fak": 0,
+		"uni_slub": 0,
+		"uni_other": 0,
+		"outdoor": 357,
+		"shopping": 0,
+		"hobby": 0       
+	},
+	{
 		"date": "2014-05-19",
 		"name": "Vlad",
 		"home": 847,
@@ -325,6 +338,58 @@
 		"hobby": 0       
 	},
 	{
+		"date": "2014-05-22",
+		"name": "Vlad",
+		"home": 1196,
+		"transit": 93,
+		"uni_mensa": 0,
+		"uni_fak": 0,
+		"uni_slub": 0,
+		"uni_other": 0,
+		"outdoor": 151,
+		"shopping": 0,
+		"hobby": 0       
+	},
+	{
+		"date": "2014-05-23",
+		"name": "Vlad",
+		"home": 898,
+		"transit": 123,
+		"uni_mensa": 0,
+		"uni_fak": 0,
+		"uni_slub": 0,
+		"uni_other": 0,
+		"outdoor": 419,
+		"shopping": 0,
+		"hobby": 0       
+	},
+	{
+		"date": "2014-05-24",
+		"name": "Vlad",
+		"home": 934,
+		"transit": 88,
+		"uni_mensa": 0,
+		"uni_fak": 0,
+		"uni_slub": 0,
+		"uni_other": 0,
+		"outdoor": 418,
+		"shopping": 0,
+		"hobby": 0       
+	},
+	{
+		"date": "2014-05-25",
+		"name": "Vlad",
+		"home": 1215,
+		"transit": 58,
+		"uni_mensa": 0,
+		"uni_fak": 0,
+		"uni_slub": 0,
+		"uni_other": 0,
+		"outdoor": 167,
+		"shopping": 0,
+		"hobby": 0       
+	},
+	{
 		"date": "2014-05-26",
 		"name": "Vlad",
 		"home": 780,
@@ -347,6 +412,32 @@
 		"uni_slub": 370,
 		"uni_other": 33,
 		"outdoor": 24,
+		"shopping": 0,
+		"hobby": 0       
+	},
+	{
+		"date": "2014-05-28",
+		"name": "Vlad",
+		"home": 915,
+		"transit": 210,
+		"uni_mensa": 21,
+		"uni_fak": 192,
+		"uni_slub": 0,
+		"uni_other": 56,
+		"outdoor": 0,
+		"shopping": 46,
+		"hobby": 0       
+	},
+	{
+		"date": "2014-05-29",
+		"name": "Vlad",
+		"home": 840,
+		"transit": 131,
+		"uni_mensa": 32,
+		"uni_fak": 157,
+		"uni_slub": 156,
+		"uni_other": 28,
+		"outdoor": 96,
 		"shopping": 0,
 		"hobby": 0       
 	}
