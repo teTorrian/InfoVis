@@ -28,7 +28,7 @@ class PersonFilter extends HashSet<String> implements Filter {
     return dataObjects;
   }
   
-  void resetFilter() {
+  void fillFilter() {
     clear();
     add("Jonas");
     add("Vlad");

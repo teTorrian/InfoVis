@@ -113,22 +113,16 @@ class Path implements Drawable {
   boolean mousePressed() {
     // mouseEvent variable contains the current event information
     if (mouseEvent.getClickCount()==2) {
-      println("<double click>");
-      if(mouseOver(new PVector(mouseX, mouseY))) {
-        println("mouse over");
-        println(date.getString("name"));
-        
-        personFilter.resetFilter();
-        personFilter.remove(date.getString("name"));
-        
-        //pathGroup.filters.add(personFilter);
-        //println(pathGroup.filters.toString());
-        //pathGroup.updateFilters();
-        
+      println("double click");
+      if(mouseMoved()) {
+        // Mouse auf einer Linie beim Doppelklick
+        // -> Person auswählen
+
         return true;
       }
       else {
         // Filter löschen
+
       }
     }
     else {

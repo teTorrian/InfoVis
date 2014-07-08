@@ -63,5 +63,13 @@ class Model {
   int getLocationCount() {
     return getLocations(cachedDataObjects.getJSONObject(0)).size();
   }
+  
+  HashSet<String> getDates() {
+    HashSet<String> dates = new HashSet<String>();
+    for (int i = 0; i < cachedDataObjects.size(); i++)
+      dates.add(((JSONObject) cachedDataObjects.getJSONObject(i)).getString("date"));
+      
+    return dates;
+  }
 }
 
