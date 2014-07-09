@@ -1,4 +1,4 @@
-class PolyfocalAxis extends DrawableGroup<PolyfocalPoint> {
+class BifocalAxis extends DrawableGroup<BifocalPoint> {
 
   int textOffset = 14;
   int hoverArea = 5;
@@ -17,7 +17,7 @@ class PolyfocalAxis extends DrawableGroup<PolyfocalPoint> {
   boolean initialized = false;
   PVector hoverPoint;
 
-  PolyfocalAxis(Chart chart, int x, String label) {
+  BifocalAxis(Chart chart, int x, String label) {
     this.chart = chart;
     this.font = chart.view.font;
     this.dragAndDropManager = new DragAndDropManager();
@@ -76,7 +76,7 @@ class PolyfocalAxis extends DrawableGroup<PolyfocalPoint> {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       if (mouseOver(m)) {
         hoverPoint = null;
-        add(0, new PolyfocalPoint(this, 0, m.y));
+        add(0, new BifocalPoint(this, 0, m.y));
         get(0).dragAndDropManager.matrix = dragAndDropManager.matrix;
         get(0).dragAndDropManager.invertedMatrix = dragAndDropManager.invertedMatrix;
         get(0).dragAndDropManager.start();

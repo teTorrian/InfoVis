@@ -1,17 +1,17 @@
-class PolyfocalPoint extends PVector implements Drawable {
+class BifocalPoint extends PVector implements Drawable {
   int hoverArea = 5;
   Font font;
   DragAndDropManager dragAndDropManager;
-  PolyfocalAxis polyfocalAxis; 
+  BifocalAxis bifocalAxis; 
  
   boolean updated = false;
   boolean initialized = false;  
   boolean highlighted = false;
   
-  PolyfocalPoint(PolyfocalAxis polyfocalAxis, float x, float y) {
+  BifocalPoint(BifocalAxis bifocalAxis, float x, float y) {
     super(x, y);
     this.dragAndDropManager = new DragAndDropManager();
-    this.polyfocalAxis = polyfocalAxis;
+    this.bifocalAxis = bifocalAxis;
   }
   
   boolean updated() {
@@ -63,9 +63,9 @@ class PolyfocalPoint extends PVector implements Drawable {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       dragAndDropManager.stop();
       if (abs(m.x) > 10) {
-        polyfocalAxis.remove(this);
+        bifocalAxis.remove(this);
       }
-      polyfocalAxis.updated = true;
+      bifocalAxis.updated = true;
       loop();
       return true;
     }
