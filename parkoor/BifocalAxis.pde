@@ -1,30 +1,134 @@
-class BifocalAxis extends DrawableGroup<BifocalPoint> {
+class BifocalAxis extends DrawableGroup<Drawable> {
 
   int textOffset = 14;
   int hoverArea = 5;
-  float[] spacing = {
-    5, 5
-  };
+  int normalDashSize = 5;
 
   Chart chart;
   Font font;
   DragAndDropManager dragAndDropManager;
 
   int x;
+  boolean secondHalf = false;
   String label;
 
   boolean updated = false;
   boolean initialized = false;
   PVector hoverPoint;
+  BifocalAxis parent;
+  BifocalAxis root;
+  BifocalAxis topChild;
+  BifocalAxis bottomChild;
+  BifocalPoint parentPoint;
+  BifocalPoint point;
+  float blurFactor = 1.0;
+  
+  PVector startPoint;
 
   BifocalAxis(Chart chart, int x, String label) {
     this.chart = chart;
     this.font = chart.view.font;
     this.dragAndDropManager = new DragAndDropManager();
-
+    root = this;
     this.x = x;
     this.label = label;
   }
+  
+  BifocalAxis(BifocalAxis parent, BifocalAxis root, BifocalPoint parentPoint, boolean secondHalf) {
+    this.chart = parent.chart;
+    this.root = root;
+    this.font = chart.view.font;
+//    this.dragAndDropManager = parent.dragAndDropManager;
+    this.dragAndDropManager = new DragAndDropManager();
+    this.parent = parent;
+    this.secondHalf = secondHalf;
+    this.parentPoint = parentPoint;
+  }
+  
+  String getLabel() {
+    if (parent != null) {
+      return parent.getLabel();
+    } else
+      return label;
+  }
+  
+  float getX() {
+    if (parent != null) {
+      return parent.getX();
+    } else
+      return x;
+  }
+  
+  float getTop() {
+    if (parent != null) {
+      if (!secondHalf) {
+        return parent.getTop();
+      } else {
+        return parentPoint.y;
+      }
+    } else
+      return 0;
+  }
+  
+  float getBottom() {
+    if (parent != null) {
+      if (secondHalf) {
+        return parent.getBottom();
+      } else {
+        return parentPoint.y;
+      }
+    } else
+      return chart.getInnerHeight();
+  }
+  
+  float getStretchFactor() {
+    if (parent != null) {
+      if (!secondHalf) {
+        return parent.getStretchFactor()*(getBottom()-getTop())/(parent.startPoint.y-getTop());
+      } else {
+        return parent.getStretchFactor()*(getBottom()-getTop())/(getBottom()-parent.startPoint.y);
+      }
+    } else
+      return 1.0;
+  }
+  
+  float getDashSize() {
+     float dash = normalDashSize*getStretchFactor();
+     if (dash > (getBottom()-getTop()))
+       dash = (getBottom()-getTop());
+     return dash;
+  }
+  
+  boolean isLastBranch() {
+    return ((topChild == null || topChild.size() == 0) && (bottomChild == null || bottomChild.size() == 0));
+  }
+  
+  int getLayer() {
+    if (parent == null) {
+      return 1;
+    } else {
+      return parent.getLayer()+1;
+    }
+  }
+  
+  int countDepth(int current) {
+    if (topChild != null && bottomChild != null) {
+      current++;
+      int bottomDepth = bottomChild.countDepth(current);
+      int topDepth = topChild.countDepth(current);
+      if (topDepth > bottomDepth)
+        return topDepth;
+      else
+        return bottomDepth;
+    } else {
+      return current;
+    }
+  }
+  
+  int getRootDepth() {
+    return root.countDepth(1);
+  }
+  
 
   float minutesAxisProjection(float value) {
     return chart.getInnerHeight() - (value/1440) * chart.getInnerHeight();
@@ -40,23 +144,57 @@ class BifocalAxis extends DrawableGroup<BifocalPoint> {
 
   void draw() {
     pushMatrix();
-      translate(x, 0);
+    
+      if (parent == null) {
+        translate(getX(), 0);
+//        dragAndDropManager.saveMatrix();
+        textFont(font.light14);
+        textAlign(LEFT);
+        fill(200, 200, 200);
+        noStroke();
+        text(getLabel(), 0, -14);
+      } else {
+      
+//        translate (getStretchFactor()*10,0);
+//        dragAndDropManager.saveMatrix();
+      }
       dragAndDropManager.saveMatrix();
 
-      strokeWeight(1.2);
-      stroke(200, 200, 200);
-      dashline(0, chart.getInnerHeight(), 0, 0, spacing);
-      textFont(font.light14);
-      textAlign(LEFT);
-      fill(200, 200, 200);
-      noStroke();
-      text(label, 0, -14);
-
-      if (hoverPoint != null) {
-        ellipse(hoverPoint.x, hoverPoint.y, 2*hoverArea, 2*hoverArea);
+      if (size() == 0) {
+        // leaf
+        
+        float[] spacing = {
+            getDashSize(), getDashSize()
+          };
+        strokeWeight(1.2);
+        stroke(200, 200, 200);
+        if (parent == null) {
+          dashline(0, getBottom(), 0, getTop(), spacing);
+        } else {
+          dashline(0, getBottom()-hoverArea, 0, getTop()+hoverArea, spacing);
+        }
+       
+        
+        if (hoverPoint != null) {
+          
+          noStroke();
+          ellipseMode(CENTER);
+          ellipse(hoverPoint.x, hoverPoint.y, 2*hoverArea, 2*hoverArea);
+        }
+        
+        super.draw();
+      } else {
+        // branch
+        super.draw();
+//        if (point.dragAndDropManager.dragging) {
+//          stroke(200, 200, 200, 50);
+////          noStroke();
+//          fill(255,255,255,255);
+//          ellipseMode(CENTER);
+//          ellipse(startPoint.x, startPoint.y, hoverArea*2, hoverArea*2);
+//        }
+        
       }
-      
-      super.draw();
   
     popMatrix();
   
@@ -68,18 +206,24 @@ class BifocalAxis extends DrawableGroup<BifocalPoint> {
   }
 
   boolean mouseOver(PVector m) {
-    return (m.x > -hoverArea && m.x < hoverArea && m.y > 0 && m.y < chart.getInnerHeight());
+    return (m.x > -hoverArea && m.x < hoverArea && m.y > getTop() + hoverArea && m.y < getBottom()-hoverArea);
   }
 
   boolean mousePressed() {
-    if (!super.mousePressed()) {
+    if (!super.mousePressed() && isLastBranch()) {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       if (mouseOver(m)) {
-        hoverPoint = null;
-        add(0, new BifocalPoint(this, 0, m.y));
-        get(0).dragAndDropManager.matrix = dragAndDropManager.matrix;
-        get(0).dragAndDropManager.invertedMatrix = dragAndDropManager.invertedMatrix;
-        get(0).dragAndDropManager.start();
+        startPoint = hoverPoint;
+        point = null;
+        point = new BifocalPoint(this, 0, m.y);
+        add(point);
+        point.dragAndDropManager.matrix = dragAndDropManager.matrix;
+        point.dragAndDropManager.invertedMatrix = dragAndDropManager.invertedMatrix;
+        point.dragAndDropManager.start();
+        topChild = new BifocalAxis(this, root, point, false);
+        bottomChild = new BifocalAxis(this, root, point, true);
+        add(topChild);
+        add(bottomChild);
 //        updated = true;
 //        loop();
         return true;
@@ -90,7 +234,7 @@ class BifocalAxis extends DrawableGroup<BifocalPoint> {
 
 
   boolean mouseMoved() {
-    if (!super.mouseMoved()) {
+    if (!super.mouseMoved() && isLastBranch()) {
         PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
         if (mouseOver(m)) {
           hoverPoint = new PVector(0, m.y);

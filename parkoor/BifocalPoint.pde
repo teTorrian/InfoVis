@@ -14,6 +14,10 @@ class BifocalPoint extends PVector implements Drawable {
     this.bifocalAxis = bifocalAxis;
   }
   
+  float blurFactor() {
+     return (float)bifocalAxis.getLayer()/(float)bifocalAxis.getRootDepth();
+  }
+  
   boolean updated() {
     return !initialized || updated || dragAndDropManager.dragging;
   }
@@ -24,13 +28,15 @@ class BifocalPoint extends PVector implements Drawable {
   void draw() {
     pushMatrix();
       //translate(x,y);
+      
       dragAndDropManager.saveMatrix();  
       if (highlighted) {   
-        fill(200,200,200);
+        fill(220,220,220,255*blurFactor());
       } else {
-        fill(180,180,180);
+        fill(180,180,180,255*blurFactor());
       }
-      ellipseMode(CENTER);
+      noStroke();
+          ellipseMode(CENTER);
       ellipse(this.x, this.y, 2*hoverArea, 2*hoverArea);
     popMatrix();
     
@@ -63,7 +69,7 @@ class BifocalPoint extends PVector implements Drawable {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       dragAndDropManager.stop();
       if (abs(m.x) > 10) {
-        bifocalAxis.remove(this);
+        bifocalAxis.clear();
       }
       bifocalAxis.updated = true;
       loop();
@@ -75,15 +81,17 @@ class BifocalPoint extends PVector implements Drawable {
   boolean mouseDragged() {
     if (dragAndDropManager.dragging) {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
-      this.y = m.y;
-      if (abs(m.x) > 10) {
-        this.x = m.x;
-      } else {
-        this.x = 0;
+      if (m.y >= bifocalAxis.getTop() && m.y <= bifocalAxis.getBottom()) {
+        this.y = m.y;
+        if (abs(m.x) > 10) {
+          this.x = m.x;
+        } else {
+          this.x = 0;
+        }
+        updated = true;
+        loop();
+        return true;
       }
-      updated = true;
-      loop();
-      return true;
     }
     return false;
   }
