@@ -27,7 +27,7 @@ class BifocalPoint extends PVector implements Drawable {
   
   void draw() {
     pushMatrix();
-      //translate(x,y);
+//      translate(bifocalAxis.getX(),0);
       
       dragAndDropManager.saveMatrix();  
       if (highlighted) {   
@@ -81,7 +81,7 @@ class BifocalPoint extends PVector implements Drawable {
   boolean mouseDragged() {
     if (dragAndDropManager.dragging) {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
-      if (m.y >= bifocalAxis.getTop() && m.y <= bifocalAxis.getBottom()) {
+      if (m.y >= bifocalAxis.getMagnificationTop() && m.y <= bifocalAxis.getMagnificationBottom()) {
         this.y = m.y;
         if (abs(m.x) > 10) {
           this.x = m.x;

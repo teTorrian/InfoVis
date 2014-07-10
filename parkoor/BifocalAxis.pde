@@ -19,11 +19,9 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   BifocalAxis root;
   BifocalAxis topChild;
   BifocalAxis bottomChild;
-  BifocalPoint parentPoint;
-  BifocalPoint point;
+  PVector originalPoint;
+  BifocalPoint magnificationPoint;
   float blurFactor = 1.0;
-  
-  PVector startPoint;
 
   BifocalAxis(Chart chart, int x, String label) {
     this.chart = chart;
@@ -33,76 +31,107 @@ class BifocalAxis extends DrawableGroup<Drawable> {
     this.x = x;
     this.label = label;
   }
-  
-  BifocalAxis(BifocalAxis parent, BifocalAxis root, BifocalPoint parentPoint, boolean secondHalf) {
+
+  BifocalAxis(BifocalAxis parent, BifocalAxis root, boolean secondHalf) {
     this.chart = parent.chart;
     this.root = root;
     this.font = chart.view.font;
-//    this.dragAndDropManager = parent.dragAndDropManager;
+    //    this.dragAndDropManager = parent.dragAndDropManager;
     this.dragAndDropManager = new DragAndDropManager();
     this.parent = parent;
     this.secondHalf = secondHalf;
-    this.parentPoint = parentPoint;
+    this.x = parent.x;
   }
-  
+
   String getLabel() {
     if (parent != null) {
       return parent.getLabel();
     } else
       return label;
   }
-  
-  float getX() {
-    if (parent != null) {
-      return parent.getX();
-    } else
-      return x;
+
+  int getX() {
+    //    if (parent != null) {
+    //      return parent.getX();
+    //    } else
+    return x;
   }
-  
-  float getTop() {
+
+  float getOriginalTop() {
     if (parent != null) {
       if (!secondHalf) {
-        return parent.getTop();
+        return parent.getOriginalTop();
       } else {
-        return parentPoint.y;
+        return parent.originalPoint.y;
       }
     } else
       return 0;
   }
-  
-  float getBottom() {
+
+  float getOriginalBottom() {
     if (parent != null) {
       if (secondHalf) {
-        return parent.getBottom();
+        return parent.getOriginalBottom();
       } else {
-        return parentPoint.y;
+        return parent.originalPoint.y;
       }
     } else
       return chart.getInnerHeight();
   }
-  
+
+  float getOriginalHeight() {
+    return abs(getOriginalBottom() - getOriginalTop());
+  }
+
+  float getMagnificationTop() {
+    if (parent != null) {
+      if (!secondHalf) {
+        return parent.getMagnificationTop();
+      } else {
+        return parent.magnificationPoint.y;
+      }
+    } else
+      return 0;
+  }
+
+  float getMagnificationBottom() {
+    if (parent != null) {
+      if (secondHalf) {
+        return parent.getMagnificationBottom();
+      } else {
+        return parent.magnificationPoint.y;
+      }
+    } else
+      return chart.getInnerHeight();
+  }
+
+  float getMagnificationHeight() {
+    return abs(getMagnificationBottom() - getMagnificationTop());
+  }
+
   float getStretchFactor() {
     if (parent != null) {
       if (!secondHalf) {
-        return parent.getStretchFactor()*(getBottom()-getTop())/(parent.startPoint.y-getTop());
+        return parent.getStretchFactor()*(getMagnificationBottom()-getMagnificationTop())/(parent.originalPoint.y-getMagnificationTop());
       } else {
-        return parent.getStretchFactor()*(getBottom()-getTop())/(getBottom()-parent.startPoint.y);
+        return parent.getStretchFactor()*(getMagnificationBottom()-getMagnificationTop())/(getMagnificationBottom()-parent.originalPoint.y);
       }
     } else
       return 1.0;
   }
-  
+
   float getDashSize() {
-     float dash = normalDashSize*getStretchFactor();
-     if (dash > (getBottom()-getTop()))
-       dash = (getBottom()-getTop());
-     return dash;
+    float dash = normalDashSize*getStretchFactor();
+    if (dash > (getMagnificationBottom()-getMagnificationTop()))
+      dash = (getMagnificationBottom()-getMagnificationTop());
+    return dash;
   }
-  
+
+
   boolean isLastBranch() {
     return ((topChild == null || topChild.size() == 0) && (bottomChild == null || bottomChild.size() == 0));
   }
-  
+
   int getLayer() {
     if (parent == null) {
       return 1;
@@ -110,7 +139,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       return parent.getLayer()+1;
     }
   }
-  
+
   int countDepth(int current) {
     if (topChild != null && bottomChild != null) {
       current++;
@@ -124,12 +153,39 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       return current;
     }
   }
-  
+
   int getRootDepth() {
     return root.countDepth(1);
   }
   
+  
+  float magnify(float value) {
+    return getMagnificationTop() +
+          getMagnificationHeight() * (   ( value - getOriginalTop() ) / getOriginalHeight()   );
+  }
 
+  float magnifyRecursively(float value) {
+    
+    float magY = magnify(value);
+    
+    if (topChild != null && bottomChild != null) {
+      
+      // magnitude + recurse into responsable child 
+      
+      if (magY < originalPoint.y) {
+        return topChild.magnifyRecursively(magY);
+        
+      } else {
+        return bottomChild.magnifyRecursively(magY);
+      }
+        
+    } else {
+      return magY;
+    }
+    
+  }
+  
+    
   float minutesAxisProjection(float value) {
     return chart.getInnerHeight() - (value/1440) * chart.getInnerHeight();
   }
@@ -144,90 +200,103 @@ class BifocalAxis extends DrawableGroup<Drawable> {
 
   void draw() {
     pushMatrix();
-    
-      if (parent == null) {
-        translate(getX(), 0);
-//        dragAndDropManager.saveMatrix();
-        textFont(font.light14);
-        textAlign(LEFT);
-        fill(200, 200, 200);
-        noStroke();
-        text(getLabel(), 0, -14);
-      } else {
-      
-//        translate (getStretchFactor()*10,0);
-//        dragAndDropManager.saveMatrix();
-      }
-      dragAndDropManager.saveMatrix();
 
-      if (size() == 0) {
-        // leaf
-        
-        float[] spacing = {
-            getDashSize(), getDashSize()
-          };
-        strokeWeight(1.2);
-        stroke(200, 200, 200);
-        if (parent == null) {
-          dashline(0, getBottom(), 0, getTop(), spacing);
-        } else {
-          dashline(0, getBottom()-hoverArea, 0, getTop()+hoverArea, spacing);
-        }
-       
-        
-        if (hoverPoint != null) {
-          
-          noStroke();
-          ellipseMode(CENTER);
-          ellipse(hoverPoint.x, hoverPoint.y, 2*hoverArea, 2*hoverArea);
-        }
-        
-        super.draw();
+    if (parent == null) {
+      translate(getX(), 0);
+      //      dragAndDropManager.saveMatrix();
+      textFont(font.light14);
+      textAlign(LEFT);
+      fill(200, 200, 200);
+      noStroke();
+      text(getLabel(), 0, -14);
+    } else {
+
+      //      translate (8,0);
+      //      dragAndDropManager.saveMatrix();
+    }
+    dragAndDropManager.saveMatrix();
+
+    if (size() == 0) {
+      // leaf
+
+      float[] spacing = {
+        getDashSize(), getDashSize()
+        };
+
+      float[] normalSpacing = {
+        3, 3
+      };
+
+
+      strokeWeight(1.2);
+      stroke(200, 200, 200);
+      
+      if (parent == null) {
+        dashline(0, getMagnificationBottom(), 0, getMagnificationTop(), spacing);
       } else {
-        // branch
-        super.draw();
-//        if (point.dragAndDropManager.dragging) {
-//          stroke(200, 200, 200, 50);
-////          noStroke();
-//          fill(255,255,255,255);
-//          ellipseMode(CENTER);
-//          ellipse(startPoint.x, startPoint.y, hoverArea*2, hoverArea*2);
-//        }
-        
+        dashline(0, getMagnificationBottom()-hoverArea, 0, getMagnificationTop()+hoverArea, spacing);
+//        line(-13, getOriginalBottom()-hoverArea, 0, getMagnificationBottom()-hoverArea);
+//        line(-13, getOriginalTop()+hoverArea, 0, getMagnificationTop()+hoverArea);
       }
-  
+
+
+
+      if (hoverPoint != null) {
+
+        noStroke();
+        ellipseMode(CENTER);
+        ellipse(hoverPoint.x, hoverPoint.y, 2*hoverArea, 2*hoverArea);
+      }
+
+      super.draw();
+    } else {
+      // branch
+       super.draw();
+      if (magnificationPoint.dragAndDropManager.dragging) {
+        stroke(180, 180, 180, 255*magnificationPoint.blurFactor());
+        //          noStroke();
+        fill(255, 255, 255, 255);
+        ellipseMode(CENTER);
+        ellipse(originalPoint.x, originalPoint.y, hoverArea*2, hoverArea*2);
+      }
+    }
+
+
+
+
     popMatrix();
-  
+   
+
     updated = false;
-  
+
     if (!initialized) {
       initialized = true;
     }
   }
 
   boolean mouseOver(PVector m) {
-    return (m.x > -hoverArea && m.x < hoverArea && m.y > getTop() + hoverArea && m.y < getBottom()-hoverArea);
+    return (m.x > -hoverArea && m.x < hoverArea && m.y > getMagnificationTop() + hoverArea && m.y < getMagnificationBottom()-hoverArea);
   }
 
   boolean mousePressed() {
     if (!super.mousePressed() && isLastBranch()) {
       PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
       if (mouseOver(m)) {
-        startPoint = hoverPoint;
-        point = null;
-        point = new BifocalPoint(this, 0, m.y);
-        add(point);
-        point.dragAndDropManager.matrix = dragAndDropManager.matrix;
-        point.dragAndDropManager.invertedMatrix = dragAndDropManager.invertedMatrix;
-        point.dragAndDropManager.start();
-        topChild = new BifocalAxis(this, root, point, false);
-        bottomChild = new BifocalAxis(this, root, point, true);
+        originalPoint = hoverPoint;
+        magnificationPoint = null;
+        magnificationPoint = new BifocalPoint(this, 0, m.y);
+        add(magnificationPoint);
+        magnificationPoint.dragAndDropManager.matrix = dragAndDropManager.matrix;
+        magnificationPoint.dragAndDropManager.invertedMatrix = dragAndDropManager.invertedMatrix;
+        magnificationPoint.dragAndDropManager.start();
+        topChild = new BifocalAxis(this, root, false);
+        bottomChild = new BifocalAxis(this, root, true);
         add(topChild);
         add(bottomChild);
-//        updated = true;
-//        loop();
+        //        updated = true;
+        //        loop();
         return true;
-      } 
+      }
     }
     return false;
   }
@@ -235,16 +304,16 @@ class BifocalAxis extends DrawableGroup<Drawable> {
 
   boolean mouseMoved() {
     if (!super.mouseMoved() && isLastBranch()) {
-        PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
-        if (mouseOver(m)) {
-          hoverPoint = new PVector(0, m.y);
-          updated = true;
-          loop();
-        } else if (hoverPoint != null) {
-          hoverPoint = null;
-          updated = true;
-          loop();
-        }
+      PVector m = dragAndDropManager.transformVector(new PVector(float(mouseX), float(mouseY)));
+      if (mouseOver(m)) {
+        hoverPoint = new PVector(0, m.y);
+        updated = true;
+        loop();
+      } else if (hoverPoint != null) {
+        hoverPoint = null;
+        updated = true;
+        loop();
+      }
     } else if (hoverPoint != null) {
       hoverPoint = null;
       updated = true;
