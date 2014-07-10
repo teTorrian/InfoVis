@@ -34,6 +34,10 @@ class Path implements Drawable {
 
   void update() {
   }
+  
+  float minutesToY(float minutes) {
+    return chart.bifocalAxis.magnifyRecursively(chart.getInnerHeight() - ((float) minutes/1440) * chart.getInnerHeight());
+  }
 
   void draw() {
     float c = (float)chart.getInnerHeight() / 1440;
@@ -57,7 +61,7 @@ class Path implements Drawable {
           fill(pathGroup.pathColorHighlighted.get(entry_name));
           noStroke();
           textFont(font.light22);
-          translate(-chart.offsetX-4-textWidth(entry_name), chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() - textAscent()/2-4);
+          translate(-chart.offsetX-4-textWidth(entry_name), minutesToY((float)data.get(dataKeys.get(0))) - textAscent()/2-4);
           rect(0, 0, textWidth(entry_name)+8, textAscent()+8);
           textFont(font.light14);
           fill(255,255,255);
@@ -76,12 +80,12 @@ class Path implements Drawable {
   
       beginShape();
         int i = 0;
-        vertex(-chart.offsetX, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight());
+        vertex(-chart.offsetX, minutesToY((float)data.get(dataKeys.get(0))));
         for (String key : dataKeys) {
           // x muss ersetzt werden durch axes.get(i++).x
-          vertex(i++ * chart.getSpacing(), chart.getInnerHeight() - ((float)data.get(key)/1440) * chart.getInnerHeight());
+          vertex(i++ * chart.getSpacing(), minutesToY((float)data.get(key)) );
         }
-        vertex(chart.getInnerWidth()+chart.offsetX2, chart.getInnerHeight() - ((float)data.get(dataKeys.get(dataKeys.size()-1))/1440) * chart.getInnerHeight());
+        vertex(chart.getInnerWidth()+chart.offsetX2, minutesToY((float)data.get(dataKeys.get(dataKeys.size()-1))));
       endShape();
 
     popMatrix();
@@ -191,7 +195,7 @@ class Path implements Drawable {
     PVector pointM = dragAndDropManager.transformVector(mouse);
     float c = (float)chart.getInnerHeight() / 1440;
     int i = 0;
-    point0 = new PVector(-chart.offsetX, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight());
+    point0 = new PVector(-chart.offsetX, minutesToY((float)data.get(dataKeys.get(0))));
     for (String key : dataKeys) {
       point1 = new PVector(i * chart.getSpacing(), (float)chart.getInnerHeight() - data.get(key) * c);
       if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
@@ -201,7 +205,7 @@ class Path implements Drawable {
       point0 = point1;
       i++;
     }
-    point1 = new PVector(chart.getInnerWidth()+chart.offsetX2, chart.getInnerHeight() - ((float)data.get(dataKeys.get(dataKeys.size()-1))/1440) * chart.getInnerHeight());
+    point1 = new PVector(chart.getInnerWidth()+chart.offsetX2, minutesToY((float)data.get(dataKeys.get(dataKeys.size()-1))));
     if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
         return true;
       }
