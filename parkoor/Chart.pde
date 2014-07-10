@@ -18,6 +18,7 @@ class Chart extends DrawableGroup {
   AxisGroup axisGroup;
   Controller controller;
   PathGroup pathGroup;
+  BifocalAxis bifocalAxis;
   View view;
   Font font;
 
@@ -34,12 +35,12 @@ class Chart extends DrawableGroup {
     this.height = height;
 
     axisGroup = new AxisGroup(this);
-
-
     pathGroup = new PathGroup(this);
+    bifocalAxis = new BifocalAxis(this, width-offsetX, "Zoom");
+    
     add(pathGroup);
     add(axisGroup);
-    add(new BifocalAxis(this, width-offsetX, "Zoom"));
+    add(bifocalAxis);
 //    add(new BifocalAxis(this, 0-offsetX, ""));
   }
 
