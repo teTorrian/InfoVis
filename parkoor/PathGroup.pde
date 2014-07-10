@@ -1,3 +1,5 @@
+import java.util.Map;
+
 class PathGroup extends DrawableGroup<Path> {
 
   Chart chart;
@@ -13,9 +15,8 @@ class PathGroup extends DrawableGroup<Path> {
   DateFilter dateFilter;
   
   // Multi-Select
-  JSONArray selection;
-  Path averagePath;
-  ArrayList<String> dataKeys;
+  AveragePath averagePath;
+  HashMap<String, Float> averageMap;
   
   PathGroup(Chart chart) {
     this.chart = chart;
@@ -30,8 +31,7 @@ class PathGroup extends DrawableGroup<Path> {
     filters.add(dateFilter);
     
     // Multi-Select
-    selection = new JSONArray();
-    dataKeys = chart.controller.model.getLocations();
+    averageMap = new HashMap<String,Float>();
     
     pathColor = new IntDict();
     pathColor.set("Jonas", color(176, 40, 93, 70));
@@ -63,29 +63,38 @@ class PathGroup extends DrawableGroup<Path> {
   }
   
   // Multi-Select
-  void extendSelection(JSONObject data) {
-    selection.setJSONObject(selection.size(), data);
+  void updateMultiSelect() {
     JSONObject average = new JSONObject();
-    average.setString("info", "average of " + selection.size() + " path(s)");
-    average.setString("name", "average");
-    for (String key : dataKeys) {
-      float a = 0;
-      for (int d = 0; d < selection.size(); d++) {
-        a += (selection.getJSONObject(d).getFloat(key));
+    averageMap.clear();
+    for (String key : chart.controller.model.getLocations())
+      averageMap.put(key, 0.0);
+    int c = 0;
+    // Werte aller selektierten Pfade aufsummieren
+    for (Path path: this) {
+      if(path.selected) {
+        for(String key: averageMap.keySet()) {
+          averageMap.put(key, (averageMap.get(key) + path.date.getFloat(key)));
+        }
+        c++;
       }
-      a /= selection.size();
-      average.setFloat(key, a);
     }
-    println(average);
-    remove(averagePath);
-    averagePath = new Path(this, average);
-    add(averagePath);
+    if(c > 1) {
+      // Durchschnitt berechnen
+      for(String key: averageMap.keySet()) {
+        average.setFloat(key, (averageMap.get(key) / c));
+      }
+      average.setString("name", "average");
+      average.setString("info", "average of " + c + " path(s)");
+      println(average.getString("info"));
+      remove(averagePath);
+      averagePath = new AveragePath(this, average);
+      //averagePath.selected = true;
+      add(averagePath);
+    }
   }
   
-  void clearSelection() {
+  void clearMultiSelect() {
     remove(averagePath);
-    // ... feeding the garbage collector
-    selection = new JSONArray();
   }
 }
 

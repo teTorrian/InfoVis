@@ -12,10 +12,9 @@ class Path implements Drawable {
   DragAndDropManager dragAndDropManager;
   boolean highlighted = false;
   boolean grayed = false;
+  boolean selected = false;
   HashMap<String, Integer> data;
   ArrayList<String> dataKeys;
-  
-  PersonFilter personFilter;
 
   Path(PathGroup pathGroup, JSONObject date) {
     this.pathGroup = pathGroup;
@@ -26,8 +25,6 @@ class Path implements Drawable {
     this.dragAndDropManager = new DragAndDropManager();
     data = chart.controller.model.getLocationTimes(date);
     dataKeys = chart.controller.model.getLocations(/*date*/);
-    
-    personFilter = new PersonFilter();
   }
 
   boolean updated() {
@@ -45,9 +42,13 @@ class Path implements Drawable {
       dragAndDropManager.saveMatrix();
       String entry_name = date.getString("name");
     
+      stroke(pathGroup.pathColor.get(entry_name));
       if (grayed) {
+        // Linienfarbe ausgegraut
         stroke(color(200,200,200,100));
-      } else if (highlighted) {
+      }
+      if (highlighted) {
+        // Name anzeigen
         pushMatrix();
           fill(pathGroup.pathColorHighlighted.get(entry_name));
           noStroke();
@@ -56,11 +57,15 @@ class Path implements Drawable {
           textFont(font.light14);
           fill(255,255,255);
           text(entry_name, 4,textAscent()+6);
+          // Linienfarbe highlighted
           stroke(pathGroup.pathColorHighlighted.get(entry_name));
         popMatrix();
-      } else {
-        stroke(pathGroup.pathColor.get(entry_name));
       }
+      if (selected)
+        stroke(pathGroup.pathColorHighlighted.get(entry_name));
+
+      /*if(selected && grayed)
+        stroke(pathGroup.pathColorHighlighted.get(entry_name));*/
       strokeWeight(strokeWidth);
       noFill();
   
@@ -111,32 +116,11 @@ class Path implements Drawable {
   }
 
   boolean mousePressed() {
+    boolean mouseIsOver = mouseOver(new PVector(float(mouseX),float(mouseY)));
     // mouseEvent variable contains the current event information
-    if (mouseEvent.getClickCount()==2) {
-      if(mouseMoved()) {
-        // double click auf eine Linie
-        // -> alle Datensätze einer Person auswählen (Filter)
-        println("double click on this Path :\t" + date.getString("name") + "\t" + date.getString("date"));
-        
-        pathGroup.personFilter.fillFilter();
-        pathGroup.personFilter.remove(date.getString("name"));
-        println("People not to show : " + pathGroup.personFilter.toString());
-
-        return true;
-      }
-      else {
-        // double click in leere Fläche
-        // -> Filter löschen
-        pathGroup.personFilter.clear();
-
-        // Warum funktioniert das?
-        println("double click and no Path cares");
-        return true;
-      }
-    }
-    else if (mouseEvent.getClickCount()==1) {
+    if (mouseEvent.getClickCount()==1) {
       // Multi-Select
-      if (mouseMoved()) {
+      if (mouseIsOver) {
         // single click auf eine Linie
         // -> Linie auswählen (Auswahl erstellen, Durchschnitt anzeigen)
         // Alle weiteren Linie werden dauerhaft, also solange die Auswahl
@@ -144,15 +128,44 @@ class Path implements Drawable {
         // Allerdings ist das auch schlecht, da man so nicht mehr erkennt
         // welcher Datensatz von wem ist.
         println("single click");
-        //pathGroup.extendSelection(date);
+        selected = true;
+        pathGroup.updateMultiSelect();
+        updated = true;
+        loop();
         return true;
       }
       else {
         // single click in leere Fläche
         // -> Auswahl löschen
-        //pathGroup.clearSelection();
+        /**
+        *
+        */
+        pathGroup.clearMultiSelect();
+        selected = false;
+        updated = true;
+        loop();
+        // Jeder Pfad behandelt selbst dieses Ereignis.
+        return false;
+      }
+    }
+    if (mouseEvent.getClickCount()==2) {
+      if(mouseIsOver) {
+        // double click auf eine Linie
+        // -> alle Datensätze einer Person auswählen
+        String name = date.getString("name");
+        println("double click on " + name);
+        int c = 0;
         
-        //return true;
+        for (Path path: pathGroup) {
+          if ((path.date.getString("name")).equals(name)) {
+            path.selected = true;
+          }
+        }
+        pathGroup.updateMultiSelect();
+        updated = true;
+        loop();
+        
+        return true;
       }
     }
     return false;
@@ -198,15 +211,17 @@ class Path implements Drawable {
         path.highlighted = false;
         path.grayed = true;
       }
+      // Durch add/remove wird dieser Pfad der 'oberste' in der Reihenfolge.
       int myIndex = pathGroup.indexOf(this);
       pathGroup.add(this);
       pathGroup.remove(myIndex);
+      
       highlighted = true;
       grayed = false;
       for(Axis axis:chart.axisGroup) {
         axis.selectionMode = true;
         axis.selectionColor = pathGroup.pathColorHighlighted.get(date.getString("name"));
-        axis.selection = (data.get(axis.name)/60);
+        axis.selection = data.get(axis.name);
       }
       updated = true;
       loop();
