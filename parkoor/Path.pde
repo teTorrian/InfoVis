@@ -13,6 +13,7 @@ class Path implements Drawable {
   boolean highlighted = false;
   boolean grayed = false;
   boolean selected = false;
+  boolean hidden = false;
   HashMap<String, Integer> data;
   ArrayList<String> dataKeys;
 
@@ -37,6 +38,9 @@ class Path implements Drawable {
   void draw() {
     float c = (float)chart.getInnerHeight() / 1440;
 
+    if(hidden)
+      println("hidden");
+      
     pushMatrix();
     
       dragAndDropManager.saveMatrix();
@@ -52,11 +56,12 @@ class Path implements Drawable {
         pushMatrix();
           fill(pathGroup.pathColorHighlighted.get(entry_name));
           noStroke();
+          textFont(font.light22);
           translate(-chart.offsetX-4-textWidth(entry_name), chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() - textAscent()/2-4);
           rect(0, 0, textWidth(entry_name)+8, textAscent()+8);
           textFont(font.light14);
           fill(255,255,255);
-          text(entry_name, 4,textAscent()+6);
+          text(entry_name, 8, textAscent()+7);
           // Linienfarbe highlighted
           stroke(pathGroup.pathColorHighlighted.get(entry_name));
         popMatrix();
@@ -221,6 +226,7 @@ class Path implements Drawable {
       for(Axis axis:chart.axisGroup) {
         axis.selectionMode = true;
         axis.selectionColor = pathGroup.pathColorHighlighted.get(date.getString("name"));
+        // TODO 
         axis.selection = data.get(axis.name);
       }
       updated = true;

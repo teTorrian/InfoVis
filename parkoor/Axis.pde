@@ -64,11 +64,13 @@ class Axis implements Drawable {
       noStroke();
       if (!selectionMode) {
         fill(0,0,0);
-        text(int(min), 0, 0);
+        // TODO vorher int()
+        text(min, 0, 0);
       } else {
         textFont(font.bold14);
         fill(selectionColor);
-        text(int(selection), 0, 0);
+        // TODO vorher int()
+        text(selection, 0, 0);
       }
       textFont(font.light14);
       fill(0,0,0);
@@ -94,7 +96,8 @@ class Axis implements Drawable {
       translate(0,-textOffset);
       fill(markColor);
       noStroke();
-      text(int(max), 0, 0);
+      // TODO vorher int()
+      text(max, 0, 0);
 //      if (!selectionMode) {
 //        text(int(max), 0, 0);
 //      } else {

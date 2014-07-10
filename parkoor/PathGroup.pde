@@ -38,7 +38,7 @@ class PathGroup extends DrawableGroup<Path> {
     pathColor.set("Christian", color(232, 74, 56, 70));
     pathColor.set("Vlad", color(7, 217, 98, 70));
     pathColor.set("Lukas", color(14, 123, 221, 70));
-    pathColor.set("average", color(80, 80, 80, 180));
+    pathColor.set("average", color(110, 110, 110, 180));
     
     pathColorHighlighted = new IntDict();
     pathColorHighlighted.set("Jonas", color(176, 40, 93, 180));
@@ -52,9 +52,6 @@ class PathGroup extends DrawableGroup<Path> {
   
   void updateFilters() {
     cachedData = chart.controller.model.getDataObjects(chart.axisGroup.filters);
-    
-    // Double Click
-    cachedData = chart.controller.model.getDataObjects(cachedData, filters);
     
     this.clear();
     for(int i = 0; i < cachedData.size(); i++) {
@@ -83,7 +80,7 @@ class PathGroup extends DrawableGroup<Path> {
       for(String key: averageMap.keySet()) {
         average.setFloat(key, (averageMap.get(key) / c));
       }
-      average.setString("name", "average");
+      average.setString("name", "Durchschnitt");
       average.setString("info", "average of " + c + " path(s)");
       println(average.getString("info"));
       remove(averagePath);
