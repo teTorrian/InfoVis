@@ -28,6 +28,7 @@ class DrawableGroup<s extends Drawable> extends ArrayList<s> implements Drawable
     for (Drawable drawable: this) {
       drawable.draw();
     }
+    updated = false;
   }
   
   boolean mousePressed() {
