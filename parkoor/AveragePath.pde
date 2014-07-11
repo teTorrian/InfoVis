@@ -9,7 +9,7 @@ class AveragePath extends Path {
   void draw() {
     String entry_name = date.getString("name");
     
-    // Pfadpunkte holen
+    // Pfadeckpunkte holen
     pathVertices = new ArrayList<PVector>();
     pathVertices.add(new PVector(-chart.offsetX, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight()));
     int i = 0;
@@ -29,10 +29,9 @@ class AveragePath extends Path {
       noStroke();
       
       pushMatrix();
-        // KRITISCH weil immer von textAscent() abhängig!
         textFont(font.light14);
-        translate(-chart.offsetX-textWidth(entry_name)*1.1, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() - textAscent()/2-4 );
-        text(entry_name, 0, textAscent()+7);
+        translate(-chart.offsetX - textWidth(chart.model.dictionary.get(entry_name))*1.1, (1 - (float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() + textAscent()/2);
+        text(chart.model.dictionary.get(entry_name), 0, 0);
       popMatrix();
 
       float DOT_SPACING = 5;
@@ -67,6 +66,14 @@ class AveragePath extends Path {
     boolean mouseOverPath = super.mouseOver(mouse);
     // TODO: Hover über Schrift abfangen
     
-    return mouseOverPath;
+    PVector m = dragAndDropManager.transformVector(mouse);
+    
+    float x = -chart.offsetX - textWidth(chart.model.dictionary.get(date.getString("name")))*1.1;
+    float y = (1 - (float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() + textAscent()/2;
+    
+    textFont(font.light14);
+    boolean mouseOverText = (m.x > x && m.x < x+textWidth(chart.model.dictionary.get(date.getString("name")))) && (m.y < y && m.y > y-textAscent());
+    
+    return mouseOverPath || mouseOverText;
   }
 }

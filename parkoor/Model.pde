@@ -1,5 +1,6 @@
 import java.util.Map;
 import java.util.HashSet;
+import java.util.Calendar;
 
 class Model {
 
@@ -68,7 +69,46 @@ class Model {
   }
   
   int getLocationCount() {
-    return getLocations(/*cachedDataObjects.getJSONObject(0)*/).size();
+    return getLocations().size();
+  }
+  
+  ArrayList<String> getPeople() {
+    ArrayList<String> people = new ArrayList<String>();
+    people.add("Christian");
+    people.add("Jonas");
+    people.add("Lukas");
+    people.add("Vlad");
+    return people;
+  }
+  
+  int getPersonIndex(String name) {
+    ArrayList<String> people = getPeople();
+    for (int index = 0; index < people.size(); index++)
+      if(people.get(index).equals(name))
+        return index;
+    return -1;
+  }
+  
+  int getWeekday(String d) {
+    Date date;
+    DateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");;
+    DateFormat day = new SimpleDateFormat("EE");
+    int i = 0;
+    try {
+      date = dateFormat.parse(d);
+      // day.format(date) gibt den Wochentag zurück.
+      // Calendar kann dagegen benutzt werden, um einen Index 
+      // zu bekommen. Allerdings: So = 1, Mo = 2, ...
+      Calendar c = Calendar.getInstance();
+      c.setTime(date);
+      i = c.get(Calendar.DAY_OF_WEEK);
+    }
+    catch (Exception e) {
+      println("Unable to parse " + d);
+    }
+    // Mo = 1, Di = 2, ...
+    i = ((i+5)%7)+1;
+    return i;
   }
   
   HashSet<String> getDates() {
@@ -81,15 +121,16 @@ class Model {
   
   void compileDictionary() {
     dictionary = new StringDict();
-    dictionary.set("home","Zu Hause");
-    dictionary.set("transit","Unterwegs");
-    dictionary.set("uni_mensa","Mensa");
-    dictionary.set("uni_fak","Fakultät");
-    dictionary.set("uni_slub","SLUB");
-    dictionary.set("uni_other","Uni (Sonstige)");
-    dictionary.set("outdoor","Draußen");
-    dictionary.set("shopping","Besorgungen");
-    dictionary.set("hobby","Hobby/Sport");
+    dictionary.set("home", "Zu Hause");
+    dictionary.set("transit", "Unterwegs");
+    dictionary.set("uni_mensa", "Mensa");
+    dictionary.set("uni_fak", "Fakultät");
+    dictionary.set("uni_slub", "SLUB");
+    dictionary.set("uni_other", "Uni (Sonstige)");
+    dictionary.set("outdoor", "Draußen");
+    dictionary.set("shopping", "Besorgungen");
+    dictionary.set("hobby", "Hobby/Sport");
+    dictionary.set("average", "Durchschnitt");
   }
 }
 

@@ -80,7 +80,7 @@ class PathGroup extends DrawableGroup<Path> {
       for(String key: averageMap.keySet()) {
         average.setFloat(key, (averageMap.get(key) / c));
       }
-      average.setString("name", "Durchschnitt");
+      average.setString("name", "average");
       average.setString("info", "average of " + c + " path(s)");
       println(average.getString("info"));
       remove(averagePath);

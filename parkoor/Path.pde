@@ -80,9 +80,10 @@ class Path implements Drawable {
   
       beginShape();
         int i = 0;
+        /*vertex(-chart.getSpacing()*2, chart.model.getWeekday(date.getString("date"))*50 - 50);
+        vertex(-(chart.getSpacing()*1), chart.model.getPersonIndex(entry_name)*100 - 50);*/
         vertex(-chart.offsetX, minutesToY((float)data.get(dataKeys.get(0))));
         for (String key : dataKeys) {
-          // x muss ersetzt werden durch axes.get(i++).x
           vertex(i++ * chart.getSpacing(), minutesToY((float)data.get(key)) );
         }
         vertex(chart.getInnerWidth()+chart.offsetX2, minutesToY((float)data.get(dataKeys.get(dataKeys.size()-1))));
@@ -136,11 +137,11 @@ class Path implements Drawable {
         // besteht, grayed dargestellt, beim mouse over highlighted.
         // Allerdings ist das auch schlecht, da man so nicht mehr erkennt
         // welcher Datensatz von wem ist.
-        println("single click");
         selected = true;
         pathGroup.updateMultiSelect();
         updated = true;
         loop();
+        
         return true;
       }
       else {
@@ -162,9 +163,6 @@ class Path implements Drawable {
         // double click auf eine Linie
         // -> alle Datensätze einer Person auswählen
         String name = date.getString("name");
-        println("double click on " + name);
-        int c = 0;
-        
         for (Path path: pathGroup) {
           if ((path.date.getString("name")).equals(name)) {
             path.selected = true;
@@ -177,6 +175,7 @@ class Path implements Drawable {
         return true;
       }
     }
+    
     return false;
   }
 
