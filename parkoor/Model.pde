@@ -4,9 +4,12 @@ import java.util.HashSet;
 class Model {
 
   JSONArray cachedDataObjects;
+  StringDict dictionary;
 
   Model(String filename) {
     cachedDataObjects = loadJSONArray(filename);
+    
+    compileDictionary();
   }
 
   JSONArray getDataObjects() {
@@ -46,7 +49,11 @@ class Model {
     return LocationTimes;
   }
   
-  ArrayList<String> getLocations(/*JSONObject dataObject*/) {
+  /**
+  * getLocations() gibt die Orte zurück und legt außerdem über deren
+  * Reihenfolge fest, in welcher Ordnung die Achsen angezeigt werden.
+  */
+  ArrayList<String> getLocations() {
     ArrayList<String> locations = new ArrayList<String>();
     locations.add("home");
     locations.add("transit");
@@ -71,5 +78,19 @@ class Model {
       
     return dates;
   }
+  
+  void compileDictionary() {
+    dictionary = new StringDict();
+    dictionary.set("home","Zu Hause");
+    dictionary.set("transit","Unterwegs");
+    dictionary.set("uni_mensa","Mensa");
+    dictionary.set("uni_fak","Fakultät");
+    dictionary.set("uni_slub","SLUB");
+    dictionary.set("uni_other","Uni (Sonstige)");
+    dictionary.set("outdoor","Draußen");
+    dictionary.set("shopping","Besorgungen");
+    dictionary.set("hobby","Hobby/Sport");
+  }
+
 }
 
