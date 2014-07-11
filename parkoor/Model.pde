@@ -91,6 +91,18 @@ class Model {
     dictionary.set("shopping","Besorgungen");
     dictionary.set("hobby","Hobby/Sport");
   }
-
 }
 
+String formatMinutes(float min) {
+  int hours = int(min / 60);
+  int minutes = int(min % 60);
+  String minutesStr = "";
+  if(minutes < 10)
+    minutesStr += "0";
+  minutesStr += str(minutes);
+  return str(hours)+":" + minutesStr;
+}
+
+String formatHours(float hours) {
+  return formatMinutes(hours*60);
+}

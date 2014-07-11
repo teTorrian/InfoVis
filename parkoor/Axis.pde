@@ -65,12 +65,12 @@ class Axis implements Drawable {
       if (!selectionMode) {
         fill(0,0,0);
         // TODO vorher int()
-        text(min, 0, 0);
+        text(formatHours(min), 0, 0);
       } else {
         textFont(font.bold14);
         fill(selectionColor);
         // TODO vorher int()
-        text(selection, 0, 0);
+        text(formatMinutes(selection), 0, 0);
       }
       textFont(font.light14);
       fill(0,0,0);
@@ -97,7 +97,7 @@ class Axis implements Drawable {
       fill(markColor);
       noStroke();
       // TODO vorher int()
-      text(max, 0, 0);
+      text(formatHours(max), 0, 0);
 //      if (!selectionMode) {
 //        text(int(max), 0, 0);
 //      } else {
