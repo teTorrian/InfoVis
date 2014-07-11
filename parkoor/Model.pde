@@ -100,7 +100,7 @@ String formatMinutes(float min) {
   if(minutes < 10)
     minutesStr += "0";
   minutesStr += str(minutes);
-  return str(hours)+":" + minutesStr;
+  return str(hours)+"h " + minutesStr + "m";
 }
 
 String formatHours(float hours) {
