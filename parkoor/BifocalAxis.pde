@@ -60,7 +60,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   float getOriginalTop() {
     if (parent != null) {
       if (!secondHalf) {
-        return parent.getOriginalTop();
+        return parent.getMagnificationTop();
       } else {
         return parent.originalPoint.y;
       }
@@ -71,7 +71,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   float getOriginalBottom() {
     if (parent != null) {
       if (secondHalf) {
-        return parent.getOriginalBottom();
+        return parent.getMagnificationBottom();
       } else {
         return parent.originalPoint.y;
       }
@@ -80,7 +80,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   }
 
   float getOriginalHeight() {
-    return abs(getOriginalBottom() - getOriginalTop());
+    return getOriginalBottom() - getOriginalTop();
   }
 
   float getMagnificationTop() {
@@ -106,7 +106,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   }
 
   float getMagnificationHeight() {
-    return abs(getMagnificationBottom() - getMagnificationTop());
+    return getMagnificationBottom() - getMagnificationTop();
   }
 
   float getStretchFactor() {
@@ -157,35 +157,64 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   int getRootDepth() {
     return root.countDepth(1);
   }
-  
-  
+
+
   float magnify(float value) {
-    return getMagnificationTop() +
-          getMagnificationHeight() * (   ( value - getOriginalTop() ) / getOriginalHeight()   );
+    float mag = getMagnificationTop() +
+      getMagnificationHeight() * (   ( value - getOriginalTop() ) / getOriginalHeight()   );
+    if (mag < 0 || mag > chart.getInnerHeight()) {
+      println("getMagnificationTop() = "+getMagnificationTop(),
+              ", getMagnificationHeight() = "+getMagnificationHeight(),
+              ", getOriginalTop() = "+getOriginalTop()+
+              ", getOriginalHeight() = "+getOriginalHeight()+
+              ", value = "+value+
+              ", value - getOriginalTop() = "+(value - getOriginalTop())+
+              ", height = "+chart.getInnerHeight()+
+              " -> "+mag);
+      }
+    return mag;
   }
 
   float magnifyRecursively(float value) {
     
-    float magY = magnify(value);
-    
-    if (topChild != null && bottomChild != null) {
-      
-      // magnitude + recurse into responsable child 
-      
-      if (magY < originalPoint.y) {
-        return topChild.magnifyRecursively(magY);
-        
-      } else {
-        return bottomChild.magnifyRecursively(magY);
-      }
-        
-    } else {
-      return magY;
+    if (value < getOriginalTop() || value > getOriginalBottom()) {
+      println("a");
     }
     
-  }
-  
+    if (parent == null && topChild == null && bottomChild == null) {
+      return value;
+    } else if (parent == null && topChild != null && bottomChild != null) {
+      if (value < originalPoint.y) {
+        return topChild.magnifyRecursively(value);
+      } else {
+        return bottomChild.magnifyRecursively(value);
+      }
+    } else if (parent != null && topChild == null && bottomChild == null) {
+      return magnify(value);  
+    } else if (parent != null && topChild != null && bottomChild != null) {
+      if (value < originalPoint.y) {
+        return topChild.magnifyRecursively(magnify(value));
+      } else {
+        return bottomChild.magnifyRecursively(magnify(value));
+      } 
+    }
     
+    return value;
+  
+//    float magY = magnify(value);
+//    if (topChild != null && bottomChild != null) {
+//      // magnitude + recurse into responsable child 
+//      if (magY < originalPoint.y) {
+//        return topChild.magnifyRecursively(magY);
+//      } else {
+//        return bottomChild.magnifyRecursively(magY);
+//      }
+//    } else {
+//      return magY;
+//    }
+  }
+
+
   float minutesAxisProjection(float value) {
     return chart.getInnerHeight() - (value/1440) * chart.getInnerHeight();
   }
@@ -230,13 +259,13 @@ class BifocalAxis extends DrawableGroup<Drawable> {
 
       strokeWeight(1.2);
       stroke(200, 200, 200);
-      
+
       if (parent == null) {
         dashline(0, getMagnificationBottom(), 0, getMagnificationTop(), spacing);
       } else {
         dashline(0, getMagnificationBottom()-hoverArea, 0, getMagnificationTop()+hoverArea, spacing);
-//        line(-13, getOriginalBottom()-hoverArea, 0, getMagnificationBottom()-hoverArea);
-//        line(-13, getOriginalTop()+hoverArea, 0, getMagnificationTop()+hoverArea);
+        //        line(-13, getOriginalBottom()-hoverArea, 0, getMagnificationBottom()-hoverArea);
+        //        line(-13, getOriginalTop()+hoverArea, 0, getMagnificationTop()+hoverArea);
       }
 
 
@@ -251,7 +280,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       super.draw();
     } else {
       // branch
-       super.draw();
+      super.draw();
       if (magnificationPoint.dragAndDropManager.dragging) {
         stroke(180, 180, 180, 255*magnificationPoint.blurFactor());
         //          noStroke();
@@ -265,7 +294,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
 
 
     popMatrix();
-   
+
 
     updated = false;
 
