@@ -30,10 +30,9 @@ class AveragePath extends Path {
       
       pushMatrix();
         // KRITISCH weil immer von textAscent() abhängig!
-        textFont(font.light22);
-        translate(-chart.offsetX-4-textWidth(entry_name)*0.75, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() - textAscent()/2-4);
         textFont(font.light14);
-        text(entry_name, 8,textAscent()+7);
+        translate(-chart.offsetX-textWidth(entry_name)*1.1, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() - textAscent()/2-4 );
+        text(entry_name, 0, textAscent()+7);
       popMatrix();
 
       float DOT_SPACING = 5;
@@ -67,6 +66,7 @@ class AveragePath extends Path {
   boolean mouseOver(PVector mouse) {
     boolean mouseOverPath = super.mouseOver(mouse);
     // TODO: Hover über Schrift abfangen
+    
     return mouseOverPath;
   }
 }
