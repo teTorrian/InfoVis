@@ -1,6 +1,5 @@
 Controller controller;
 View view;
-
 void setup(){ 
   size(1024,600);
   

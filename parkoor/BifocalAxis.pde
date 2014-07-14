@@ -113,8 +113,10 @@ class BifocalAxis extends DrawableGroup<Drawable> {
     if (parent != null) {
       if (!secondHalf) {
         return parent.getStretchFactor()*(getMagnificationBottom()-getMagnificationTop())/(parent.originalPoint.y-getMagnificationTop());
+
       } else {
         return parent.getStretchFactor()*(getMagnificationBottom()-getMagnificationTop())/(getMagnificationBottom()-parent.originalPoint.y);
+
       }
     } else
       return 1.0;
@@ -140,84 +142,72 @@ class BifocalAxis extends DrawableGroup<Drawable> {
     }
   }
 
-  int countDepth(int current) {
+  int depth(int current) {
     if (topChild != null && bottomChild != null) {
       current++;
-      int bottomDepth = bottomChild.countDepth(current);
-      int topDepth = topChild.countDepth(current);
-      if (topDepth > bottomDepth)
+      int topDepth = topChild.depth(current);
+      int bottomDepth = bottomChild.depth(current);
+      if (topDepth > bottomDepth) {
         return topDepth;
-      else
+      } else {
         return bottomDepth;
+      }
     } else {
       return current;
     }
   }
 
   int getRootDepth() {
-    return root.countDepth(1);
+    return root.depth(1);
   }
+  
+//  float highlightingDimension() {
+//    float rootDepth = (float) bifocalAxis.getRootDepth();
+//     return (rootDepth - (float)bifocalAxis.getLayer()/rootDepth);
+//  }
 
 
   float magnify(float value) {
-    float mag = getMagnificationTop() +
+    return getMagnificationTop() +
       getMagnificationHeight() * (   ( value - getOriginalTop() ) / getOriginalHeight()   );
-    if (mag < 0 || mag > chart.getInnerHeight()) {
-      println("getMagnificationTop() = "+getMagnificationTop(),
-              ", getMagnificationHeight() = "+getMagnificationHeight(),
-              ", getOriginalTop() = "+getOriginalTop()+
-              ", getOriginalHeight() = "+getOriginalHeight()+
-              ", value = "+value+
-              ", value - getOriginalTop() = "+(value - getOriginalTop())+
-              ", height = "+chart.getInnerHeight()+
-              " -> "+mag);
-      }
-    return mag;
   }
 
   float magnifyRecursively(float value) {
     
-    if (value < getOriginalTop() || value > getOriginalBottom()) {
-      println("a");
-    }
+    float mag = parent != null ? magnify(value) : value;
     
-    if (parent == null && topChild == null && bottomChild == null) {
-      return value;
-    } else if (parent == null && topChild != null && bottomChild != null) {
-      if (value < originalPoint.y) {
-        return topChild.magnifyRecursively(value);
+    if (topChild != null && bottomChild != null) {
+      if (mag < originalPoint.y) {
+        return topChild.magnifyRecursively(mag);
       } else {
-        return bottomChild.magnifyRecursively(value);
+        return bottomChild.magnifyRecursively(mag);
       }
-    } else if (parent != null && topChild == null && bottomChild == null) {
-      return magnify(value);  
-    } else if (parent != null && topChild != null && bottomChild != null) {
-      if (value < originalPoint.y) {
-        return topChild.magnifyRecursively(magnify(value));
-      } else {
-        return bottomChild.magnifyRecursively(magnify(value));
-      } 
-    }
-    
-    return value;
+    } else
+      return mag;
+
+  }
   
-//    float magY = magnify(value);
-//    if (topChild != null && bottomChild != null) {
-//      // magnitude + recurse into responsable child 
-//      if (magY < originalPoint.y) {
-//        return topChild.magnifyRecursively(magY);
-//      } else {
-//        return bottomChild.magnifyRecursively(magY);
-//      }
-//    } else {
-//      return magY;
-//    }
+  void clear() {
+    
+    if (topChild != null) {
+      topChild.parent = null;
+      topChild.root = null;
+      if (topChild.magnificationPoint != null)
+        topChild.magnificationPoint.bifocalAxis = null;
+      topChild.clear();
+    }
+    if (bottomChild != null) {
+      bottomChild.parent = null;
+      bottomChild.root = null;
+      if (bottomChild.magnificationPoint != null)
+        bottomChild.magnificationPoint.bifocalAxis = null;
+      bottomChild.clear();
+    }
+    topChild = null;
+    bottomChild = null;
+    super.clear();
   }
 
-
-  float minutesAxisProjection(float value) {
-    return chart.getInnerHeight() - (value/1440) * chart.getInnerHeight();
-  }
 
 
   boolean updated() {
@@ -225,6 +215,9 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   }
 
   void update() {
+  }
+  
+  void drawHighlighting(int x, int y, float width, float height) {
   }
 
   void draw() {
@@ -406,4 +399,3 @@ class BifocalAxis extends DrawableGroup<Drawable> {
     }
   }
 }
-
