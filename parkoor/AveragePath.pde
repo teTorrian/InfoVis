@@ -11,12 +11,12 @@ class AveragePath extends Path {
     
     // Pfadeckpunkte holen
     pathVertices = new ArrayList<PVector>();
-    pathVertices.add(new PVector(-chart.offsetX, chart.getInnerHeight() - ((float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight()));
+    pathVertices.add(new PVector(-chart.offsetX, minutesToY(data.get(dataKeys.get(0)))));
     int i = 0;
     for (String key : dataKeys) {
-      pathVertices.add(new PVector(i++ * chart.getSpacing(), chart.getInnerHeight() - ((float)data.get(key)/1440) * chart.getInnerHeight()));
+      pathVertices.add(new PVector(i++ * chart.getSpacing(), minutesToY(data.get(key))));
     }
-    pathVertices.add(new PVector(chart.getInnerWidth()+chart.offsetX2, chart.getInnerHeight() - ((float)data.get(dataKeys.get(dataKeys.size()-1))/1440) * chart.getInnerHeight()));
+    pathVertices.add(new PVector(chart.getInnerWidth()+chart.offsetX2, minutesToY(data.get(dataKeys.get(dataKeys.size()-1)))));
         
     pushMatrix();
     
@@ -30,7 +30,7 @@ class AveragePath extends Path {
       
       pushMatrix();
         textFont(font.light14);
-        translate(-chart.offsetX - textWidth(chart.model.dictionary.get(entry_name))*1.1, (1 - (float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() + textAscent()/2);
+        translate(-chart.offsetX - textWidth(chart.model.dictionary.get(entry_name))*1.1, (minutesToY(data.get(dataKeys.get(0)))) + textAscent()/2);
         text(chart.model.dictionary.get(entry_name), 0, 0);
       popMatrix();
 
@@ -69,7 +69,7 @@ class AveragePath extends Path {
     PVector m = dragAndDropManager.transformVector(mouse);
     
     float x = -chart.offsetX - textWidth(chart.model.dictionary.get(date.getString("name")))*1.1;
-    float y = (1 - (float)data.get(dataKeys.get(0))/1440) * chart.getInnerHeight() + textAscent()/2;
+    float y = (minutesToY(data.get(dataKeys.get(0)))) + textAscent()/2;
     
     textFont(font.light14);
     boolean mouseOverText = (m.x > x && m.x < x+textWidth(chart.model.dictionary.get(date.getString("name")))) && (m.y < y && m.y > y-textAscent());

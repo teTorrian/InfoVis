@@ -121,6 +121,24 @@ class BifocalAxis extends DrawableGroup<Drawable> {
     } else
       return 1.0;
   }
+  
+  float getMaxStretchFactor() {
+    if (topChild != null && bottomChild != null) {
+      float topFactor = topChild.getMaxStretchFactor();
+      float bottomFactor = bottomChild.getMaxStretchFactor();
+      if (topFactor > bottomFactor) {
+        return topFactor;
+      } else {
+        return bottomFactor;
+      }
+    } else {
+      return getStretchFactor();
+    }
+  }
+  
+  float rootMaxStretchFactor() {
+    return root.getMaxStretchFactor();
+  }
 
   float getDashSize() {
     float dash = normalDashSize*getStretchFactor();
@@ -161,10 +179,10 @@ class BifocalAxis extends DrawableGroup<Drawable> {
     return root.depth(1);
   }
   
-//  float highlightingDimension() {
-//    float rootDepth = (float) bifocalAxis.getRootDepth();
-//     return (rootDepth - (float)bifocalAxis.getLayer()/rootDepth);
-//  }
+  float highlightingDimension() {
+    float rootDepth = (float) getRootDepth();
+     return (rootDepth - (float) getLayer()/rootDepth);
+  }
 
 
   float magnify(float value) {
@@ -217,7 +235,14 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   void update() {
   }
   
-  void drawHighlighting(int x, int y, float width, float height) {
+  void drawHighlighting(float width) {
+    if (topChild != null && bottomChild != null) {
+      topChild.drawHighlighting(width);
+      bottomChild.drawHighlighting(width);
+    } else {
+      fill(255,255,255,128-getStretchFactor()/rootMaxStretchFactor()*128);
+      rect(0,getMagnificationTop(), width, getMagnificationBottom()-getMagnificationTop());
+    }
   }
 
   void draw() {
@@ -272,6 +297,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
 
       super.draw();
     } else {
+      
       // branch
       super.draw();
       if (magnificationPoint.dragAndDropManager.dragging) {

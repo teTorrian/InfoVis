@@ -38,6 +38,7 @@ class Path implements Drawable {
   float minutesToY(float minutes) {
     return chart.bifocalAxis.magnifyRecursively(chart.getInnerHeight() - ((float) minutes/1440) * chart.getInnerHeight());
   }
+ 
 
   void draw() {
     float c = (float)chart.getInnerHeight() / 1440;
@@ -196,7 +197,7 @@ class Path implements Drawable {
     int i = 0;
     point0 = new PVector(-chart.offsetX, minutesToY((float)data.get(dataKeys.get(0))));
     for (String key : dataKeys) {
-      point1 = new PVector(i * chart.getSpacing(), (float)chart.getInnerHeight() - data.get(key) * c);
+      point1 = new PVector(i * chart.getSpacing(), minutesToY(data.get(key)));
       if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
         return true;
       }

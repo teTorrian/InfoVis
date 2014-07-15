@@ -39,8 +39,8 @@ class Chart extends DrawableGroup {
     bifocalAxis = new BifocalAxis(this, width-offsetX, "Zoom");
     
     add(pathGroup);
-    add(axisGroup);
     add(bifocalAxis);
+    add(axisGroup);
 //    add(new BifocalAxis(this, 0-offsetX, ""));
   }
 
