@@ -82,6 +82,8 @@ class BifocalAxis extends DrawableGroup<Drawable> {
   float getOriginalHeight() {
     return getOriginalBottom() - getOriginalTop();
   }
+  
+
 
   float getMagnificationTop() {
     if (parent != null) {
@@ -189,11 +191,16 @@ class BifocalAxis extends DrawableGroup<Drawable> {
     return getMagnificationTop() +
       getMagnificationHeight() * (   ( value - getOriginalTop() ) / getOriginalHeight()   );
   }
+  
+  float demagnify(float value) {
+    return getOriginalTop() +
+      getOriginalHeight() * (   ( value - getMagnificationTop() ) / getMagnificationHeight()   );
+  }
 
   float magnifyRecursively(float value) {
     
-    float mag = parent != null ? magnify(value) : value;
-    
+    float mag = magnify(value);
+   
     if (topChild != null && bottomChild != null) {
       if (mag < originalPoint.y) {
         return topChild.magnifyRecursively(mag);
@@ -202,6 +209,17 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       }
     } else
       return mag;
+
+  }
+  
+  float demagnifyRecursively(float value) {
+    
+    float demag = demagnify(value);
+    
+    if (parent != null) {
+        return parent.demagnifyRecursively(demag);
+    } else
+      return demag;
 
   }
   
@@ -247,9 +265,17 @@ class BifocalAxis extends DrawableGroup<Drawable> {
 
   void draw() {
     pushMatrix();
-
+    
     if (parent == null) {
       translate(getX(), 0);
+      float[] spacing = {
+        getDashSize(), getDashSize()
+      };
+//      if (topChild != null) {
+//        stroke(230, 230, 230,255);
+//        strokeWeight(1.0);
+//        dashline(30, getMagnificationBottom(), 30, getMagnificationTop(), spacing);
+//      }
       //      dragAndDropManager.saveMatrix();
       textFont(font.light14);
       textAlign(LEFT);
@@ -275,7 +301,7 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       };
 
 
-      strokeWeight(1.2);
+      strokeWeight(1);
       stroke(200, 200, 200);
 
       if (parent == null) {
@@ -298,15 +324,19 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       super.draw();
     } else {
       
-      // branch
       super.draw();
+      
+      // branch
       if (magnificationPoint.dragAndDropManager.dragging) {
-        stroke(180, 180, 180, 255*magnificationPoint.blurFactor());
+        stroke(120, 120, 120, 255*magnificationPoint.blurFactor());
+        strokeWeight(1);
         //          noStroke();
-        fill(255, 255, 255, 255);
+        fill(255, 255, 255, 0);
         ellipseMode(CENTER);
-        ellipse(originalPoint.x, originalPoint.y, hoverArea*2, hoverArea*2);
+        ellipse(originalPoint.x, originalPoint.y, hoverArea*2.1, hoverArea*2.1);
       }
+      
+      
     }
 
 
