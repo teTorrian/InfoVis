@@ -47,6 +47,12 @@ class BifocalPoint extends PVector implements Drawable {
       fill(200,255);
       minutes = minutes - 60*hours;
       text(hours+"h "+minutes+"m", 40, originY+5);
+      float[] spacing = {
+        3, 3
+      };
+      stroke(0,0,0,64);
+      strokeWeight(1.0);
+      bifocalAxis.dashline(0, this.y, -bifocalAxis.chart.width, this.y, spacing);
     popMatrix();
     
     updated = false;

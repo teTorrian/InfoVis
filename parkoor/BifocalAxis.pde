@@ -271,11 +271,26 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       float[] spacing = {
         getDashSize(), getDashSize()
       };
-//      if (topChild != null) {
-//        stroke(230, 230, 230,255);
+      if (topChild != null) {
+         textFont(font.light14);
+        textAlign(LEFT);
+        fill(200,255);
+        text("0", 40, getMagnificationBottom()+5);
+        text("24h 0m", 40, getMagnificationTop()+5);
+        fill(0,0);
+//        stroke(240,240,240);
 //        strokeWeight(1.0);
+//        line(0,0,30,0);
+//        line(0,getMagnificationBottom(),30,getMagnificationBottom());
+        stroke(230, 230, 230,255);
+        strokeWeight(1.0);
 //        dashline(30, getMagnificationBottom(), 30, getMagnificationTop(), spacing);
-//      }
+      }
+      
+      stroke(230, 230, 230,255);
+      strokeWeight(1.0);
+      dashline(0, getMagnificationBottom(), 0, getMagnificationTop(), spacing);
+      
       //      dragAndDropManager.saveMatrix();
       textFont(font.light14);
       textAlign(LEFT);
@@ -304,13 +319,13 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       strokeWeight(1);
       stroke(200, 200, 200);
 
-      if (parent == null) {
-        dashline(0, getMagnificationBottom(), 0, getMagnificationTop(), spacing);
-      } else {
-        dashline(0, getMagnificationBottom()-hoverArea, 0, getMagnificationTop()+hoverArea, spacing);
-        //        line(-13, getOriginalBottom()-hoverArea, 0, getMagnificationBottom()-hoverArea);
-        //        line(-13, getOriginalTop()+hoverArea, 0, getMagnificationTop()+hoverArea);
-      }
+//      if (parent == null) {
+//        dashline(0, getMagnificationBottom(), 0, getMagnificationTop(), spacing);
+//      } else {
+//        dashline(0, getMagnificationBottom()-hoverArea, 0, getMagnificationTop()+hoverArea, spacing);
+//        //        line(-13, getOriginalBottom()-hoverArea, 0, getMagnificationBottom()-hoverArea);
+//        //        line(-13, getOriginalTop()+hoverArea, 0, getMagnificationTop()+hoverArea);
+//      }
 
 
 
