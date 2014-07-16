@@ -39,12 +39,12 @@ class BifocalPoint extends PVector implements Drawable {
       ellipseMode(CENTER);
       ellipse(this.x, this.y, 2*hoverArea, 2*hoverArea);
       fill(0,0);
-      stroke(240,240,240);
-      strokeWeight(1.0);
+      stroke(0,0,0,64);
+      strokeWeight(0.9);
       bezier(hoverArea, this.y, 20, this.y, 10, originY, 30, originY);
       int minutes = (int) ((1- originY / bifocalAxis.chart.getInnerHeight())*1440);
       int hours = floor((float) minutes/ (float) (60));
-      fill(200,255);
+      fill(0,64);
       minutes = minutes - 60*hours;
       text(hours+"h "+minutes+"m", 40, originY+5);
       float[] spacing = {
