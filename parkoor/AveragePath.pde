@@ -66,17 +66,35 @@ class AveragePath extends Path {
   }
 
   boolean mouseOver(PVector mouse) {
-    boolean mouseOverPath = super.mouseOver(mouse);
-    // TODO: Hover über Schrift abfangen
+    PVector point0 = null;
+    PVector point1 = null;
+    PVector pointM = dragAndDropManager.transformVector(mouse);
+    float c = (float)chart.getInnerHeight() / 1440;
+    int i = 0;
+
+    point0 = new PVector(-chart.offsetX, minutesToY(data.get(dataKeys.get(0))));
+    for (String key : dataKeys) {
+      point1 = new PVector(chart.getSpacing()*2 + (i * chart.getSpacing()), minutesToY(data.get(key)));
+      if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
+        return true;
+      }
+      
+      point0 = point1;
+      i++;
+    }
+    point1 = new PVector(chart.getInnerWidth()+chart.offsetX2, minutesToY((float)data.get(dataKeys.get(dataKeys.size()-1))));
+    if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
+        return true;
+    }
     
-    PVector m = dragAndDropManager.transformVector(mouse);
+    boolean mouseOverText = false;
     
     float x = -chart.offsetX - textWidth(chart.model.dictionary.get(date.getString("name")))*1.1;
     float y = (minutesToY(data.get(dataKeys.get(0)))) + textAscent()/2;
     
     textFont(font.light14);
-    boolean mouseOverText = (m.x > x && m.x < x+textWidth(chart.model.dictionary.get(date.getString("name")))) && (m.y < y && m.y > y-textAscent());
+    mouseOverText = (pointM.x > x && pointM.x < x+textWidth(chart.model.dictionary.get(date.getString("name")))) && (pointM.y < y && pointM.y > y-textAscent());
     
-    return mouseOverPath || mouseOverText;
+    return mouseOverText;
   }
 }

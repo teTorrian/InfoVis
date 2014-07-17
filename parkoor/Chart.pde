@@ -80,5 +80,13 @@ class Chart extends DrawableGroup {
   float getSpacing() {
     return getInnerWidth() / (model.getLocationCount() + 1);
   }
+  
+  float getPeopleSpacing() {
+    return getInnerHeight() / (model.getPeople().size() + 1);
+  }
+  
+  float getDaySpacing() {
+    return getInnerHeight() / 8;
+  }
 }
 

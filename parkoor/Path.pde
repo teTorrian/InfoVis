@@ -82,9 +82,9 @@ class Path implements Drawable {
     
         beginShape();
           int i = 0;
-          vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name)*100 - 50);
-          vertex(0, chart.model.getPersonIndex(entry_name)*100 - 50);
-          vertex(chart.getSpacing(), chart.model.getWeekday(date.getString("date"))*50 - 50);
+          vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
+          vertex(0, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
+          vertex(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing());
           for (String key : dataKeys) {
             vertex(i++ * chart.getSpacing() + 2*chart.getSpacing(), minutesToY((float)data.get(key)) );
           }
@@ -204,14 +204,20 @@ class Path implements Drawable {
     float c = (float)chart.getInnerHeight() / 1440;
     int i = 0;
     
-    /*if (pointInsideLine(pointM, new PVector(-chart.offsetX, chart.model.getPersonIndex(date.getString("name"))*100 - 50), new PVector(chart.getSpacing(), chart.model.getWeekday(date.getString("date"))*50 - 50), strokeWidth))
+    if (pointInsideLine(
+          pointM,
+          new PVector(0, chart.model.getPersonIndex(date.getString("name")) * chart.getPeopleSpacing() + chart.getPeopleSpacing()),
+          new PVector(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing()),
+          strokeWidth)
+          )
       return true;
 /*
-    vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name)*100 - 50);
-          vertex(0, chart.model.getPersonIndex(entry_name)*100 - 50);
-          vertex(chart.getSpacing(), chart.model.getWeekday(date.getString("date"))*50 - 50);
-*/
-    point0 = new PVector(chart.getSpacing(), chart.model.getWeekday(date.getString("date"))*50 - 50);
+
+          vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
+          vertex(0, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
+          vertex(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing());
+    */      
+    point0 = new PVector(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing());
     for (String key : dataKeys) {
       point1 = new PVector(chart.getSpacing()*2 + (i * chart.getSpacing()), minutesToY(data.get(key)));
       if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
