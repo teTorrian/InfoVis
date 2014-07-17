@@ -98,7 +98,8 @@ class Path implements Drawable {
     
     }
     else {
-      selected = false;
+      // Pfad bleibt selected, auch wenn er gefiltert wurde, nicht mehr sichtbar war und wieder sichtbar wird.
+      //selected = false;
     }
   }
 
