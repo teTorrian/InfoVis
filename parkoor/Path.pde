@@ -146,19 +146,28 @@ class Path implements Drawable {
           // besteht, grayed dargestellt, beim mouse over highlighted.
           // Allerdings ist das auch schlecht, da man so nicht mehr erkennt
           // welcher Datensatz von wem ist.
-          selected = true;
-          pathGroup.updateMultiSelect();
-          updated = true;
-          loop();
+          if (!selected) {
+            selected = true;
+            pathGroup.selections++;
+            pathGroup.updateMultiSelect();
+            updated = true;
+            loop();
+          }
           
           return true;
         }
         else {
           // single click in leere Fläche
           // -> Auswahl löschen
-          selected = false;
-          updated = true;
-          // Jeder Pfad behandelt selbst dieses Ereignis.
+          if (selected) {
+            selected = false;
+            pathGroup.selections--;
+            updated = true;
+            // Jeder Pfad behandelt selbst dieses Ereignis.
+          }
+          
+         
+          
           return false;
 
           // ACHTUNG: Das funktioniert, weil die PathGroup dieser Ereignis
@@ -240,6 +249,9 @@ class Path implements Drawable {
     if (!hidden) {
       boolean mouseIsOver = mouseOver(new PVector(float(mouseX),float(mouseY)));
       if (!highlighted && mouseIsOver) {
+        
+        pathGroup.highlightes++;
+        
         for(Path path:pathGroup) {
           path.highlighted = false;
           path.grayed = true;
@@ -261,19 +273,18 @@ class Path implements Drawable {
         loop();
         return true;
       } else if (highlighted && !mouseIsOver) {
-        for(Path path:pathGroup) {
-          path.grayed = false;
-        }
-        for(Axis axis:chart.axisGroup) {
-          axis.selectionMode = false;
-        }
+        
+        pathGroup.highlightes--;
+        
         highlighted = false;
+        grayed = true;
+        
         updated = true;
         loop();
-        return false;
+        return true;
       } else if (highlighted && mouseIsOver) {
         return true;
-      }
+      } 
     }
     return false;
   }
