@@ -14,7 +14,7 @@ class AveragePath extends Path {
     pathVertices.add(new PVector(-chart.offsetX, minutesToY(data.get(dataKeys.get(0)))));
     int i = 0;
     for (String key : dataKeys) {
-      pathVertices.add(new PVector(i++ * chart.getSpacing(), minutesToY(data.get(key))));
+      pathVertices.add(new PVector(i++ * chart.getSpacing() + 2*chart.offsetX, minutesToY(data.get(key))));
     }
     pathVertices.add(new PVector(chart.getInnerWidth()+chart.offsetX2, minutesToY(data.get(dataKeys.get(dataKeys.size()-1)))));
         

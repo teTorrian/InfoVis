@@ -5,10 +5,10 @@ class Chart extends DrawableGroup {
   int width;
   int height;
 
-  int offsetX = 50;    // Abstand der Achsen zur linken Seite des Diagramms 
+  int offsetX = 30;    // Abstand der Achsen zur linken Seite des Diagramms 
   int offsetY = 0;    // Abstand der Achsen zur oberen Seite des Diagramms 
-  int offsetX2 = 50;   // Abstand der Achsen zur rechten Seite des Diagramms 
-  int offsetY2 = 0;    // Abstand der Achsen zur unteren Seite des Diagramms 
+  int offsetX2 = offsetX;   // Abstand der Achsen zur rechten Seite des Diagramms 
+  int offsetY2 = offsetY;    // Abstand der Achsen zur unteren Seite des Diagramms 
 
   int topicOffset = 100;
   String topic = "Wo bin ich?";
@@ -78,7 +78,7 @@ class Chart extends DrawableGroup {
   }
 
   float getSpacing() {
-    return getInnerWidth()/(model.getLocationCount()-1);
+    return (getInnerWidth() - 2 * offsetX) / ( model.getLocationCount() - 1);
   }
 }
 
