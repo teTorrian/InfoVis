@@ -11,7 +11,7 @@ class AxisGroup extends DrawableGroup<Axis> {
     
     ArrayList<String> locations = chart.model.getLocations();
     for (int i = 0; i < locations.size(); i++)
-      add(new Axis(this, int(chart.getSpacing()*i + 2*chart.offsetX), chart.model.dictionary.get(locations.get(i)), locations.get(i)));
+      add(new Axis(this, int(chart.getSpacing()*i + 2*chart.getSpacing()), chart.model.dictionary.get(locations.get(i)), locations.get(i)));
 
     filters = new ArrayList<Filter>();
     for (Axis axis:this) {

@@ -11,10 +11,13 @@ class AveragePath extends Path {
     
     // Pfadeckpunkte holen
     pathVertices = new ArrayList<PVector>();
+    //pathVertices.add(new PVector(-chart.offsetX, chart.model.getPersonIndex(entry_name)*100 - 50));
+    //pathVertices.add(new PVector(0, chart.model.getPersonIndex(entry_name)*100 - 50));
+    //pathVertices.add(new PVector(chart.getSpacing(), chart.model.getWeekday(date.getString("date"))*50 - 50));
     pathVertices.add(new PVector(-chart.offsetX, minutesToY(data.get(dataKeys.get(0)))));
     int i = 0;
     for (String key : dataKeys) {
-      pathVertices.add(new PVector(i++ * chart.getSpacing() + 2*chart.offsetX, minutesToY(data.get(key))));
+      pathVertices.add(new PVector(i++ * chart.getSpacing() + 2*chart.getSpacing(), minutesToY(data.get(key))));
     }
     pathVertices.add(new PVector(chart.getInnerWidth()+chart.offsetX2, minutesToY(data.get(dataKeys.get(dataKeys.size()-1)))));
         

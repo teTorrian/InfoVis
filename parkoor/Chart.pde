@@ -78,7 +78,7 @@ class Chart extends DrawableGroup {
   }
 
   float getSpacing() {
-    return (getInnerWidth() - 2 * offsetX) / ( model.getLocationCount() - 1);
+    return getInnerWidth() / (model.getLocationCount() + 1);
   }
 }
 
