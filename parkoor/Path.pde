@@ -26,6 +26,7 @@ class Path implements Drawable {
     this.dragAndDropManager = new DragAndDropManager();
     data = chart.controller.model.getLocationTimes(date);
     dataKeys = chart.controller.model.getLocations(/*date*/);
+    hidden = false;
   }
 
   boolean updated() {
@@ -41,58 +42,61 @@ class Path implements Drawable {
  
 
   void draw() {
-    float c = (float)chart.getInnerHeight() / 1440;
 
-    if(hidden)
-      println("hidden");
+    if(!hidden) {
       
-    pushMatrix();
-    
-      dragAndDropManager.saveMatrix();
-      String entry_name = date.getString("name");
-    
-      stroke(pathGroup.pathColor.get(entry_name));
-      if (grayed) {
-        // Linienfarbe ausgegraut
-        stroke(color(200,200,200,100));
-      }
-      if (highlighted) {
-        // Name anzeigen
-        pushMatrix();
-          fill(pathGroup.pathColorHighlighted.get(entry_name));
-          noStroke();
-          textFont(font.light22);
-          translate(-chart.offsetX-4-textWidth(entry_name), minutesToY((float)data.get(dataKeys.get(0))) - textAscent()/2-4);
-          rect(0, 0, textWidth(entry_name)+8, textAscent()+8);
-          textFont(font.light14);
-          fill(255,255,255);
-          text(entry_name, 8, textAscent()+7);
-          // Linienfarbe highlighted
-          stroke(pathGroup.pathColorHighlighted.get(entry_name));
-        popMatrix();
-      }
-      if (selected)
-        stroke(pathGroup.pathColorHighlighted.get(entry_name));
-
-      /*if(selected && grayed)
-        stroke(pathGroup.pathColorHighlighted.get(entry_name));*/
-      strokeWeight(strokeWidth);
-      noFill();
-  
-      beginShape();
-        int i = 0;
-        /*vertex(-chart.getSpacing()*2, chart.model.getWeekday(date.getString("date"))*50 - 50);
-        vertex(-(chart.getSpacing()*1), chart.model.getPersonIndex(entry_name)*100 - 50);*/
-        vertex(-chart.offsetX, minutesToY((float)data.get(dataKeys.get(0))));
-        for (String key : dataKeys) {
-          vertex(i++ * chart.getSpacing(), minutesToY((float)data.get(key)) );
+      float c = (float)chart.getInnerHeight() / 1440;
+      
+      pushMatrix();
+      
+        dragAndDropManager.saveMatrix();
+        String entry_name = date.getString("name");
+      
+        stroke(pathGroup.pathColor.get(entry_name));
+        if (grayed) {
+          // Linienfarbe ausgegraut
+          stroke(color(200,200,200,100));
         }
-        vertex(chart.getInnerWidth()+chart.offsetX2, minutesToY((float)data.get(dataKeys.get(dataKeys.size()-1))));
-      endShape();
-
-    popMatrix();
+        if (highlighted) {
+          // Name anzeigen
+          pushMatrix();
+            fill(pathGroup.pathColorHighlighted.get(entry_name));
+            noStroke();
+            textFont(font.light22);
+            translate(-chart.offsetX-4-textWidth(entry_name), minutesToY((float)data.get(dataKeys.get(0))) - textAscent()/2-4);
+            rect(0, 0, textWidth(entry_name)+8, textAscent()+8);
+            textFont(font.light14);
+            fill(255,255,255);
+            text(entry_name, 8, textAscent()+7);
+            // Linienfarbe highlighted
+            stroke(pathGroup.pathColorHighlighted.get(entry_name));
+          popMatrix();
+        }
+        if (selected)
+          stroke(pathGroup.pathColorHighlighted.get(entry_name));
+  
+        /*if(selected && grayed)
+          stroke(pathGroup.pathColorHighlighted.get(entry_name));*/
+        strokeWeight(strokeWidth);
+        noFill();
     
-    updated = false;
+        beginShape();
+          int i = 0;
+          /*vertex(-chart.getSpacing()*2, chart.model.getWeekday(date.getString("date"))*50 - 50);
+          vertex(-(chart.getSpacing()*1), chart.model.getPersonIndex(entry_name)*100 - 50);*/
+          vertex(-chart.offsetX, minutesToY((float)data.get(dataKeys.get(0))));
+          for (String key : dataKeys) {
+            vertex(i++ * chart.getSpacing(), minutesToY((float)data.get(key)) );
+          }
+          vertex(chart.getInnerWidth()+chart.offsetX2, minutesToY((float)data.get(dataKeys.get(dataKeys.size()-1))));
+        endShape();
+  
+      popMatrix();
+    
+    
+      updated = false;
+    
+    }
   }
 
   boolean pointInsideLine(PVector thePoint,

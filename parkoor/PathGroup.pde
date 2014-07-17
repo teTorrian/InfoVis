@@ -22,6 +22,9 @@ class PathGroup extends DrawableGroup<Path> {
     this.chart = chart;
     model = chart.controller.model;
     cachedData = model.getDataObjects();
+    for(int i = 0; i < cachedData.size(); i++) {
+      add(new Path(this, cachedData.getJSONObject(i)));
+    }
     
     // Double Click
     filters = new ArrayList<Filter>();
@@ -53,9 +56,13 @@ class PathGroup extends DrawableGroup<Path> {
   void updateFilters() {
     cachedData = chart.controller.model.getDataObjects(chart.axisGroup.filters);
     
-    this.clear();
+    for(Path path : this) {
+      path.hidden = true;
+    }
+    
     for(int i = 0; i < cachedData.size(); i++) {
-      add(new Path(this, cachedData.getJSONObject(i)));
+      JSONObject personDay = cachedData.getJSONObject(i);
+      get(personDay.getInt("id")).hidden = false;
     }
   }
   

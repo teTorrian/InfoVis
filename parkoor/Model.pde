@@ -10,6 +10,11 @@ class Model {
   Model(String filename) {
     cachedDataObjects = loadJSONArray(filename);
     
+    for (int j = 0; j < cachedDataObjects.size(); j++) {
+      JSONObject data = cachedDataObjects.getJSONObject(j);
+      data.setInt("id", j);
+    }
+    
     compileDictionary();
   }
 
