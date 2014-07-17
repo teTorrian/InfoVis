@@ -98,7 +98,7 @@ class Path implements Drawable {
     
     }
     else {
-      selected = false;
+//      selected = false;
     }
   }
 
