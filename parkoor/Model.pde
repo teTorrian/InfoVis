@@ -77,6 +77,10 @@ class Model {
     return getLocations().size();
   }
   
+  /**
+  * getPeople() gibt die Personen zurück und bestimmt wie
+  * getLocations() deren Reihenfolge.
+  */
   ArrayList<String> getPeople() {
     ArrayList<String> people = new ArrayList<String>();
     people.add("Christian");
@@ -93,29 +97,7 @@ class Model {
         return index;
     return -1;
   }
-  
-  int getWeekday(String d) {
-    Date date;
-    DateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");;
-    DateFormat day = new SimpleDateFormat("EE");
-    int i = 0;
-    try {
-      date = dateFormat.parse(d);
-      // day.format(date) gibt den Wochentag zurück.
-      // Calendar kann dagegen benutzt werden, um einen Index 
-      // zu bekommen. Allerdings: So = 1, Mo = 2, ...
-      Calendar c = Calendar.getInstance();
-      c.setTime(date);
-      i = c.get(Calendar.DAY_OF_WEEK);
-    }
-    catch (Exception e) {
-      println("Unable to parse " + d);
-    }
-    // Mo = 1, Di = 2, ...
-    i = ((i+5)%7)+1;
-    return i;
-  }
-  
+
   HashSet<String> getDates() {
     HashSet<String> dates = new HashSet<String>();
     for (int i = 0; i < cachedDataObjects.size(); i++)
@@ -157,4 +139,29 @@ String formatMinutes(float min) {
 
 String formatHours(float hours) {
   return formatMinutes(hours*60);
+}
+
+/**
+* jetzt global
+*/
+int getWeekday(String d) {
+  Date date;
+  DateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");;
+  DateFormat day = new SimpleDateFormat("EE");
+  int i = 0;
+  try {
+    date = dateFormat.parse(d);
+    // day.format(date) gibt den Wochentag zurück.
+    // Calendar kann dagegen benutzt werden, um einen Index 
+    // zu bekommen. Allerdings: So = 1, Mo = 2, ...
+    Calendar c = Calendar.getInstance();
+    c.setTime(date);
+    i = c.get(Calendar.DAY_OF_WEEK);
+  }
+  catch (Exception e) {
+    println("Unable to parse " + d);
+  }
+  // Mo = 1, Di = 2, ...
+  i = ((i+5)%7)+1;
+  return i;
 }

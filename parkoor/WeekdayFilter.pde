@@ -64,28 +64,6 @@ class WeekdayFilter implements Filter {
     return dataObjects;
   }
   
-  int getWeekday(String d) {
-    Date date;
-    DateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");;
-    //DateFormat day = new SimpleDateFormat("EE");
-    int i = 0;
-    try {
-      date = dateFormat.parse(d);
-      // day.format(date) gibt den Wochentag zurück.
-      // Calendar kann dagegen benutzt werden, um einen Index 
-      // zu bekommen. Allerdings: So = 1, Mo = 2, ...
-      Calendar c = Calendar.getInstance();
-      c.setTime(date);
-      i = c.get(Calendar.DAY_OF_WEEK);
-    }
-    catch (Exception e) {
-      println("Unable to parse " + d);
-    }
-    // Mo = 1, Di = 2, ...
-    i = ((i+5)%7)+1;
-    return i;
-  }
-  
   void fillFilter() {
     for(int i = 0; i < 7; i++)
       weekdays[i] = true;

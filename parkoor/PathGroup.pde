@@ -9,11 +9,16 @@ class PathGroup extends DrawableGroup<Path> {
   JSONArray cachedData;
   Model model;
   
-  // Double Click
   ArrayList<Filter> selectors;
   PersonFilter pSel;
   DateFilter dSel;
   WeekdayFilter wdSel;
+  /**
+    * Da die Filter hier allerdings als Selektoren "missbraucht"
+    * werden, muss auf die umgekehrte Logik geachtet werden. Daher
+    * müssen die Filter immer zuerst gefüllt werden (fillFilter),
+    * um danach wieder einzelne Elemente zu entfernen (remove).
+    */
   
   // Multi-Select
   AveragePath averagePath;
@@ -31,12 +36,7 @@ class PathGroup extends DrawableGroup<Path> {
       add(path);
     }
 
-    /**
-    * Da die Filter hier allerdings als Selektoren "missbraucht"
-    * werden, muss auf die umgekehrte Logik geachtet werden. Daher
-    * müssen die Filter immer zuerst gefüllt werden (fillFilter),
-    * um danach wieder einzelne Elemente zu entfernen (remove).
-    **/
+    // Initialisieren der Selektoren
     resetSelectors();
     
     // Multi-Select
@@ -63,7 +63,7 @@ class PathGroup extends DrawableGroup<Path> {
     println("Updating Selectors...");
     cachedData = chart.controller.model.getDataObjects(selectors);
     
-    for(int i = 0; i < cachedData.size(); i++) {
+    for (int i = 0; i < cachedData.size(); i++) {
       JSONObject personDay = cachedData.getJSONObject(i);
       ordered.get(personDay.getInt("id")).selected = true;
     }
@@ -73,11 +73,11 @@ class PathGroup extends DrawableGroup<Path> {
   void updateFilters() {
     cachedData = chart.controller.model.getDataObjects(chart.axisGroup.filters);
     
-    for(Path path : ordered) {
+    for (Path path : ordered) {
       path.hidden = true;
     }
     
-    for(int i = 0; i < cachedData.size(); i++) {
+    for (int i = 0; i < cachedData.size(); i++) {
       JSONObject personDay = cachedData.getJSONObject(i);
       ordered.get(personDay.getInt("id")).hidden = false;
     }
@@ -101,7 +101,7 @@ class PathGroup extends DrawableGroup<Path> {
       }
     }
     remove(averagePath);
-    if(c > 1) {
+    if (c > 1) {
       // Durchschnitt berechnen
       for(String key: averageMap.keySet()) {
         average.setFloat(key, (averageMap.get(key) / c));
@@ -120,7 +120,7 @@ class PathGroup extends DrawableGroup<Path> {
   }
   
   boolean mousePressed() {
-    if (! super.mousePressed()) {
+    if (!super.mousePressed()) {
       clearMultiSelect();
       resetSelectors();
       updated = true;
@@ -131,16 +131,23 @@ class PathGroup extends DrawableGroup<Path> {
   }
   
   void resetSelectors() {
+    // Feeding the Garbage Collector...
     selectors = new ArrayList<Filter>();
+    
+    // Person-Selector
     pSel = new PersonFilter();
     pSel.fillFilter();
     selectors.add(pSel);
-    dSel = new DateFilter();
-    selectors.add(dSel);
+    
+    // Date-Selector  –– NOT USED
+    /* Dieser Filter könnte genutzt werden, um alle Personen 
+       an einem Tag auszuwählen. */
+    /*dSel = new DateFilter();
+    selectors.add(dSel);*/
+    
+    // Weekday-Selector
     wdSel = new WeekdayFilter();
     //wdSel.fillFilter();
     selectors.add(wdSel);
   }
 }
-
-

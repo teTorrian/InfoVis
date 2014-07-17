@@ -84,7 +84,7 @@ class Path implements Drawable {
           int i = 0;
           vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing());
           vertex(0, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing());
-          vertex(chart.getSpacing(), (chart.model.getWeekday(date.getString("date"))-1) * chart.getDaySpacing());
+          vertex(chart.getSpacing(), (getWeekday(date.getString("date"))-1) * chart.getDaySpacing());
           for (String key : dataKeys) {
             vertex(i++ * chart.getSpacing() + 2*chart.getSpacing(), minutesToY((float)data.get(key)) );
           }
@@ -156,13 +156,13 @@ class Path implements Drawable {
         else {
           // single click in leere Fläche
           // -> Auswahl löschen
-          /**
-          *
-          */
           selected = false;
           updated = true;
           // Jeder Pfad behandelt selbst dieses Ereignis.
           return false;
+
+          // ACHTUNG: Das funktioniert, weil die PathGroup dieser Ereignis
+          // noch zusätzlich behandelt! (insbesondere loop() aufruft)
         }
       }
       if (mouseEvent.getClickCount()==2) {
@@ -172,29 +172,25 @@ class Path implements Drawable {
           String name = date.getString("name");
           PersonFilter pSel = pathGroup.pSel;
           pSel.remove(name);
-          /*
-          for (Path path: pathGroup) {
-            if ((path.date.getString("name")).equals(name)) {
-              path.selected = true;
-            }
-          }*/
+
           chart.pathGroup.updateSelectors();
-          //pathGroup.updateMultiSelect();
           updated = true;
           loop();
-          /*
-          WeekdayFilter wdSel = pathGroup.wdSel;
           
-          wdSel.fillFilter();
-          wdSel.remove(2);
+          /* BEISPIEL FÜR WEEKDAY */
+//          WeekdayFilter wdSel = pathGroup.wdSel;
+//          wdSel.remove(2);
+//          
+//          chart.pathGroup.updateSelectors();
           
-          //chart.axisGroup.filters.add(wf);
-          chart.pathGroup.updateSelectors();
-          */
           return true;
         }
       }
     }
+    // Beim Klick in eine leere Fläche sollen dennoch ALLE Pfade abgewählt werden.
+    if (hidden && mouseEvent.getClickCount()>0)
+      selected = false;
+      
     return false;
   }
 
@@ -217,19 +213,12 @@ class Path implements Drawable {
     if (pointInsideLine(
           pointM,
           new PVector(0, chart.model.getPersonIndex(date.getString("name")) * chart.getPeopleSpacing()),
-          new PVector(chart.getSpacing(), (chart.model.getWeekday(date.getString("date"))-1) * chart.getDaySpacing()),
+          new PVector(chart.getSpacing(), (getWeekday(date.getString("date"))-1) * chart.getDaySpacing()),
           strokeWidth)
           )
       return true;
 
-/*
-
-          vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
-          vertex(0, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
-          vertex(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing());
-    */      
-    point0 = new PVector(chart.getSpacing(), (chart.model.getWeekday(date.getString("date"))-1) * chart.getDaySpacing());
-
+    point0 = new PVector(chart.getSpacing(), (getWeekday(date.getString("date"))-1) * chart.getDaySpacing());
     for (String key : dataKeys) {
       point1 = new PVector(chart.getSpacing()*2 + (i * chart.getSpacing()), minutesToY(data.get(key)));
       if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
