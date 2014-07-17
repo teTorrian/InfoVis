@@ -21,6 +21,9 @@ class Chart extends DrawableGroup {
   BifocalAxis bifocalAxis;
   View view;
   Font font;
+  BubbleAxis nameAxis;
+  BubbleAxis dateAxis;
+  
 
   Chart(View view, int left, int top, int width, int height) {
     super();
@@ -37,9 +40,23 @@ class Chart extends DrawableGroup {
     axisGroup = new AxisGroup(this);
     pathGroup = new PathGroup(this);
     bifocalAxis = new BifocalAxis(this, width-offsetX, "Zoom");
+    nameAxis = new BubbleAxis(this, 0);
+    for (String name:model.getPeople()) {
+      nameAxis.add(new Bubble(nameAxis, name.charAt(0)+"", pathGroup.pathColorHighlighted.get(name)));
+    }
+    dateAxis = new BubbleAxis(this, floor(getSpacing()));
+    dateAxis.add(new Bubble(dateAxis, "Mo", color(230)));
+    dateAxis.add(new Bubble(dateAxis, "Di", color(230)));
+    dateAxis.add(new Bubble(dateAxis, "Mi", color(230)));
+    dateAxis.add(new Bubble(dateAxis, "Do", color(230)));
+    dateAxis.add(new Bubble(dateAxis, "Fr", color(230)));
+    dateAxis.add(new Bubble(dateAxis, "Sa", color(230)));
+    dateAxis.add(new Bubble(dateAxis, "So", color(230)));
     
     add(pathGroup);
     add(bifocalAxis);
+    add(nameAxis);
+    add(dateAxis);
     add(axisGroup);
 //    add(new BifocalAxis(this, 0-offsetX, ""));
   }
@@ -82,11 +99,11 @@ class Chart extends DrawableGroup {
   }
   
   float getPeopleSpacing() {
-    return getInnerHeight() / model.getPeople().size();
+    return getInnerHeight() / (model.getPeople().size()-1);
   }
   
   float getDaySpacing() {
-    return getInnerHeight() / 7;
+    return getInnerHeight() / 6;
   }
 }
 

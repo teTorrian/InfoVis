@@ -307,7 +307,6 @@ class BifocalAxis extends DrawableGroup<Drawable> {
       stroke(0, 0, 0, 80);
       strokeWeight(1.0);
       dashline(0, getMagnificationBottom(), 0, getMagnificationTop(), spacing);
-      dashline(-chart.width, getMagnificationBottom(), -chart.width, 0, spacing);
       
       //      dragAndDropManager.saveMatrix();
       textFont(font.light14);

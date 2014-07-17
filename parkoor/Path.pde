@@ -59,18 +59,18 @@ class Path implements Drawable {
         }
         if (highlighted) {
           // Name anzeigen
-          pushMatrix();
-            fill(pathGroup.pathColorHighlighted.get(entry_name));
-            noStroke();
-            textFont(font.light22);
-            translate(-chart.offsetX-4-textWidth(entry_name), minutesToY((float)data.get(dataKeys.get(0))) - textAscent()/2-4);
-            rect(0, 0, textWidth(entry_name)+8, textAscent()+8);
-            textFont(font.light14);
-            fill(255,255,255);
-            text(entry_name, 8, textAscent()+7);
+//          pushMatrix();
+//            fill(pathGroup.pathColorHighlighted.get(entry_name));
+//            noStroke();
+//            textFont(font.light22);
+//            translate(-chart.offsetX-4-textWidth(entry_name), minutesToY((float)data.get(dataKeys.get(0))) - textAscent()/2-4);
+//            rect(0, 0, textWidth(entry_name)+8, textAscent()+8);
+//            textFont(font.light14);
+//            fill(255,255,255);
+//            text(entry_name, 8, textAscent()+7);
             // Linienfarbe highlighted
             stroke(pathGroup.pathColorHighlighted.get(entry_name));
-          popMatrix();
+//          popMatrix();
         }
         if (selected)
           stroke(pathGroup.pathColorHighlighted.get(entry_name));
@@ -82,9 +82,9 @@ class Path implements Drawable {
     
         beginShape();
           int i = 0;
-          vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + (chart.getPeopleSpacing() * 0.5));
-          vertex(0, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + (chart.getPeopleSpacing() * 0.5));
-          vertex(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing() - (chart.getDaySpacing() * 0.5));
+          vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing());
+          vertex(0, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing());
+          vertex(chart.getSpacing(), (chart.model.getWeekday(date.getString("date"))-1) * chart.getDaySpacing());
           for (String key : dataKeys) {
             vertex(i++ * chart.getSpacing() + 2*chart.getSpacing(), minutesToY((float)data.get(key)) );
           }
@@ -216,13 +216,20 @@ class Path implements Drawable {
     
     if (pointInsideLine(
           pointM,
-          new PVector(0, chart.model.getPersonIndex(date.getString("name")) * chart.getPeopleSpacing() + (chart.getPeopleSpacing() * 0.5)),
-          new PVector(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing() - (chart.getDaySpacing() * 0.5)),
+          new PVector(0, chart.model.getPersonIndex(date.getString("name")) * chart.getPeopleSpacing()),
+          new PVector(chart.getSpacing(), (chart.model.getWeekday(date.getString("date"))-1) * chart.getDaySpacing()),
           strokeWidth)
           )
       return true;
-  
-    point0 = new PVector(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing() - (chart.getDaySpacing() * 0.5));
+
+/*
+
+          vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
+          vertex(0, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
+          vertex(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing());
+    */      
+    point0 = new PVector(chart.getSpacing(), (chart.model.getWeekday(date.getString("date"))-1) * chart.getDaySpacing());
+
     for (String key : dataKeys) {
       point1 = new PVector(chart.getSpacing()*2 + (i * chart.getSpacing()), minutesToY(data.get(key)));
       if (pointInsideLine(pointM, point0, point1, strokeWidth)) {
