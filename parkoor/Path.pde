@@ -98,8 +98,7 @@ class Path implements Drawable {
     
     }
     else {
-      // Pfad bleibt selected, auch wenn er gefiltert wurde, nicht mehr sichtbar war und wieder sichtbar wird.
-      //selected = false;
+      selected = false;
     }
   }
 
@@ -135,56 +134,57 @@ class Path implements Drawable {
   }
 
   boolean mousePressed() {
-    boolean mouseIsOver = mouseOver(new PVector(float(mouseX),float(mouseY)));
-    // mouseEvent variable contains the current event information
-    if (mouseEvent.getClickCount()==1) {
-      // Multi-Select
-      if (mouseIsOver) {
-        // single click auf eine Linie
-        // -> Linie auswählen (Auswahl erstellen, Durchschnitt anzeigen)
-        // Alle weiteren Linie werden dauerhaft, also solange die Auswahl
-        // besteht, grayed dargestellt, beim mouse over highlighted.
-        // Allerdings ist das auch schlecht, da man so nicht mehr erkennt
-        // welcher Datensatz von wem ist.
-        selected = true;
-        pathGroup.updateMultiSelect();
-        updated = true;
-        loop();
-        
-        return true;
-      }
-      else {
-        // single click in leere Fläche
-        // -> Auswahl löschen
-        /**
-        *
-        */
-        pathGroup.clearMultiSelect();
-        selected = false;
-        updated = true;
-        loop();
-        // Jeder Pfad behandelt selbst dieses Ereignis.
-        return false;
-      }
-    }
-    if (mouseEvent.getClickCount()==2) {
-      if(mouseIsOver) {
-        // double click auf eine Linie
-        // -> alle Datensätze einer Person auswählen
-        String name = date.getString("name");
-        for (Path path: pathGroup) {
-          if ((path.date.getString("name")).equals(name)) {
-            path.selected = true;
-          }
+    if(!hidden) {
+      boolean mouseIsOver = mouseOver(new PVector(float(mouseX),float(mouseY)));
+      // mouseEvent variable contains the current event information
+      if (mouseEvent.getClickCount()==1) {
+        // Multi-Select
+        if (mouseIsOver) {
+          // single click auf eine Linie
+          // -> Linie auswählen (Auswahl erstellen, Durchschnitt anzeigen)
+          // Alle weiteren Linie werden dauerhaft, also solange die Auswahl
+          // besteht, grayed dargestellt, beim mouse over highlighted.
+          // Allerdings ist das auch schlecht, da man so nicht mehr erkennt
+          // welcher Datensatz von wem ist.
+          selected = true;
+          pathGroup.updateMultiSelect();
+          updated = true;
+          loop();
+          
+          return true;
         }
-        pathGroup.updateMultiSelect();
-        updated = true;
-        loop();
-        
-        return true;
+        else {
+          // single click in leere Fläche
+          // -> Auswahl löschen
+          /**
+          *
+          */
+          pathGroup.clearMultiSelect();
+          selected = false;
+          updated = true;
+          loop();
+          // Jeder Pfad behandelt selbst dieses Ereignis.
+          return false;
+        }
+      }
+      if (mouseEvent.getClickCount()==2) {
+        if(mouseIsOver) {
+          // double click auf eine Linie
+          // -> alle Datensätze einer Person auswählen
+          String name = date.getString("name");
+          for (Path path: pathGroup) {
+            if ((path.date.getString("name")).equals(name)) {
+              path.selected = true;
+            }
+          }
+          pathGroup.updateMultiSelect();
+          updated = true;
+          loop();
+          
+          return true;
+        }
       }
     }
-    
     return false;
   }
 
@@ -230,41 +230,43 @@ class Path implements Drawable {
   }
 
   boolean mouseMoved() {
-    boolean mouseIsOver = mouseOver(new PVector(float(mouseX),float(mouseY)));
-    if (!highlighted && mouseIsOver) {
-      for(Path path:pathGroup) {
-        path.highlighted = false;
-        path.grayed = true;
+    if (!hidden) {
+      boolean mouseIsOver = mouseOver(new PVector(float(mouseX),float(mouseY)));
+      if (!highlighted && mouseIsOver) {
+        for(Path path:pathGroup) {
+          path.highlighted = false;
+          path.grayed = true;
+        }
+        // Durch add/remove wird dieser Pfad der 'oberste' in der Reihenfolge.
+        int myIndex = pathGroup.indexOf(this);
+        pathGroup.add(this);
+        pathGroup.remove(myIndex);
+        
+        highlighted = true;
+        grayed = false;
+        for(Axis axis:chart.axisGroup) {
+          axis.selectionMode = true;
+          axis.selectionColor = pathGroup.pathColorHighlighted.get(date.getString("name"));
+          // TODO 
+          axis.selection = data.get(axis.name);
+        }
+        updated = true;
+        loop();
+        return true;
+      } else if (highlighted && !mouseIsOver) {
+        for(Path path:pathGroup) {
+          path.grayed = false;
+        }
+        for(Axis axis:chart.axisGroup) {
+          axis.selectionMode = false;
+        }
+        highlighted = false;
+        updated = true;
+        loop();
+        return false;
+      } else if (highlighted && mouseIsOver) {
+        return true;
       }
-      // Durch add/remove wird dieser Pfad der 'oberste' in der Reihenfolge.
-      int myIndex = pathGroup.indexOf(this);
-      pathGroup.add(this);
-      pathGroup.remove(myIndex);
-      
-      highlighted = true;
-      grayed = false;
-      for(Axis axis:chart.axisGroup) {
-        axis.selectionMode = true;
-        axis.selectionColor = pathGroup.pathColorHighlighted.get(date.getString("name"));
-        // TODO 
-        axis.selection = data.get(axis.name);
-      }
-      updated = true;
-      loop();
-      return true;
-    } else if (highlighted && !mouseIsOver) {
-      for(Path path:pathGroup) {
-        path.grayed = false;
-      }
-      for(Axis axis:chart.axisGroup) {
-        axis.selectionMode = false;
-      }
-      highlighted = false;
-      updated = true;
-      loop();
-      return false;
-    } else if (highlighted && mouseIsOver) {
-      return true;
     }
     return false;
   }
