@@ -43,12 +43,20 @@ class Axis implements Drawable {
     locationFilter = new LocationFilter(min, max, name);
   }
   
-  float minutesOnAxis(float value) {
-    return chart.getInnerHeight() - (value/1440) * chart.getInnerHeight();
+  float hoursFromAxis(float value) {
+    return -(value/  chart.getInnerHeight() - 1)*1440/60;
+  }
+  
+
+  float axisFromHour(float hour) {
+    return (1-((hour*60)/1440)) * chart.getInnerHeight();
   }
   
   void updateLocationFilter() {
+//    locationFilter.min = hoursFromAxis(chart.bifocalAxis.magnifyRecursively(axisFromHour(min)));
     locationFilter.min = min;
+    println("locationFilter.min "+locationFilter.min+" - min: "+min);
+//    locationFilter.max = hoursFromAxis(chart.bifocalAxis.magnifyRecursively(axisFromHour(max)));
     locationFilter.max = max;
   }
   
@@ -79,12 +87,18 @@ class Axis implements Drawable {
     popMatrix();
     
     pushMatrix();
-      translate(0,(1-((min-minMin)/(maxMax-minMin)))*chart.getInnerHeight());
+      translate(0,(1-((hoursFromAxis(chart.bifocalAxis.demagnifyRecursively(axisFromHour(min)))-minMin)/(maxMax-minMin)))*chart.getInnerHeight());
       if (minHighlighted)
         fill(markColorHighlighted);
       else
         fill(markColor);
       noStroke();
+      triangle(-triangleSize, triangleSize, triangleSize, triangleSize, 0, 0);
+    popMatrix();
+    
+    pushMatrix();
+      translate(0,(1-((min-minMin)/(maxMax-minMin)))*chart.getInnerHeight());
+      fill(0,0,0,64);
       triangle(-triangleSize, triangleSize, triangleSize, triangleSize, 0, 0);
     popMatrix();
   }

@@ -17,13 +17,17 @@ class PathGroup extends DrawableGroup<Path> {
   // Multi-Select
   AveragePath averagePath;
   HashMap<String, Float> averageMap;
+  ArrayList<Path> ordered;
   
   PathGroup(Chart chart) {
     this.chart = chart;
     model = chart.controller.model;
     cachedData = model.getDataObjects();
+    ordered = new ArrayList<Path>();
     for(int i = 0; i < cachedData.size(); i++) {
-      add(new Path(this, cachedData.getJSONObject(i)));
+      Path path = new Path(this, cachedData.getJSONObject(i));
+      ordered.add(path);
+      add(path);
     }
     
     // Double Click
@@ -56,13 +60,13 @@ class PathGroup extends DrawableGroup<Path> {
   void updateFilters() {
     cachedData = chart.controller.model.getDataObjects(chart.axisGroup.filters);
     
-    for(Path path : this) {
+    for(Path path : ordered) {
       path.hidden = true;
     }
     
     for(int i = 0; i < cachedData.size(); i++) {
       JSONObject personDay = cachedData.getJSONObject(i);
-      get(personDay.getInt("id")).hidden = false;
+      ordered.get(personDay.getInt("id")).hidden = false;
     }
   }
   
