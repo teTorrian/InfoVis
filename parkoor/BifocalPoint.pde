@@ -28,7 +28,7 @@ class BifocalPoint extends PVector implements Drawable {
   void draw() {
     pushMatrix();
 //      translate(bifocalAxis.getX(),0);
-      float originY = bifocalAxis.demagnifyRecursively(bifocalAxis.originalPoint.y);
+      float originY = bifocalAxis.demagnifyRecursivelyForChild(bifocalAxis.originalPoint.y);
       dragAndDropManager.saveMatrix();  
       if (highlighted) {   
         fill(220,220,220,255*blurFactor());
