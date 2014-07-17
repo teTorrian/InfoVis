@@ -135,13 +135,19 @@ class Model {
 }
 
 String formatMinutes(float min) {
-  int hours = int(min / 60);
-  int minutes = int(min % 60);
-  String minutesStr = "";
-  if(minutes < 10)
-    minutesStr += "0";
-  minutesStr += str(minutes);
-  return str(hours)+"h " + minutesStr + "m";
+  if (min == 0) {
+    return "0h";
+  } else if (min == 24*60) {
+    return "24h";
+  } else {
+    int hours = int(min / 60);
+    int minutes = int(min % 60);
+    String minutesStr = "";
+    if(minutes < 10)
+      minutesStr += "0";
+    minutesStr += str(minutes);
+    return str(hours)+"h " + minutesStr + "m";
+  }
 }
 
 String formatHours(float hours) {
