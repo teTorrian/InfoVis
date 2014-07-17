@@ -20,4 +20,8 @@ class LocationFilter implements Filter {
     }
     return dataObjects;
   }
+  
+  void fillFilter() {
+    // TODO
+  }
 }

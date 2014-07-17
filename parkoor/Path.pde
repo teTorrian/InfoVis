@@ -159,10 +159,8 @@ class Path implements Drawable {
           /**
           *
           */
-          pathGroup.clearMultiSelect();
           selected = false;
           updated = true;
-          loop();
           // Jeder Pfad behandelt selbst dieses Ereignis.
           return false;
         }
@@ -172,15 +170,27 @@ class Path implements Drawable {
           // double click auf eine Linie
           // -> alle Datensätze einer Person auswählen
           String name = date.getString("name");
+          PersonFilter pSel = pathGroup.pSel;
+          pSel.remove(name);
+          /*
           for (Path path: pathGroup) {
             if ((path.date.getString("name")).equals(name)) {
               path.selected = true;
             }
-          }
-          pathGroup.updateMultiSelect();
+          }*/
+          chart.pathGroup.updateSelectors();
+          //pathGroup.updateMultiSelect();
           updated = true;
           loop();
+          /*
+          WeekdayFilter wdSel = pathGroup.wdSel;
           
+          wdSel.fillFilter();
+          wdSel.remove(2);
+          
+          //chart.axisGroup.filters.add(wf);
+          chart.pathGroup.updateSelectors();
+          */
           return true;
         }
       }
@@ -211,12 +221,7 @@ class Path implements Drawable {
           strokeWidth)
           )
       return true;
-/*
-
-          vertex(-chart.offsetX, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
-          vertex(0, chart.model.getPersonIndex(entry_name) * chart.getPeopleSpacing() + chart.getPeopleSpacing());
-          vertex(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing());
-    */      
+  
     point0 = new PVector(chart.getSpacing(), chart.model.getWeekday(date.getString("date")) * chart.getDaySpacing() - (chart.getDaySpacing() * 0.5));
     for (String key : dataKeys) {
       point1 = new PVector(chart.getSpacing()*2 + (i * chart.getSpacing()), minutesToY(data.get(key)));

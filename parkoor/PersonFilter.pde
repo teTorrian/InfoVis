@@ -30,6 +30,7 @@ class PersonFilter extends HashSet<String> implements Filter {
   
   void fillFilter() {
     clear();
+    // TODO dynamischer?
     add("Jonas");
     add("Vlad");
     add("Lukas");

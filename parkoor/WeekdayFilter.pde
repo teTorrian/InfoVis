@@ -13,6 +13,17 @@ class WeekdayFilter implements Filter {
   WeekdayFilter() {
   }
   
+  WeekdayFilter(int d) {
+    if(d > 0 && d < 8)
+      weekdays[d] = true;
+  }
+  
+  WeekdayFilter(boolean[] d) {
+    if(d.length == 7)
+      for(int i = 0; i < 7; i++)
+        weekdays[i] = d[i];
+  }
+  
   /**
   * Fügt den Wochentag d dem Filter hinzu (Mo = 1, Di = 2, ... So = 7).
   **/
@@ -30,7 +41,7 @@ class WeekdayFilter implements Filter {
   **/
   boolean remove(int d) {
     if(d > 0 && d < 8) {
-      weekdays[d] = true;
+      weekdays[d] = false;
       return true;
     }
     else
@@ -38,73 +49,45 @@ class WeekdayFilter implements Filter {
   }
   
   JSONArray filterObjects(JSONArray dataObjects) {
+    println(dataObjects.size() + " Object(s) to filter.");
     
     for (int i = 0; i < dataObjects.size(); ) {
-      String data = ((JSONObject)dataObjects.getJSONObject(i)).getString("date");
-      /*
+      int idx = getWeekday(((JSONObject)dataObjects.getJSONObject(i)).getString("date"));
 
-      if (
-      contains(data.getString("date")))
-        dataObjects.remove(i);
-      else
-        i++;*/
-    }
-    
-    return dataObjects;
-  }
-}
-/*
-  DateFilter(String toAdd) {
-    add(toAdd);
-  }
-  
-  DateFilter(String[] toAdd) {
-    for(int i = 0; i < toAdd.length; i++)
-      add(toAdd[i]);
-  }
-  
-  boolean add(String toAdd) {
-    if(validateDate(toAdd))
-      return super.add(toAdd);
-    else return false;
-  }
-  
-  JSONArray filterObjects(JSONArray dataObjects) {
-    
-    for (int i = 0; i < dataObjects.size(); ) {
-      JSONObject data = dataObjects.getJSONObject(i);
-
-      if (contains(data.getString("date")))
+      if (weekdays[idx-1])
         dataObjects.remove(i);
       else
         i++;
     }
-    
+
+    println(dataObjects.size() + " Object(s) left.");
     return dataObjects;
   }
   
-  /**
-  * Validierung des Datums (als String). dateFormat.parse() akzeptiert auch "14-5-20".
-  * Validierung bei remove() ist nicht notwendig, da nur valide Daten in das Set aufgenommen werden.
-  * Es wird angenommen, dass die Daten im JSONArray valide sind (nach dem Format "yyyy-mm-dd").
-  *
-  boolean validateDate(String d) {
-    if((d.length() != 10) || (d.indexOf('-', 0) != 4) || (d.indexOf('-', 5) != 7))
-      return false;
+  int getWeekday(String d) {
+    Date date;
+    DateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");;
+    //DateFormat day = new SimpleDateFormat("EE");
+    int i = 0;
     try {
       date = dateFormat.parse(d);
+      // day.format(date) gibt den Wochentag zurück.
+      // Calendar kann dagegen benutzt werden, um einen Index 
+      // zu bekommen. Allerdings: So = 1, Mo = 2, ...
+      Calendar c = Calendar.getInstance();
+      c.setTime(date);
+      i = c.get(Calendar.DAY_OF_WEEK);
     }
     catch (Exception e) {
       println("Unable to parse " + d);
-      return false;
     }
-    return true;
+    // Mo = 1, Di = 2, ...
+    i = ((i+5)%7)+1;
+    return i;
   }
   
-  void fillFilter(HashSet<String> allDates) {
-    clear();
-    for(String date: allDates)
-      add(date);
+  void fillFilter() {
+    for(int i = 0; i < 7; i++)
+      weekdays[i] = true;
   }
 }
-*/

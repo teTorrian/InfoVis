@@ -10,9 +10,10 @@ class PathGroup extends DrawableGroup<Path> {
   Model model;
   
   // Double Click
-  ArrayList<Filter> filters;
-  PersonFilter personFilter;
-  DateFilter dateFilter;
+  ArrayList<Filter> selectors;
+  PersonFilter pSel;
+  DateFilter dSel;
+  WeekdayFilter wdSel;
   
   // Multi-Select
   AveragePath averagePath;
@@ -29,13 +30,14 @@ class PathGroup extends DrawableGroup<Path> {
       ordered.add(path);
       add(path);
     }
-    
-    // Double Click
-    filters = new ArrayList<Filter>();
-    personFilter = new PersonFilter();
-    filters.add(personFilter);
-    dateFilter = new DateFilter();
-    filters.add(dateFilter);
+
+    /**
+    * Da die Filter hier allerdings als Selektoren "missbraucht"
+    * werden, muss auf die umgekehrte Logik geachtet werden. Daher
+    * müssen die Filter immer zuerst gefüllt werden (fillFilter),
+    * um danach wieder einzelne Elemente zu entfernen (remove).
+    **/
+    resetSelectors();
     
     // Multi-Select
     averageMap = new HashMap<String,Float>();
@@ -55,6 +57,17 @@ class PathGroup extends DrawableGroup<Path> {
     pathColorHighlighted.set("average", color(80, 80, 80, 180));
     
     updateFilters();
+  }
+  
+  void updateSelectors() {
+    println("Updating Selectors...");
+    cachedData = chart.controller.model.getDataObjects(selectors);
+    
+    for(int i = 0; i < cachedData.size(); i++) {
+      JSONObject personDay = cachedData.getJSONObject(i);
+      ordered.get(personDay.getInt("id")).selected = true;
+    }
+    updateMultiSelect();
   }
   
   void updateFilters() {
@@ -104,6 +117,29 @@ class PathGroup extends DrawableGroup<Path> {
   
   void clearMultiSelect() {
     remove(averagePath);
+  }
+  
+  boolean mousePressed() {
+    if (! super.mousePressed()) {
+      clearMultiSelect();
+      resetSelectors();
+      updated = true;
+      loop();
+      return true;
+    }
+    return false;
+  }
+  
+  void resetSelectors() {
+    selectors = new ArrayList<Filter>();
+    pSel = new PersonFilter();
+    pSel.fillFilter();
+    selectors.add(pSel);
+    dSel = new DateFilter();
+    selectors.add(dSel);
+    wdSel = new WeekdayFilter();
+    //wdSel.fillFilter();
+    selectors.add(wdSel);
   }
 }
 

@@ -63,4 +63,8 @@ class DateFilter extends HashSet<String> implements Filter {
     for(String date: allDates)
       add(date);
   }
+  
+  void fillFilter() {
+    // TODO
+  }
 }
