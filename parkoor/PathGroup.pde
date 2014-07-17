@@ -68,6 +68,7 @@ class PathGroup extends DrawableGroup<Path> {
       JSONObject personDay = cachedData.getJSONObject(i);
       ordered.get(personDay.getInt("id")).hidden = false;
     }
+    updateMultiSelect();
   }
   
   // Multi-Select
@@ -79,13 +80,14 @@ class PathGroup extends DrawableGroup<Path> {
     int c = 0;
     // Werte aller selektierten Pfade aufsummieren
     for (Path path: this) {
-      if(path.selected) {
+      if(path.selected && !path.hidden) {
         for(String key: averageMap.keySet()) {
           averageMap.put(key, (averageMap.get(key) + path.date.getFloat(key)));
         }
         c++;
       }
     }
+    remove(averagePath);
     if(c > 1) {
       // Durchschnitt berechnen
       for(String key: averageMap.keySet()) {
@@ -94,7 +96,6 @@ class PathGroup extends DrawableGroup<Path> {
       average.setString("name", "average");
       average.setString("info", "average of " + c + " path(s)");
       println(average.getString("info"));
-      remove(averagePath);
       averagePath = new AveragePath(this, average);
       //averagePath.selected = true;
       add(averagePath);

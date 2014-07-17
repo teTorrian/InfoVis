@@ -97,6 +97,9 @@ class Path implements Drawable {
       updated = false;
     
     }
+    else {
+      selected = false;
+    }
   }
 
   boolean pointInsideLine(PVector thePoint,
