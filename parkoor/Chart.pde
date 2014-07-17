@@ -82,11 +82,11 @@ class Chart extends DrawableGroup {
   }
   
   float getPeopleSpacing() {
-    return getInnerHeight() / (model.getPeople().size() + 1);
+    return getInnerHeight() / model.getPeople().size();
   }
   
   float getDaySpacing() {
-    return getInnerHeight() / 8;
+    return getInnerHeight() / 7;
   }
 }
 
