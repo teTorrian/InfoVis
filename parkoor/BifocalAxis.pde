@@ -282,19 +282,18 @@ class BifocalAxis extends DrawableGroup<Drawable> {
 //        strokeWeight(1.0);
 //        line(0,0,30,0);
 //        line(0,getMagnificationBottom(),30,getMagnificationBottom());
-        stroke(230, 230, 230,255);
-        strokeWeight(1.0);
 //        dashline(30, getMagnificationBottom(), 30, getMagnificationTop(), spacing);
       }
       
-      stroke(230, 230, 230,255);
+      stroke(0, 0, 0, 80);
       strokeWeight(1.0);
       dashline(0, getMagnificationBottom(), 0, getMagnificationTop(), spacing);
+      dashline(-chart.width, getMagnificationBottom(), -chart.width, 0, spacing);
       
       //      dragAndDropManager.saveMatrix();
       textFont(font.light14);
       textAlign(LEFT);
-      fill(200, 200, 200);
+      fill(0, 0, 0, 80);
       noStroke();
       text(getLabel(), 0, -14);
     } else {
