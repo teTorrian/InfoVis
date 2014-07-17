@@ -50,9 +50,10 @@ class BifocalPoint extends PVector implements Drawable {
       float[] spacing = {
         3, 3
       };
-      stroke(0,0,0,64);
-      strokeWeight(1.0);
-      bifocalAxis.dashline(0, this.y, -bifocalAxis.chart.width, this.y, spacing);
+      stroke(100,64);
+      strokeWeight(1.5);
+      //bifocalAxis.dashline(0, this.y, -bifocalAxis.chart.width, this.y, spacing);
+      line(0, this.y, -bifocalAxis.chart.width, this.y);
     popMatrix();
     
     updated = false;
