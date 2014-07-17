@@ -44,12 +44,13 @@ class Axis implements Drawable {
   }
   
   float hoursFromAxis(float value) {
-    return -(value/  chart.getInnerHeight() - 1)*1440/60;
+    return - (value / chart.getInnerHeight() - 1 ) * (maxMax - minMin) + minMin;
+//    return -(value/  chart.getInnerHeight() - 1)*1440/60;
   }
   
 
   float axisFromHour(float hour) {
-    return (1-((hour*60)/1440)) * chart.getInnerHeight();
+    return (1-((hour-minMin)/(maxMax-minMin)))*chart.getInnerHeight();
   }
   
   void updateLocationFilter() {
@@ -87,7 +88,7 @@ class Axis implements Drawable {
     popMatrix();
     
     pushMatrix();
-      translate(0,(1-((hoursFromAxis(chart.bifocalAxis.demagnifyRecursively(axisFromHour(min)))-minMin)/(maxMax-minMin)))*chart.getInnerHeight());
+      translate(0,chart.bifocalAxis.magnifyRecursively(axisFromHour(min)));
       if (minHighlighted)
         fill(markColorHighlighted);
       else
@@ -97,7 +98,7 @@ class Axis implements Drawable {
     popMatrix();
     
     pushMatrix();
-      translate(0,(1-((min-minMin)/(maxMax-minMin)))*chart.getInnerHeight());
+      translate(0,axisFromHour(min));
       fill(0,0,0,64);
       triangle(-triangleSize, triangleSize, triangleSize, triangleSize, 0, 0);
     popMatrix();
@@ -120,12 +121,18 @@ class Axis implements Drawable {
     popMatrix();
     
     pushMatrix();
-      translate(0,(1-((max-minMin)/(maxMax-minMin)))*chart.getInnerHeight());
+      translate(0,chart.bifocalAxis.magnifyRecursively(axisFromHour(max)));
       if (maxHighlighted)
         fill(markColorHighlighted);
       else
         fill(markColor);
       noStroke();
+      triangle(-triangleSize, -triangleSize, triangleSize, -triangleSize, 0, 0);
+    popMatrix();
+  
+    pushMatrix();
+      translate(0,axisFromHour(max));
+      fill(0,0,0,64);
       triangle(-triangleSize, -triangleSize, triangleSize, -triangleSize, 0, 0);
     popMatrix();
   }
@@ -140,15 +147,15 @@ class Axis implements Drawable {
       
       stroke(lineColorGrayed);
       strokeWeight(1.2);
-      line(0,0,0,chart.getInnerHeight()*(1-((min-minMin)/(maxMax-minMin))));
+      line(0,0,0,chart.bifocalAxis.magnifyRecursively(axisFromHour(max)));
       
       stroke(lineColor);
       strokeWeight(1.2);
-      line(0,chart.getInnerHeight()*(1-((min-minMin)/(maxMax-minMin))),0,chart.getInnerHeight()*(1-((max-minMin)/(maxMax-minMin))));
+      line(0,chart.bifocalAxis.magnifyRecursively(axisFromHour(max)),0,chart.bifocalAxis.magnifyRecursively(axisFromHour(min)));
       
       stroke(lineColorGrayed);
       strokeWeight(1.2);
-      line(0,chart.getInnerHeight()*(1-((min-minMin)/(maxMax-minMin))),0,chart.getInnerHeight());
+      line(0,chart.bifocalAxis.magnifyRecursively(axisFromHour(min)),0,chart.getInnerHeight());
       
       drawSliderMin();
       drawSliderMax();
@@ -163,13 +170,13 @@ class Axis implements Drawable {
   }
   
   boolean mouseOverMinMark(PVector mouse) {
-    PVector p0 = new PVector(0.0, chart.getInnerHeight()*(1-((min-minMin)/(maxMax-minMin))) + triangleSize);
+    PVector p0 = new PVector(0.0, chart.bifocalAxis.magnifyRecursively(axisFromHour(min)) + triangleSize);
     PVector p1 = dragAndDropManager.transformVector(mouse);
     return (p0.dist(p1) < 8);
   }
   
   boolean mouseOverMaxMark(PVector mouse) {
-    PVector p0 = new PVector(0.0, chart.getInnerHeight()*(1-((max-minMin)/(maxMax-minMin))) - triangleSize);
+    PVector p0 = new PVector(0.0, chart.bifocalAxis.magnifyRecursively(axisFromHour(max)) - triangleSize);
     PVector p1 = dragAndDropManager.transformVector(mouse);
     return (p0.dist(p1) < 8);
   }
@@ -201,7 +208,7 @@ class Axis implements Drawable {
   boolean mouseDragged() {
     if (dragAndDropManager.dragging) {
       if (draggingMax) {
-        max = minMin + (1-dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight())*(maxMax-minMin);
+        max = hoursFromAxis(chart.bifocalAxis.demagnifyRecursively(dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y));
         if (max < min) {
           max = min;
         } else if (max > maxMax) {
@@ -210,7 +217,7 @@ class Axis implements Drawable {
         updateLocationFilter();
         chart.pathGroup.updateFilters();
       } else {
-        min = minMin + (1-dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y/chart.getInnerHeight())*(maxMax-minMin);
+        min = hoursFromAxis(chart.bifocalAxis.demagnifyRecursively(dragAndDropManager.transformVector(new PVector(float(mouseX),float(mouseY))).y));
         if (min < minMin) {
           min = minMin;
         } else if (min > max) {

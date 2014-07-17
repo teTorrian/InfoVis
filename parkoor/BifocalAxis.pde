@@ -212,15 +212,34 @@ class BifocalAxis extends DrawableGroup<Drawable> {
 
   }
   
-  float demagnifyRecursively(float value) {
-    
+  BifocalAxis findMagAxisRecursively(float value) {
+    if (topChild != null && bottomChild != null) {
+      if (value < magnificationPoint.y) {
+        return topChild.findMagAxisRecursively(value);
+      } else {
+        return bottomChild.findMagAxisRecursively(value);
+      }
+    } else {
+      return this;
+    }
+  }
+  
+  BifocalAxis findMagAxis(float value) {
+    return root.findMagAxisRecursively(value);
+  }
+  
+  float demagnifyRecursivelyForChild(float value) {
     float demag = demagnify(value);
     
     if (parent != null) {
-        return parent.demagnifyRecursively(demag);
+        return parent.demagnifyRecursivelyForChild(demag);
     } else
       return demag;
-
+  }
+  
+  float demagnifyRecursively(float value) {
+    BifocalAxis axis = findMagAxis(value);
+    return axis.demagnifyRecursivelyForChild(value);
   }
   
   void clear() {
