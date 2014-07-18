@@ -73,12 +73,12 @@ class Axis implements Drawable {
       noStroke();
       if (!selectionMode) {
         fill(0,0,0);
-        // TODO vorher int()
+        // vorher int()
         text(formatHours(min), 0, 0);
       } else {
         textFont(font.bold14);
         fill(selectionColor);
-        // TODO vorher int()
+        // vorher int()
         text(formatMinutes(selection), 0, 0);
       }
       textFont(font.light14);
@@ -193,6 +193,8 @@ class Axis implements Drawable {
       loop();
       return true;
     }
+    if (mouseOverLabel(new PVector(float(mouseX),float(mouseY)))) {
+    }
     return false;
   }
   
@@ -252,5 +254,19 @@ class Axis implements Drawable {
       loop();
     }
     return false;
+  }
+  
+  boolean mouseOverLabel(PVector mouse) {
+    PVector m = dragAndDropManager.transformVector(mouse);
+    textFont(font.light14);
+    // x = 0
+    float y = textOffset + chart.getInnerHeight() + textAscent()*3;
+    // textAlign(CENTER)
+    float xt = textWidth(label)/2;
+    float yt = textAscent();
+
+    // y+3 ... kleine Korrektur bezüglich der y-Position
+
+    return ((m.x > -xt && m.x < +xt) && (m.y < (y+3) && m.y > (y-yt)));
   }
 }
