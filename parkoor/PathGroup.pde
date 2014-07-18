@@ -126,10 +126,9 @@ class PathGroup extends DrawableGroup<Path> {
       clearMultiSelect();
       resetSelectors();
       updated = true;
-      if (selections == 0) {
-        for (Path path : this) {
+      selections = 0;
+      for (Path path : this) {
           path.grayed = false;
-        }
       }
       loop();
       return true;

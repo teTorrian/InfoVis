@@ -84,6 +84,9 @@ class Axis implements Drawable {
       textFont(font.light14);
       fill(0,0,0);
       translate(0,textAscent()*2);
+      // LABEL
+      if(mouseOverLabel(new PVector(mouseX, mouseY)))
+        fill(0, 102, 255);
       text(label, 0, 0);
     popMatrix();
     
