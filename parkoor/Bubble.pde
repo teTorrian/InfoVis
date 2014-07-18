@@ -1,6 +1,7 @@
 class Bubble implements Drawable {
   
   int bubbleRadius = 35;
+  boolean active = false;
   
   BubbleAxis bubbelAxis;
   String label;
@@ -95,4 +96,5 @@ class Bubble implements Drawable {
       return false;
     }
   }
+  
 }

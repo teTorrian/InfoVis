@@ -8,7 +8,7 @@ class WeekdayFilter implements Filter {
   DateFormat dateFormat = new SimpleDateFormat ("yyyy-MM-dd");;
   Date date;
   
-  boolean weekdays[] = {false, false, false, false, false, false, false};
+  boolean weekdays[] = {true, true, true, true, true, true, true};
   
   WeekdayFilter() {
   }
@@ -29,7 +29,7 @@ class WeekdayFilter implements Filter {
   **/
   boolean add(int d) {
     if(d > 0 && d < 8) {
-      weekdays[d] = true;
+      weekdays[d-1] = true;
       return true;
     }
     else
@@ -41,7 +41,7 @@ class WeekdayFilter implements Filter {
   **/
   boolean remove(int d) {
     if(d > 0 && d < 8) {
-      weekdays[d] = false;
+      weekdays[d-1] = false;
       return true;
     }
     else

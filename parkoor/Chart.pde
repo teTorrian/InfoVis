@@ -42,16 +42,16 @@ class Chart extends DrawableGroup {
     bifocalAxis = new BifocalAxis(this, width-offsetX, "Zoom");
     nameAxis = new BubbleAxis(this, 0);
     for (String name:model.getPeople()) {
-      nameAxis.add(new Bubble(nameAxis, name.charAt(0)+"", pathGroup.pathColorHighlighted.get(name)));
+      nameAxis.add(new PersonBubble(pathGroup, nameAxis, name.charAt(0)+"", name, pathGroup.pathColorHighlighted.get(name)));
     }
     dateAxis = new BubbleAxis(this, floor(getSpacing()));
-    dateAxis.add(new Bubble(dateAxis, "Mo", color(230)));
-    dateAxis.add(new Bubble(dateAxis, "Di", color(230)));
-    dateAxis.add(new Bubble(dateAxis, "Mi", color(230)));
-    dateAxis.add(new Bubble(dateAxis, "Do", color(230)));
-    dateAxis.add(new Bubble(dateAxis, "Fr", color(230)));
-    dateAxis.add(new Bubble(dateAxis, "Sa", color(230)));
-    dateAxis.add(new Bubble(dateAxis, "So", color(230)));
+    dateAxis.add(new WeekdayBubble(pathGroup, dateAxis, "Mo", 1, color(230)));
+    dateAxis.add(new WeekdayBubble(pathGroup, dateAxis, "Di", 2, color(230)));
+    dateAxis.add(new WeekdayBubble(pathGroup, dateAxis, "Mi", 3, color(230)));
+    dateAxis.add(new WeekdayBubble(pathGroup, dateAxis, "Do", 4, color(230)));
+    dateAxis.add(new WeekdayBubble(pathGroup, dateAxis, "Fr", 5, color(230)));
+    dateAxis.add(new WeekdayBubble(pathGroup, dateAxis, "Sa", 6, color(230)));
+    dateAxis.add(new WeekdayBubble(pathGroup, dateAxis, "So", 7, color(230)));
     
     add(pathGroup);
     add(bifocalAxis);

@@ -12,6 +12,8 @@ class PathGroup extends DrawableGroup<Path> {
   int highlightes;
 
   ArrayList<Filter> selectors;
+  ArrayList<Filter> weekdaySelectors;
+  
   PersonFilter pSel;
   DateFilter dSel;
   WeekdayFilter wdSel;
@@ -61,6 +63,19 @@ class PathGroup extends DrawableGroup<Path> {
     updateFilters();
   }
 
+  void updateWeekdaySelectors() {
+    println("Updating Selectors...");
+    cachedData = chart.controller.model.getDataObjects(weekdaySelectors);
+
+    for (int i = 0; i < cachedData.size (); i++) {
+      JSONObject personDay = cachedData.getJSONObject(i);
+      ordered.get(personDay.getInt("id")).selected = true;
+    }
+    selections += cachedData.size();
+    updateMultiSelect();
+  }
+
+  // eigentlich PersonSelectors
   void updateSelectors() {
     println("Updating Selectors...");
     cachedData = chart.controller.model.getDataObjects(selectors);
@@ -69,9 +84,10 @@ class PathGroup extends DrawableGroup<Path> {
       JSONObject personDay = cachedData.getJSONObject(i);
       ordered.get(personDay.getInt("id")).selected = true;
     }
+    selections += cachedData.size();
     updateMultiSelect();
   }
-
+  
   void updateFilters() {
     cachedData = chart.controller.model.getDataObjects(chart.axisGroup.filters);
 
@@ -130,6 +146,12 @@ class PathGroup extends DrawableGroup<Path> {
       for (Path path : this) {
           path.grayed = false;
       }
+      for(Drawable bubble : chart.dateAxis) {
+        ((Bubble) bubble).active = false;
+      }
+      for(Drawable bubble : chart.nameAxis) {
+        ((Bubble) bubble).active = false;
+      }
       loop();
       return true;
     }
@@ -156,10 +178,10 @@ class PathGroup extends DrawableGroup<Path> {
   void resetSelectors() {
     // Feeding the Garbage Collector...
     selectors = new ArrayList<Filter>();
+    weekdaySelectors = new ArrayList<Filter>();
 
     // Person-Selector
     pSel = new PersonFilter();
-    pSel.fillFilter();
     selectors.add(pSel);
 
     // Date-Selector  –– NOT USED
@@ -170,8 +192,7 @@ class PathGroup extends DrawableGroup<Path> {
 
     // Weekday-Selector
     wdSel = new WeekdayFilter();
-    //wdSel.fillFilter();
-    selectors.add(wdSel);
+    weekdaySelectors.add(wdSel);
   }
 }
 

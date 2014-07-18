@@ -180,6 +180,9 @@ class Path implements Drawable {
           // -> alle Datensätze einer Person auswählen
           String name = date.getString("name");
           PersonFilter pSel = pathGroup.pSel;
+          if(pSel.isEmpty()) {
+            pSel.fillFilter();
+          }
           pSel.remove(name);
 
           chart.pathGroup.updateSelectors();
