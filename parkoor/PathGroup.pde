@@ -121,11 +121,17 @@ class PathGroup extends DrawableGroup<Path> {
     remove(averagePath);
     if (c > 1) {
       // Durchschnitt berechnen
+      float sum = 0;
       for (String key : averageMap.keySet ()) {
         average.setFloat(key, (averageMap.get(key) / c));
+        sum += (averageMap.get(key) / c);
       }
+      sum /= c;
+      println(c);
+      println(sum);
       average.setString("name", "average");
       average.setString("info", "average of " + c + " path(s)");
+      average.setFloat("av", sum);
       println(average.getString("info"));
       averagePath = new AveragePath(this, average);
       //averagePath.selected = true;

@@ -1,7 +1,7 @@
 Controller controller;
 View view;
 void setup(){ 
-  size(1024,600);
+  size(1024,650);
   
   controller = new Controller(100,165,824,330);
   view = controller.view;
